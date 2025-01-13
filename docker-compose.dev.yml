@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  backend:
+    depends_on:
+      - mysql
+      - redis
+    build: ./
+    container_name: backend
+    ports:
+      - "8080:8080"
+    networks:
+      sportify:
+    restart: always
+    tty: true
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      gdgoc-tuk:
+    restart: always
+    tty: true
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: sportify
+      TZ: Asia/Seoul
+    restart: always
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      gdgoc-tuk:
+
+volumes:
+  mysql_data:
+
+networks:
+  gdgoc-tuk:
+
