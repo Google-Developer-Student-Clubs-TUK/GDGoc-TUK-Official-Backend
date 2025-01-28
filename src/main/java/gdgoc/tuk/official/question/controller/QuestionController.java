@@ -1,10 +1,17 @@
 package gdgoc.tuk.official.question.controller;
 
+import gdgoc.tuk.official.global.response.IdResponse;
+import gdgoc.tuk.official.question.dto.QuestionListResponse;
+import gdgoc.tuk.official.question.dto.QuestionAddRequest;
+import gdgoc.tuk.official.question.dto.QuestionModifyRequest;
+import gdgoc.tuk.official.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,23 +20,26 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/questions")
 public class QuestionController {
 
-    @GetMapping
-    public
-    
-    @PostMapping
-    public void addQuestion(){
-        
-    }
+  private final QuestionService questionService;
 
-    @DeleteMapping
-    public void deleteQuestion(){
+  @GetMapping
+  public QuestionListResponse findAllQuestion() {
+    return questionService.findAll();
+  }
 
-    }
+  @PostMapping
+  public IdResponse addQuestion(@RequestBody QuestionAddRequest request) {
+    return questionService.addQuestion(request);
+  }
 
-    @PatchMapping
-    public void updateQuestion(){
+  @DeleteMapping("/{questionId}")
+  public void deleteQuestion(@PathVariable final Long questionId) {
+    questionService.deleteQuestion(questionId);
+  }
 
-    }
-
-    
+  @PatchMapping("/{questionId}")
+  public IdResponse modifyQuestion(
+      @PathVariable final Long questionId, @RequestBody final QuestionModifyRequest request) {
+    return questionService.modifyQuestion(questionId,request);
+  }
 }

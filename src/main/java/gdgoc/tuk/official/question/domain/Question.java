@@ -22,4 +22,8 @@ public class Question  {
     public Question(final String content) {
         this.content = content;
     }
+
+    public void modify(final String content){
+        this.content = content;
+    }
 }

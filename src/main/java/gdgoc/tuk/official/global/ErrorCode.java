@@ -8,7 +8,10 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ErrorCode {
 
-    DUMMY(HttpStatus.BAD_REQUEST,"000","요청 파라미터 검증에 실패했습니다");
+    /**
+     * Question Error
+     */
+    QUESTION_NOT_FOUND(HttpStatus.BAD_REQUEST,"100","등록된 질문을 찾을 수 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
