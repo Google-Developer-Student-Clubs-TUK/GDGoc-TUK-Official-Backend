@@ -47,4 +47,6 @@ application-dev.yml
 
 ### PRODUCTION SECRET ###
 
-### API KEY ###
+### GOOGLE OAUTH2 CLIENT CREDENTIAL ###
+credential.json
+tokens/**

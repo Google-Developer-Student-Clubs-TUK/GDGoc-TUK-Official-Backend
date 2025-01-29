@@ -1,10 +1,12 @@
 package gdgoc.tuk.official.question.controller;
 
+import com.google.api.services.sheets.v4.model.UpdateValuesResponse;
 import gdgoc.tuk.official.global.response.IdResponse;
 import gdgoc.tuk.official.question.dto.QuestionListResponse;
 import gdgoc.tuk.official.question.dto.QuestionAddRequest;
 import gdgoc.tuk.official.question.dto.QuestionModifyRequest;
 import gdgoc.tuk.official.question.service.QuestionService;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +30,8 @@ public class QuestionController {
   }
 
   @PostMapping
-  public IdResponse addQuestion(@RequestBody QuestionAddRequest request) {
-    return questionService.addQuestion(request);
+  public void addQuestions(@RequestBody QuestionAddRequest request) throws IOException {
+     questionService.addQuestions(request);
   }
 
   @DeleteMapping("/{questionId}")

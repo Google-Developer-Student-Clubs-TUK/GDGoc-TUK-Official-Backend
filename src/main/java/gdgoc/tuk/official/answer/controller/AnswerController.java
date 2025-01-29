@@ -11,10 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/answers")
 public class AnswerController {
 
-    @PostMapping
-    public void saveAnswer(@RequestBody ){
-
-    }
 }
 
 

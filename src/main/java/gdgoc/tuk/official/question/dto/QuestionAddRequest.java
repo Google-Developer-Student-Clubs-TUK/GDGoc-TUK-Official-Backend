@@ -1,5 +1,7 @@
 package gdgoc.tuk.official.question.dto;
 
+import java.util.List;
+
 public record QuestionAddRequest(
-    String content
+    List<Object> questions
 ) {}
