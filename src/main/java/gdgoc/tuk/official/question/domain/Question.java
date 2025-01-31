@@ -19,8 +19,11 @@ public class Question {
 
   private String content;
 
-  public Question(final String content) {
+  private Long order;
+
+  public Question(final String content,final Long order) {
     this.content = content;
+    this.order = order;
   }
 
   public void modify(final String content) {

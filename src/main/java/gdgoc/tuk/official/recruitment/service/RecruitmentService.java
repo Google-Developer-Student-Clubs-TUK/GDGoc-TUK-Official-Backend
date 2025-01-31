@@ -34,7 +34,7 @@ public class RecruitmentService {
   }
 
   private List<List<Object>> getSpreadSheetQuestions() {
-    return List.of(questionService.findAllQuestions().stream().map(q -> (Object) q).toList());
+    return List.of(questionService.findAllQuestions().stream().map(q -> (Object) q.getContent()).toList());
   }
 
   private void checkAlreadyExistRecruitment() {

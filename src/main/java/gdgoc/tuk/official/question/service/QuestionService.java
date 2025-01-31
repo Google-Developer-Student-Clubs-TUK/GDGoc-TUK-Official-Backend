@@ -3,10 +3,10 @@ package gdgoc.tuk.official.question.service;
 import gdgoc.tuk.official.global.ErrorCode;
 import gdgoc.tuk.official.global.response.IdResponse;
 import gdgoc.tuk.official.question.domain.Question;
-import gdgoc.tuk.official.question.dto.QuestionAddRequest;
 import gdgoc.tuk.official.question.dto.QuestionListResponse;
 import gdgoc.tuk.official.question.dto.QuestionModifyRequest;
 import gdgoc.tuk.official.question.dto.QuestionResponse;
+import gdgoc.tuk.official.question.dto.QuestionSaveRequestList;
 import gdgoc.tuk.official.question.exception.QuestionNotFoundException;
 import gdgoc.tuk.official.question.repository.QuestionRepository;
 import java.util.List;
@@ -22,14 +22,16 @@ public class QuestionService {
   public QuestionListResponse findAllQuestionResponses() {
     final List<QuestionResponse> questionResponses =
         questionRepository.findAll().stream()
-            .map(q -> new QuestionResponse(q.getId(), q.getContent()))
+            .map(q -> new QuestionResponse(q.getId(), q.getContent(),q.getOrder()))
             .toList();
     return new QuestionListResponse(questionResponses);
   }
 
-  public void addQuestions(final QuestionAddRequest request) {
+  public void addQuestions(final QuestionSaveRequestList request) {
     final List<Question> questions =
-        request.questions().stream().map(q -> new Question(q.toString())).toList();
+        request.questionSaveRequests().stream()
+            .map(q -> new Question(q.content().toString(), q.order()))
+            .toList();
     questionRepository.saveAll(questions);
   }
 
