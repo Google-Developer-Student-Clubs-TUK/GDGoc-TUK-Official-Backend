@@ -25,7 +25,7 @@ public class QuestionController {
 
   @GetMapping
   public QuestionListResponse findAllQuestion() {
-    return questionService.findAll();
+    return questionService.findAllQuestionResponses();
   }
 
   @PostMapping

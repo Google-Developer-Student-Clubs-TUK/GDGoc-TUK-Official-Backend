@@ -1,9 +1,8 @@
 package gdgoc.tuk.official.question.service;
 
-import com.google.api.services.sheets.v4.model.UpdateValuesResponse;
 import gdgoc.tuk.official.global.ErrorCode;
 import gdgoc.tuk.official.global.response.IdResponse;
-import gdgoc.tuk.official.google.SpreadSheetsService;
+import gdgoc.tuk.official.google.service.SpreadSheetsService;
 import gdgoc.tuk.official.question.domain.Question;
 import gdgoc.tuk.official.question.dto.QuestionAddRequest;
 import gdgoc.tuk.official.question.dto.QuestionListResponse;
@@ -23,7 +22,7 @@ public class QuestionService {
   private final QuestionRepository questionRepository;
   private final SpreadSheetsService spreadSheetsService;
 
-  public QuestionListResponse findAll() {
+  public QuestionListResponse findAllQuestionResponses() {
     final List<QuestionResponse> questionResponses =
         questionRepository.findAll().stream()
             .map(q -> new QuestionResponse(q.getId(), q.getContent()))
@@ -35,7 +34,7 @@ public class QuestionService {
     final List<Question> questions =
         request.questions().stream().map(q->new Question(q.toString())).toList();
     questionRepository.saveAll(questions);
-    spreadSheetsService.createSpreadSheet("5",List.of(request.questions()));
+    spreadSheetsService.setUpSpreadSheets("5",List.of(request.questions()));
   }
 
   private List<List<Object>> createSheetValues(final QuestionAddRequest request){
@@ -56,5 +55,9 @@ public class QuestionService {
     return questionRepository
         .findById(questionId)
         .orElseThrow(() -> new QuestionNotFoundException(ErrorCode.QUESTION_NOT_FOUND));
+  }
+
+  public List<Question> findAllQuestions(){
+    return questionRepository.findAll();
   }
 }
