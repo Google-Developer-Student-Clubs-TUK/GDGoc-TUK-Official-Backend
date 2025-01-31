@@ -15,33 +15,32 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 @RestControllerAdvice(basePackages = "com.tuk.sportify")
 public class GlobalResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 
-    @Override
-    public boolean supports(
-            final MethodParameter returnType,
-            final Class<? extends HttpMessageConverter<?>> converterType) {
-        return true;
-    }
+  @Override
+  public boolean supports(
+      final MethodParameter returnType,
+      final Class<? extends HttpMessageConverter<?>> converterType) {
+    return true;
+  }
 
-    @Override
-    public Object beforeBodyWrite(
-            final Object body,
-            final MethodParameter returnType,
-            final MediaType selectedContentType,
-            final Class<? extends HttpMessageConverter<?>> selectedConverterType,
-            final ServerHttpRequest request,
-            final ServerHttpResponse response) {
-        if (body instanceof ErrorResponse) {
-            return body;
-        }
-        HttpServletResponse servletResponse =
-                ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
-                        .getResponse();
-        int status = servletResponse.getStatus();
-        String reasonPhrase = HttpStatus.resolve(status).getReasonPhrase();
-        return SuccessResponse.builder()
-                .data(body)
-                .httpStatusCode(status)
-                .httpStatusMessage(reasonPhrase)
-                .build();
+  @Override
+  public Object beforeBodyWrite(
+      final Object body,
+      final MethodParameter returnType,
+      final MediaType selectedContentType,
+      final Class<? extends HttpMessageConverter<?>> selectedConverterType,
+      final ServerHttpRequest request,
+      final ServerHttpResponse response) {
+    if (body instanceof ErrorResponse) {
+      return body;
     }
+    HttpServletResponse servletResponse =
+        ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+    int status = servletResponse.getStatus();
+    String reasonPhrase = HttpStatus.resolve(status).getReasonPhrase();
+    return SuccessResponse.builder()
+        .data(body)
+        .httpStatusCode(status)
+        .httpStatusMessage(reasonPhrase)
+        .build();
+  }
 }

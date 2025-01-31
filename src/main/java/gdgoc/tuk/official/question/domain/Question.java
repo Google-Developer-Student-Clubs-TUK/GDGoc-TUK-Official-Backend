@@ -11,19 +11,19 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Question  {
+public class Question {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
-    private String content;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    public Question(final String content) {
-        this.content = content;
-    }
+  private String content;
 
-    public void modify(final String content){
-        this.content = content;
-    }
+  public Question(final String content) {
+    this.content = content;
+  }
+
+  public void modify(final String content) {
+    this.content = content;
+  }
 }

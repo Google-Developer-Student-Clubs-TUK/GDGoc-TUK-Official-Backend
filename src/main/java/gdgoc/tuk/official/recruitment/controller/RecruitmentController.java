@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping
 public class RecruitmentController {
 
-    private final RecruitmentService recruitmentService;
+  private final RecruitmentService recruitmentService;
 
-    @PostMapping
-    public void openRecruitment(@RequestBody final RecruitmentOpenRequest request){
-        recruitmentService.openRecruitment(request);
-    }
+  @PostMapping
+  public void openRecruitment(@RequestBody final RecruitmentOpenRequest request) {
+    recruitmentService.openRecruitment(request);
+  }
 }

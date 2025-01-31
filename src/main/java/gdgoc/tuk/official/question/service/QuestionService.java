@@ -2,7 +2,6 @@ package gdgoc.tuk.official.question.service;
 
 import gdgoc.tuk.official.global.ErrorCode;
 import gdgoc.tuk.official.global.response.IdResponse;
-import gdgoc.tuk.official.google.service.SpreadSheetsService;
 import gdgoc.tuk.official.question.domain.Question;
 import gdgoc.tuk.official.question.dto.QuestionAddRequest;
 import gdgoc.tuk.official.question.dto.QuestionListResponse;
@@ -10,7 +9,6 @@ import gdgoc.tuk.official.question.dto.QuestionModifyRequest;
 import gdgoc.tuk.official.question.dto.QuestionResponse;
 import gdgoc.tuk.official.question.exception.QuestionNotFoundException;
 import gdgoc.tuk.official.question.repository.QuestionRepository;
-import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +18,6 @@ import org.springframework.stereotype.Service;
 public class QuestionService {
 
   private final QuestionRepository questionRepository;
-  private final SpreadSheetsService spreadSheetsService;
 
   public QuestionListResponse findAllQuestionResponses() {
     final List<QuestionResponse> questionResponses =
@@ -30,15 +27,10 @@ public class QuestionService {
     return new QuestionListResponse(questionResponses);
   }
 
-  public void addQuestions(final QuestionAddRequest request) throws IOException {
+  public void addQuestions(final QuestionAddRequest request) {
     final List<Question> questions =
-        request.questions().stream().map(q->new Question(q.toString())).toList();
+        request.questions().stream().map(q -> new Question(q.toString())).toList();
     questionRepository.saveAll(questions);
-    spreadSheetsService.setUpSpreadSheets("5",List.of(request.questions()));
-  }
-
-  private List<List<Object>> createSheetValues(final QuestionAddRequest request){
-    return List.of(request.questions());
   }
 
   public void deleteQuestion(final Long questionId) {
@@ -57,7 +49,7 @@ public class QuestionService {
         .orElseThrow(() -> new QuestionNotFoundException(ErrorCode.QUESTION_NOT_FOUND));
   }
 
-  public List<Question> findAllQuestions(){
+  public List<Question> findAllQuestions() {
     return questionRepository.findAll();
   }
 }

@@ -26,38 +26,39 @@ import org.springframework.core.io.ClassPathResource;
 @Configuration
 public class SpreadSheetsConfig {
 
-    private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
-    private static final List<String> SCOPES =
-        Collections.singletonList(SheetsScopes.SPREADSHEETS);
-    @Value("${google.spread-sheets.application-name}")
-    private String applicationName;
-    @Value("${google.spread-sheets.token-path}")
-    private String tokensDirectoryPath;
-    @Value("${google.spread-sheets.credential-path}")
-    private String credentialsPath;
+  private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
+  private static final List<String> SCOPES = Collections.singletonList(SheetsScopes.SPREADSHEETS);
 
-    private Credential getCredentials(final NetHttpTransport httpTransport)
-        throws IOException {
-        // Load client secrets.
-        InputStream in = new ClassPathResource(credentialsPath).getInputStream();
-        GoogleClientSecrets clientSecrets =
-            GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
+  @Value("${google.spread-sheets.application-name}")
+  private String applicationName;
 
-        // Build flow and trigger user authorization request.
-        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-            httpTransport, JSON_FACTORY, clientSecrets, SCOPES)
+  @Value("${google.spread-sheets.token-path}")
+  private String tokensDirectoryPath;
+
+  @Value("${google.spread-sheets.credential-path}")
+  private String credentialsPath;
+
+  private Credential getCredentials(final NetHttpTransport httpTransport) throws IOException {
+    // Load client secrets.
+    InputStream in = new ClassPathResource(credentialsPath).getInputStream();
+    GoogleClientSecrets clientSecrets =
+        GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
+
+    // Build flow and trigger user authorization request.
+    GoogleAuthorizationCodeFlow flow =
+        new GoogleAuthorizationCodeFlow.Builder(httpTransport, JSON_FACTORY, clientSecrets, SCOPES)
             .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(tokensDirectoryPath)))
             .setAccessType("offline")
             .build();
-        LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8080).build();
-        return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
-    }
+    LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8080).build();
+    return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
+  }
 
   @Bean
   public Sheets sheets() throws GeneralSecurityException, IOException {
-        final NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-        return new Sheets.Builder(httpTransport, JSON_FACTORY, getCredentials(httpTransport))
-                .setApplicationName(applicationName)
-                .build();
-    }
+    final NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+    return new Sheets.Builder(httpTransport, JSON_FACTORY, getCredentials(httpTransport))
+        .setApplicationName(applicationName)
+        .build();
+  }
 }

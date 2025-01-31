@@ -5,7 +5,7 @@ import gdgoc.tuk.official.global.exception.DuplicationException;
 
 public class RecruitmentDuplicationException extends DuplicationException {
 
-    public RecruitmentDuplicationException(final ErrorCode errorCode) {
-        super(errorCode);
-    }
+  public RecruitmentDuplicationException(final ErrorCode errorCode) {
+    super(errorCode);
+  }
 }

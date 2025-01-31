@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SuccessResponse<T>{
-    private int httpStatusCode;
-    private String httpStatusMessage;
-    private T data;
+public class SuccessResponse<T> {
+  private int httpStatusCode;
+  private String httpStatusMessage;
+  private T data;
 }

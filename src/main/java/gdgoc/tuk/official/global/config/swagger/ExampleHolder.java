@@ -5,4 +5,3 @@ import lombok.Builder;
 
 @Builder
 public record ExampleHolder(Example holder, int code, String name) {}
-

@@ -30,7 +30,7 @@ public class QuestionController {
 
   @PostMapping
   public void addQuestions(@RequestBody QuestionAddRequest request) throws IOException {
-     questionService.addQuestions(request);
+    questionService.addQuestions(request);
   }
 
   @DeleteMapping("/{questionId}")
@@ -41,6 +41,6 @@ public class QuestionController {
   @PatchMapping("/{questionId}")
   public IdResponse modifyQuestion(
       @PathVariable final Long questionId, @RequestBody final QuestionModifyRequest request) {
-    return questionService.modifyQuestion(questionId,request);
+    return questionService.modifyQuestion(questionId, request);
   }
 }

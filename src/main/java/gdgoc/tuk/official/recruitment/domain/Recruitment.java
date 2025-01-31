@@ -18,12 +18,13 @@ public class Recruitment {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
   private Integer generation;
   private LocalDateTime openAt;
   private LocalDateTime closeAt;
 
-  public Recruitment(final Integer generation, final LocalDateTime openAt,
-      final LocalDateTime closeAt) {
+  public Recruitment(
+      final Integer generation, final LocalDateTime openAt, final LocalDateTime closeAt) {
     this.generation = generation;
     this.openAt = openAt;
     this.closeAt = closeAt;

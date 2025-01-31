@@ -8,5 +8,5 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AnswerService {
 
-    private final AnswerRepository answerRepository;
+  private final AnswerRepository answerRepository;
 }

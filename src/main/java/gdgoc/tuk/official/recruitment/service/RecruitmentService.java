@@ -28,8 +28,8 @@ public class RecruitmentService {
     checkGeneration(request.generation());
     checkAlreadyExistRecruitment();
     spreadSheetsService.setUpSpreadSheets(request.generation(), getSpreadSheetQuestions());
-    final Recruitment recruitment = new Recruitment(request.generation(), request.openAt(),
-        request.closeAt());
+    final Recruitment recruitment =
+        new Recruitment(request.generation(), request.openAt(), request.closeAt());
     recruitmentRepository.save(recruitment);
   }
 

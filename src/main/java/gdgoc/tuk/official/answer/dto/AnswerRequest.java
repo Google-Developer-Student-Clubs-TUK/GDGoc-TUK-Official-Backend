@@ -1,5 +1,3 @@
 package gdgoc.tuk.official.answer.dto;
 
-public record AnswerRequest(
-
-) {}
+public record AnswerRequest() {}

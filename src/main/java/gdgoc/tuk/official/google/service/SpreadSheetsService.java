@@ -62,11 +62,11 @@ public class SpreadSheetsService {
                                                 .setStartRowIndex(0)
                                                 .setEndRowIndex(1))))));
 
-      try {
-          sheetsClient.spreadsheets().batchUpdate(spreadsheetId, request).execute();
-      } catch (IOException e) {
-          log.error("Filter Creation Error : {}",e.getLocalizedMessage());
-      }
+    try {
+      sheetsClient.spreadsheets().batchUpdate(spreadsheetId, request).execute();
+    } catch (IOException e) {
+      log.error("Filter Creation Error : {}", e.getLocalizedMessage());
+    }
   }
 
   public void setUpSpreadSheets(final Integer generation, final List<List<Object>> values) {
@@ -83,13 +83,13 @@ public class SpreadSheetsService {
   }
 
   private Spreadsheet createSpreadSheets(final Spreadsheet spreadsheet) {
-      final Spreadsheet result;
-      try {
-          result = sheetsClient.spreadsheets().create(spreadsheet).execute();
-      } catch (IOException e) {
+    final Spreadsheet result;
+    try {
+      result = sheetsClient.spreadsheets().create(spreadsheet).execute();
+    } catch (IOException e) {
       throw new SheetsCreationException(ErrorCode.SHEETS_CREATION_FAILED);
-      }
-      return result;
+    }
+    return result;
   }
 
   private void setHeaderBottomBorder(String spreadsheetId) {
@@ -100,10 +100,10 @@ public class SpreadSheetsService {
                 new UpdateBordersRequest().setRange(getRange()).setBottom(bottomBorder));
     BatchUpdateSpreadsheetRequest request =
         new BatchUpdateSpreadsheetRequest().setRequests(Collections.singletonList(borderRequest));
-    try{
+    try {
       sheetsClient.spreadsheets().batchUpdate(spreadsheetId, request).execute();
-    }catch (IOException e){
-      log.error("Bottom Border Creation Error : {}",e.getLocalizedMessage());
+    } catch (IOException e) {
+      log.error("Bottom Border Creation Error : {}", e.getLocalizedMessage());
     }
   }
 

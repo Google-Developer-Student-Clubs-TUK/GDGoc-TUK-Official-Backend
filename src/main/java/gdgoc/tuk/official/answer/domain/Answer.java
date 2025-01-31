@@ -17,17 +17,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Answer {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    private String content;
+  private String content;
 
-    private Long questionId;
+  private Long questionId;
 
-    @Builder
-    public Answer(final String content, final Long questionId) {
-        this.content = content;
-        this.questionId = questionId;
-    }
+  @Builder
+  public Answer(final String content, final Long questionId) {
+    this.content = content;
+    this.questionId = questionId;
+  }
 }

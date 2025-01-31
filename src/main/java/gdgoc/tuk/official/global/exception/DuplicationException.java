@@ -6,6 +6,6 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class DuplicationException extends IllegalStateException{
-    private final ErrorCode errorCode;
+public class DuplicationException extends IllegalStateException {
+  private final ErrorCode errorCode;
 }
