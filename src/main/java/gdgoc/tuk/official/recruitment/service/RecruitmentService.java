@@ -1,7 +1,7 @@
 package gdgoc.tuk.official.recruitment.service;
 
 import gdgoc.tuk.official.global.ErrorCode;
-import gdgoc.tuk.official.google.service.SpreadSheetsService;
+import gdgoc.tuk.official.google.initializer.SpreadSheetsInitializer;
 import gdgoc.tuk.official.question.service.QuestionService;
 import gdgoc.tuk.official.recruitment.domain.Recruitment;
 import gdgoc.tuk.official.recruitment.dto.RecruitmentOpenRequest;
@@ -21,13 +21,13 @@ public class RecruitmentService {
 
   private final RecruitmentRepository recruitmentRepository;
   private final QuestionService questionService;
-  private final SpreadSheetsService spreadSheetsService;
+  private final SpreadSheetsInitializer spreadSheetsInitializer;
 
   @Transactional
   public void openRecruitment(final RecruitmentOpenRequest request) {
     checkGeneration(request.generation());
     checkAlreadyExistRecruitment();
-    spreadSheetsService.setUpSpreadSheets(request.generation(), getSpreadSheetQuestions());
+    spreadSheetsInitializer.init(request.generation(), getSpreadSheetQuestions());
     final Recruitment recruitment =
         new Recruitment(request.generation(), request.openAt(), request.closeAt());
     recruitmentRepository.save(recruitment);
