@@ -22,7 +22,7 @@ public class QuestionService {
   public QuestionListResponse findAllQuestionResponses() {
     final List<QuestionResponse> questionResponses =
         questionRepository.findAll().stream()
-            .map(q -> new QuestionResponse(q.getId(), q.getContent(),q.getOrder()))
+            .map(q -> new QuestionResponse(q.getId(), q.getContent()))
             .toList();
     return new QuestionListResponse(questionResponses);
   }
@@ -30,7 +30,7 @@ public class QuestionService {
   public void addQuestions(final QuestionSaveRequestList request) {
     final List<Question> questions =
         request.questionSaveRequests().stream()
-            .map(q -> new Question(q.content().toString(), q.order()))
+            .map(Question::new)
             .toList();
     questionRepository.saveAll(questions);
   }

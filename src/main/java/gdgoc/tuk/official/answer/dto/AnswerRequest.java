@@ -1,6 +1,6 @@
 package gdgoc.tuk.official.answer.dto;
 
-public record ApplyRequest(
+public record AnswerRequest(
     Long questionId,
     String answer
 ) {}

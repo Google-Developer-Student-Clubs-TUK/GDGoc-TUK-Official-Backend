@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.cglib.core.Local;
 
 @Entity
 @Getter
@@ -20,13 +19,24 @@ public class Recruitment {
   private Long id;
 
   private Integer generation;
+  private String spreadSheetsId;
   private LocalDateTime openAt;
   private LocalDateTime closeAt;
+  private Integer emptyRowNumber;
 
   public Recruitment(
-      final Integer generation, final LocalDateTime openAt, final LocalDateTime closeAt) {
+      final Integer generation,
+      String spreadSheetsId,
+      final LocalDateTime openAt,
+      final LocalDateTime closeAt) {
     this.generation = generation;
+    this.spreadSheetsId = spreadSheetsId;
     this.openAt = openAt;
     this.closeAt = closeAt;
+      this.emptyRowNumber = 2;
+  }
+
+  public void increaseRowNumber(){
+    emptyRowNumber++;
   }
 }

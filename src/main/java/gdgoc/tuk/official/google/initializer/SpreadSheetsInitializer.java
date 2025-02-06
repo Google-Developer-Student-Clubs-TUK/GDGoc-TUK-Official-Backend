@@ -17,6 +17,7 @@ import com.google.api.services.sheets.v4.model.UpdateValuesResponse;
 import com.google.api.services.sheets.v4.model.ValueRange;
 import gdgoc.tuk.official.global.ErrorCode;
 import gdgoc.tuk.official.google.exception.SheetsCreationException;
+import gdgoc.tuk.official.google.service.SpreadSheetsService;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -31,9 +32,9 @@ public class SpreadSheetsInitializer {
 
   private static final String SPREAD_SHEET_TITLE = "GDGOC-TUK %d기 지원자 응답";
   private static final int INITIAL_SHEET_ID = 0;
-  private static final String FIRST_ROW_RANGE = "시트1!1:1";
+  private static final String POSITION = "시트1!1:1";
   private final Sheets sheetsClient;
-
+  private final SpreadSheetsService spreadSheetsService;
   private Border getBorder() {
     return new Border()
         .setStyle("SOLID")
@@ -68,16 +69,17 @@ public class SpreadSheetsInitializer {
     }
   }
 
-  public void init(final Integer generation, final List<List<Object>> questions) {
+  public String init(final Integer generation, final List<List<Object>> questions) {
     final Spreadsheet spreadsheet =
         new Spreadsheet()
             .setProperties(
                 new SpreadsheetProperties().setTitle(SPREAD_SHEET_TITLE.formatted(generation)));
     final Spreadsheet result = createSpreadSheets(spreadsheet);
     final String spreadsheetId = result.getSpreadsheetId();
-    setUpQuestions(spreadsheetId, questions);
+    spreadSheetsService.write(spreadsheetId,questions,POSITION);
     setHeaderBottomBorder(spreadsheetId);
     setHeaderRow(spreadsheetId);
+    return spreadsheetId;
   }
 
   private Spreadsheet createSpreadSheets(final Spreadsheet spreadsheet) {
@@ -114,7 +116,7 @@ public class SpreadSheetsInitializer {
           sheetsClient
               .spreadsheets()
               .values()
-              .update(spreadsheetId, FIRST_ROW_RANGE, body)
+              .update(spreadsheetId, POSITION, body)
               .setValueInputOption("USER_ENTERED")
               .execute();
       log.info("%d cells updated.", result.getUpdatedCells());

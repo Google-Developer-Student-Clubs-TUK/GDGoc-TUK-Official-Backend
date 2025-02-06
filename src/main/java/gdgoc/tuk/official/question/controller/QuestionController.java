@@ -29,7 +29,7 @@ public class QuestionController {
   }
 
   @PostMapping
-  public void addQuestions(@RequestBody QuestionSaveRequestList request) throws IOException {
+  public void addQuestions(@RequestBody QuestionSaveRequestList request) {
     questionService.addQuestions(request);
   }
 

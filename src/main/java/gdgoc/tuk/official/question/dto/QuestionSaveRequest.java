@@ -1,3 +1,3 @@
 package gdgoc.tuk.official.question.dto;
 
-public record QuestionSaveRequest(Object content, Long order) {}
+public record QuestionSaveRequest(String content) {}

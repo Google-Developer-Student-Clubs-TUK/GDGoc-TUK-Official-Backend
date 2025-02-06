@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,11 +20,8 @@ public class Question {
 
   private String content;
 
-  private Long order;
-
-  public Question(final String content,final Long order) {
+  public Question(final String content) {
     this.content = content;
-    this.order = order;
   }
 
   public void modify(final String content) {
