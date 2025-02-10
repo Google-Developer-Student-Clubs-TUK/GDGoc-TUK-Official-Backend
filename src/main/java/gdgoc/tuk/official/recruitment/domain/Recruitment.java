@@ -18,25 +18,19 @@ public class Recruitment {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private Integer generation;
+  private String generation;
   private String spreadSheetsId;
   private LocalDateTime openAt;
   private LocalDateTime closeAt;
-  private Integer emptyRowNumber;
 
   public Recruitment(
-      final Integer generation,
-      String spreadSheetsId,
+      final String generation,
+      final String spreadSheetsId,
       final LocalDateTime openAt,
       final LocalDateTime closeAt) {
     this.generation = generation;
     this.spreadSheetsId = spreadSheetsId;
     this.openAt = openAt;
     this.closeAt = closeAt;
-      this.emptyRowNumber = 2;
-  }
-
-  public void increaseRowNumber(){
-    emptyRowNumber++;
   }
 }

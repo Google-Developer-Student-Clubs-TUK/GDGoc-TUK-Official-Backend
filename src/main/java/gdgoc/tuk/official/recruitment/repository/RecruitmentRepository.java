@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RecruitmentRepository extends JpaRepository<Recruitment, Long> {
 
-  boolean existsByGeneration(Integer generation);
+  boolean existsByGeneration(String generation);
 
   boolean existsByCloseAtIsAfter(LocalDateTime now);
 

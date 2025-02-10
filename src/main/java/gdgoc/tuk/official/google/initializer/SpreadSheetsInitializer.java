@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class SpreadSheetsInitializer {
 
-  private static final String SPREAD_SHEET_TITLE = "GDGOC-TUK %d기 지원자 응답";
+  private static final String SPREAD_SHEET_TITLE = "GDGOC-TUK %s기 지원자 응답";
   private static final int INITIAL_SHEET_ID = 0;
   private static final String POSITION = "시트1!1:1";
   private final Sheets sheetsClient;
@@ -69,7 +69,7 @@ public class SpreadSheetsInitializer {
     }
   }
 
-  public String init(final Integer generation, final List<List<Object>> questions) {
+  public String init(final String generation, final List<List<Object>> questions) {
     final Spreadsheet spreadsheet =
         new Spreadsheet()
             .setProperties(
