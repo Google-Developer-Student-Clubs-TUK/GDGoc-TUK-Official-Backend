@@ -22,8 +22,9 @@ public class Applicant {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private String email;
-  private ApplicationStatus applicationStatus;
+  private String name;
+
+  private String studentNumber;
 
   @Enumerated(EnumType.STRING)
   private Field field;
@@ -31,6 +32,30 @@ public class Applicant {
   @Enumerated(EnumType.STRING)
   private Gender gender;
 
+  private String email;
+
+  private String major;
+
+  @Enumerated(EnumType.STRING)
+  private ApplicationStatus applicationStatus;
+
   @Enumerated(EnumType.STRING)
   private Role role;
+
+  public Applicant(
+      final String name,
+      final String studentNumber,
+      final Field field,
+      final Gender gender,
+      final String email,
+      String major) {
+    this.name = name;
+    this.studentNumber = studentNumber;
+    this.field = field;
+    this.gender = gender;
+    this.email = email;
+    this.major = major;
+    this.applicationStatus = ApplicationStatus.PENDING;
+    this.role = Role.ROLE_ORGANIZER;
+  }
 }

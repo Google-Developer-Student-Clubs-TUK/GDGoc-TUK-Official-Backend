@@ -76,7 +76,7 @@ public class SpreadSheetsInitializer {
                 new SpreadsheetProperties().setTitle(SPREAD_SHEET_TITLE.formatted(generation)));
     final Spreadsheet result = createSpreadSheets(spreadsheet);
     final String spreadsheetId = result.getSpreadsheetId();
-    spreadSheetsService.write(spreadsheetId,questions,POSITION);
+    spreadSheetsService.write(spreadsheetId,questions,generation);
     setHeaderBottomBorder(spreadsheetId);
     setHeaderRow(spreadsheetId);
     return spreadsheetId;

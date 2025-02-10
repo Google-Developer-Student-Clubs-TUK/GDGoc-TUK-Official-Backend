@@ -1,6 +1,5 @@
 package gdgoc.tuk.official.google.service;
 
-import com.google.api.client.googleapis.json.GoogleJsonError;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.UpdateValuesResponse;
@@ -43,7 +42,7 @@ public class SpreadSheetsService {
         final ValueRange body = new ValueRange().setValues(values).setMajorDimension("ROWS");
         UpdateValuesResponse response;
         reentrantLock.lock();
-        String nextRow = nextAnswerRowService.getNextRow(generation).toString();
+        String nextRow = (String)nextAnswerRowService.getNextRow(generation);
         try{
             final String formattedPosition = POSITION.formatted(nextRow,nextRow);
             response = sheetsClient
