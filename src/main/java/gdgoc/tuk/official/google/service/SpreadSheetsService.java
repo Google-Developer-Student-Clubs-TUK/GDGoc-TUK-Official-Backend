@@ -4,7 +4,7 @@ import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.UpdateValuesResponse;
 import com.google.api.services.sheets.v4.model.ValueRange;
-import gdgoc.tuk.official.answer.service.NextAnswerRowService;
+import gdgoc.tuk.official.answer.repository.NextAnswerRowRedisRepository;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
@@ -20,7 +20,7 @@ public class SpreadSheetsService {
     private static final String POSITION = "시트1!%s:%s";
     private final Sheets sheetsClient;
     private final ReentrantLock reentrantLock = new ReentrantLock();
-    private final NextAnswerRowService nextAnswerRowService;
+    private final NextAnswerRowRedisRepository nextAnswerRowRedisRepository;
 
     public UpdateValuesResponse write(String spreadsheetId, List<List<Object>> values,
         String generation){
@@ -42,7 +42,7 @@ public class SpreadSheetsService {
         final ValueRange body = new ValueRange().setValues(values).setMajorDimension("ROWS");
         UpdateValuesResponse response;
         reentrantLock.lock();
-        String nextRow = (String)nextAnswerRowService.getNextRow(generation);
+        String nextRow = (String) nextAnswerRowRedisRepository.findNextRow(generation);
         try{
             final String formattedPosition = POSITION.formatted(nextRow,nextRow);
             response = sheetsClient
@@ -51,7 +51,7 @@ public class SpreadSheetsService {
                 .update(spreadsheetId, formattedPosition, body)
                 .setValueInputOption("USER_ENTERED")
                 .execute();
-            nextAnswerRowService.increaseNextRow(generation);
+            nextAnswerRowRedisRepository.increaseNextRow(generation);
         }finally{
             reentrantLock.unlock();
         }

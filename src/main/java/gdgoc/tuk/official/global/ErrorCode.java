@@ -27,7 +27,13 @@ public enum ErrorCode {
    */
   NOT_ACCEPTED_APPLICANT(HttpStatus.BAD_REQUEST,"500","합격 대상자가 아닙니다."),
   APPLICANT_NOT_FOUND(HttpStatus.NOT_FOUND,"501","지원자를 찾을 수 없습니다."),
-  NOT_VALID_EMAIL(HttpStatus.BAD_REQUEST,"502","한국공학대학교 이메일 형식이 아닙니다.");
+  NOT_VALID_EMAIL(HttpStatus.BAD_REQUEST,"502","한국공학대학교 이메일 형식이 아닙니다."),
+
+  /**
+   *  Email Error Code 600 ~ 699
+   */
+  NOT_VERIFIED_EMAIL(HttpStatus.NOT_FOUND,"600","인증되지 않은 메일입니다. 인증을 시도해주세요."),
+  INVALID_CODE(HttpStatus.BAD_REQUEST,"601","잘못된 인증코드입니다.");
 
   private final HttpStatus httpStatus;
   private final String code;

@@ -1,19 +1,19 @@
-package gdgoc.tuk.official.answer.service;
+package gdgoc.tuk.official.answer.repository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
-@Component
+@Repository
 @RequiredArgsConstructor
 @Slf4j
-public class NextAnswerRowService {
+public class NextAnswerRowRedisRepository {
 
   private final RedisTemplate<String, Object> redisTemplate;
   private static final String INITIAL_NEXT_ROW = "1";
 
-  public Object getNextRow(final String generation) {
+  public Object findNextRow(final String generation) {
     return redisTemplate.opsForValue().get(generation);
   }
 
@@ -21,7 +21,7 @@ public class NextAnswerRowService {
     redisTemplate.opsForValue().increment(generation);
   }
 
-  public void createNewGeneration(final String generation) {
+  public void saveNewGeneration(final String generation) {
     redisTemplate.delete(generation);
     redisTemplate.opsForValue().set(generation,INITIAL_NEXT_ROW);
   }
