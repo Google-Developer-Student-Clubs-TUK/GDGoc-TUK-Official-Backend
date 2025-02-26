@@ -3,6 +3,7 @@ package gdgoc.tuk.official.answer.service;
 import gdgoc.tuk.official.answer.domain.Answer;
 import gdgoc.tuk.official.answer.dto.AnswerRequestList;
 import gdgoc.tuk.official.answer.repository.AnswerRepository;
+import gdgoc.tuk.official.applicant.service.ApplicantService;
 import gdgoc.tuk.official.google.service.SpreadSheetsService;
 import gdgoc.tuk.official.recruitment.domain.Recruitment;
 import gdgoc.tuk.official.recruitment.service.RecruitmentService;
@@ -19,6 +20,7 @@ public class AnswerService {
   private final AnswerRepository answerRepository;
   private final RecruitmentService recruitmentService;
   private final SpreadSheetsService spreadSheetsService;
+  private final ApplicantService applicantService;
 
   @Transactional
   public void apply(final AnswerRequestList request) {

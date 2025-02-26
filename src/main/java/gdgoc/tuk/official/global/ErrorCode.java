@@ -10,6 +10,7 @@ public enum ErrorCode {
 
   /** Question Error 100 ~ 199 */
   QUESTION_NOT_FOUND(HttpStatus.NOT_FOUND, "100", "등록된 질문을 찾을 수 없습니다."),
+  DELETE_NOT_ALLOWED(HttpStatus.BAD_REQUEST,"101","삭제할 수 없는 질문입니다."),
 
   /** Recruitment Error Code 200 ~ 299 */
   GENERATION_DUPLICATED(HttpStatus.BAD_REQUEST, "200", "이미 존재하는 기수입니다."),

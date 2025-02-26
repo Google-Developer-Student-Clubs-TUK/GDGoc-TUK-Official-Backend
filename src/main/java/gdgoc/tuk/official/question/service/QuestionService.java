@@ -7,6 +7,7 @@ import gdgoc.tuk.official.question.dto.QuestionListResponse;
 import gdgoc.tuk.official.question.dto.QuestionModifyRequest;
 import gdgoc.tuk.official.question.dto.QuestionResponse;
 import gdgoc.tuk.official.question.dto.QuestionSaveRequestList;
+import gdgoc.tuk.official.question.exception.DeleteNotAllowedException;
 import gdgoc.tuk.official.question.exception.QuestionNotFoundException;
 import gdgoc.tuk.official.question.repository.QuestionRepository;
 import java.util.List;
@@ -36,6 +37,10 @@ public class QuestionService {
   }
 
   public void deleteQuestion(final Long questionId) {
+    final Question question = getQuestion(questionId);
+    if(question.isRequired()){
+      throw new DeleteNotAllowedException(ErrorCode.DELETE_NOT_ALLOWED);
+    }
     questionRepository.deleteById(questionId);
   }
 

@@ -21,7 +21,6 @@ public class EmailService {
 
   @Value("${google.gmail.title}")
   private String title;
-
   @Value("${google.gmail.code-timeout}")
   private Integer codeTimeout;
 

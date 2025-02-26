@@ -14,7 +14,7 @@ public class VerificationCodeRedisRepository {
 
     public void saveVerificationCode(final String email,final String code, final Integer timeout){
         redisTemplate.delete(email);
-        redisTemplate.opsForValue().set(email,code, Duration.ofMinutes(20));
+        redisTemplate.opsForValue().set(email,code, Duration.ofMinutes(timeout));
     }
 
     public Optional<Object> findVerificationCode(final String email){
