@@ -13,6 +13,7 @@ import jakarta.persistence.UniqueConstraint;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -32,14 +33,17 @@ public class Question {
 
   private boolean isRequired;
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "id")
+  @OneToMany(fetch = FetchType.LAZY)
   private List<SubQuestion> subQuestions = new ArrayList<>();
 
-  public Question(final String content) {
+  @Builder
+  public Question(final String content, final QuestionType questionType, final boolean isRequired) {
     this.content = content;
+    this.questionType = questionType;
+    this.isRequired = isRequired;
   }
 
-  public void modify(final String content) {
-    this.content = content;
+  public void addSubQuestion(final SubQuestion subQuestion){
+    subQuestions.add(subQuestion);
   }
 }

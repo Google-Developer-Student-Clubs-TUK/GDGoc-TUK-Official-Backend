@@ -1,7 +1,7 @@
 package gdgoc.tuk.official.question.controller;
 
 import gdgoc.tuk.official.question.dto.QuestionListResponse;
-import gdgoc.tuk.official.question.dto.QuestionSaveRequestList;
+import gdgoc.tuk.official.question.dto.QuestionUpdateRequest;
 import gdgoc.tuk.official.question.service.QuestionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,9 +29,15 @@ public class QuestionController {
   }
 
   @PostMapping
-  @Operation(summary = "질문 생성", description = "질문을 수정/생성 공용 인터페이스입니다.")
-  public void addQuestions(@RequestBody QuestionSaveRequestList request) {
-    questionService.addQuestions(request);
+  @Operation(
+      summary = "질문 등록",
+      description =
+          """
+          질문을 수정/등록 하는 API입니다.
+          새로운 질문을 등록하는 경우엔 질문의 식별자를 -1, -2, -3 으로 넘겨주시면 됩니다.
+          해당 API 요청에는 전체 질문의 순서를 필수로 넘겨주셔야합니다.""")
+  public void updateQuestions(@RequestBody QuestionUpdateRequest request) {
+    questionService.updateQuestions(request);
   }
 
   @DeleteMapping("/{questionId}")

@@ -19,4 +19,7 @@ public class SubQuestion {
 
     private String subContent;
 
+    public SubQuestion(final String subContent) {
+        this.subContent = subContent;
+    }
 }
