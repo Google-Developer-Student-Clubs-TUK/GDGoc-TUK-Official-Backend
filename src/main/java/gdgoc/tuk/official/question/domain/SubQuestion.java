@@ -22,4 +22,8 @@ public class SubQuestion {
     public SubQuestion(final String subContent) {
         this.subContent = subContent;
     }
+
+    public void modifySubContent(final String subContent){
+        this.subContent = subContent;
+    }
 }

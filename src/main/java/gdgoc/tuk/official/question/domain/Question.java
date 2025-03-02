@@ -12,6 +12,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.UniqueConstraint;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,6 +42,18 @@ public class Question {
     this.content = content;
     this.questionType = questionType;
     this.isRequired = isRequired;
+  }
+
+  public void modifyContent(
+      final String content, final QuestionType questionType, final boolean isRequired,
+      final Map<Long,String> modifiedSubQuestionMap) {
+    this.content = content;
+    this.questionType = questionType;
+    this.isRequired = isRequired;
+    subQuestions.forEach(sq->{
+      String modifiedSubContent = modifiedSubQuestionMap.get(sq.getId());
+      sq.modifySubContent(modifiedSubContent);
+    });
   }
 
   public void addSubQuestion(final SubQuestion subQuestion){

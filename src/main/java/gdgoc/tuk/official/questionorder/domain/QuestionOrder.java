@@ -19,4 +19,8 @@ public class QuestionOrder {
 
     private Long questionId;
     private Long order;
+
+    public void changeOrder(final Long order){
+        this.order = order;
+    }
 }

@@ -2,16 +2,20 @@ package gdgoc.tuk.official.question.service;
 
 import gdgoc.tuk.official.global.ErrorCode;
 import gdgoc.tuk.official.question.domain.Question;
-import gdgoc.tuk.official.question.domain.SubQuestion;
+import gdgoc.tuk.official.question.dto.ModifiedQuestion;
 import gdgoc.tuk.official.question.dto.QuestionListResponse;
 import gdgoc.tuk.official.question.dto.QuestionResponse;
 import gdgoc.tuk.official.question.dto.QuestionUpdateRequest;
+import gdgoc.tuk.official.question.dto.UpdatedQuestionOrder;
 import gdgoc.tuk.official.question.exception.DeleteNotAllowedException;
 import gdgoc.tuk.official.question.exception.QuestionNotFoundException;
 import gdgoc.tuk.official.question.repository.QuestionRepository;
 import gdgoc.tuk.official.question.service.mapper.QuestionMapper;
+import gdgoc.tuk.official.questionorder.domain.QuestionOrder;
+import gdgoc.tuk.official.questionorder.repository.QuestionOrderRepository;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +25,7 @@ public class QuestionService {
 
   private final QuestionRepository questionRepository;
   private final QuestionMapper questionMapper;
+  private final QuestionOrderRepository questionOrderRepository;
 
   public QuestionListResponse findAllQuestionResponses() {
     final List<QuestionResponse> questionResponses =
@@ -31,21 +36,38 @@ public class QuestionService {
   }
 
   public void updateQuestions(final QuestionUpdateRequest request) {
-    createNewQuestion(request);
+    Map<Long, Long> newOrderMap = createNewQuestion(request);
     updateModifiedQuestion(request);
+    updateQuestionOrder(newOrderMap);
+  }
+
+  private void updateQuestionOrder(final Map<Long,Long> orderMap) {
+    List<QuestionOrder> questionOrders = questionOrderRepository.findAll();
+    questionOrders.forEach(qo->qo.changeOrder(orderMap.get(qo.getQuestionId())));
   }
 
   private void updateModifiedQuestion(final QuestionUpdateRequest request) {
-    request.modifiedQuestions();
+    final List<ModifiedQuestion> modifiedQuestions = request.modifiedQuestions();
+    final Map<Long, ModifiedQuestion> modifiedQuestionMap = modifiedQuestions.stream()
+        .collect(Collectors.toMap(ModifiedQuestion::questionId, q -> q));
+    final List<Long> modifiedQuestionIds =
+        modifiedQuestions.stream().map(ModifiedQuestion::questionId).toList();
+    final List<Question> questions = questionRepository.findAllByIdsFetchSubQuestion(modifiedQuestionIds);
+    questions.forEach(q->{
+      ModifiedQuestion modifiedQuestion = modifiedQuestionMap.get(q.getId());
+      questionMapper.modifyQuestion(q,modifiedQuestion);
+    });
   }
 
-  private void createNewQuestion(final QuestionUpdateRequest request) {
-    Map<Long, Long> questionOrders = request.questionOrders();
+  private Map<Long,Long> createNewQuestion(final QuestionUpdateRequest request) {
+    final Map<Long, Long> orderMap = request.updatedQuestionOrders().stream().collect(
+        Collectors.toMap(UpdatedQuestionOrder::getQuestionId, UpdatedQuestionOrder::getOrder));
     request.newQuestions().forEach(nq->{
       Long newId = questionRepository.save(questionMapper.toQuestion(nq)).getId();
-      questionOrders.put(newId,questionOrders.get(nq.questionId()));
-      questionOrders.remove(nq.questionId());
+      orderMap.put(newId,orderMap.get(nq.questionId()));
+      orderMap.remove(nq.questionId());
     });
+    return orderMap;
   }
 
   public void deleteQuestion(final Long questionId) {
