@@ -11,16 +11,21 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class QuestionOrder {
+public class QuestionOrders {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long questionId;
-    private Long order;
+    private Long orders;
 
     public void changeOrder(final Long order){
-        this.order = order;
+        this.orders = order;
+    }
+
+    public QuestionOrders(final Long questionId, final Long orders) {
+        this.questionId = questionId;
+        this.orders = orders;
     }
 }
