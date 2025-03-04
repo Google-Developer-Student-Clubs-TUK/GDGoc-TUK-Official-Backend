@@ -1,5 +1,6 @@
 package gdgoc.tuk.official.question.controller;
 
+import gdgoc.tuk.official.question.domain.Question;
 import gdgoc.tuk.official.question.dto.QuestionListResponse;
 import gdgoc.tuk.official.question.dto.QuestionUpdateRequest;
 import gdgoc.tuk.official.question.service.QuestionService;
@@ -34,8 +35,10 @@ public class QuestionController {
       description =
           """
           질문을 수정/등록 하는 API입니다.
-          새로운 질문을 등록하는 경우엔 질문의 식별자를 -1, -2, -3 으로 넘겨주시면 됩니다.
-          해당 API 요청에는 전체 질문의 순서를 필수로 넘겨주셔야합니다.""")
+          새로운 질문을 등록하는 경우엔 질문의 임시 식별자를 -1, -2, -3으로 넣어주시고 새로운 질문이 존재하는 경우엔
+          모든 질문의 순서를 같이 넘겨야합니다.
+          수정만 하는 경우엔 전체 질문의 순서를 넘기지 않아도 됩니다.
+          질문 순서를 변경하는 경우에도 모든 질문의 순서를 넘겨야합니다.""")
   public void updateQuestions(@RequestBody QuestionUpdateRequest request) {
     questionService.updateQuestions(request);
   }

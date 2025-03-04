@@ -5,6 +5,7 @@ import gdgoc.tuk.official.question.domain.Question;
 import gdgoc.tuk.official.question.domain.SubQuestion;
 import gdgoc.tuk.official.question.dto.ModifiedQuestion;
 import gdgoc.tuk.official.question.dto.QuestionListResponse;
+import gdgoc.tuk.official.question.dto.QuestionOrderResponse;
 import gdgoc.tuk.official.question.dto.QuestionResponse;
 import gdgoc.tuk.official.question.dto.QuestionUpdateRequest;
 import gdgoc.tuk.official.question.dto.UpdatedQuestionOrder;
@@ -19,9 +20,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
+@Transactional(readOnly = true)
 public class QuestionService {
 
   private final QuestionRepository questionRepository;
@@ -30,16 +33,23 @@ public class QuestionService {
 
   public QuestionListResponse findAllQuestionResponses() {
     final List<QuestionResponse> questionResponses =
-        questionRepository.findAll().stream()
-            .map(q -> new QuestionResponse(q.getId(), q.getContent()))
+        questionRepository.findAllFetchSubQuestion().stream()
+            .map(questionMapper::toQuestionResponse)
             .toList();
-    return new QuestionListResponse(questionResponses);
+    final List<QuestionOrderResponse> questionOrderResponseList =
+        questionMapper.toQuestionOrderResponseList(
+        questionOrderRepository.findAll());
+    return new QuestionListResponse(questionResponses,questionOrderResponseList);
   }
 
+
+  @Transactional
   public void updateQuestions(final QuestionUpdateRequest request) {
     Map<Long, Long> newOrderMap = createNewQuestion(request);
     updateModifiedQuestion(request);
-    updateQuestionOrder(newOrderMap);
+    if(!newOrderMap.isEmpty()){
+      updateQuestionOrder(newOrderMap);
+    }
   }
 
   private void updateQuestionOrder(final Map<Long,Long> orderMap) {

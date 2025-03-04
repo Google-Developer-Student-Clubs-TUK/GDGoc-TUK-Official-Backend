@@ -1,5 +1,6 @@
 package gdgoc.tuk.official.question.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -34,7 +35,8 @@ public class Question {
 
   private boolean isRequired;
 
-  @OneToMany(fetch = FetchType.LAZY)
+  @OneToMany(fetch = FetchType.LAZY,mappedBy = "question",cascade = CascadeType.ALL,
+      orphanRemoval = true)
   private List<SubQuestion> subQuestions = new ArrayList<>();
 
   @Builder
@@ -50,13 +52,16 @@ public class Question {
     this.content = content;
     this.questionType = questionType;
     this.isRequired = isRequired;
-    subQuestions.forEach(sq->{
-      String modifiedSubContent = modifiedSubQuestionMap.get(sq.getId());
-      sq.modifySubContent(modifiedSubContent);
-    });
+    if(!modifiedSubQuestionMap.isEmpty()){
+      subQuestions.forEach(sq->{
+        String modifiedSubContent = modifiedSubQuestionMap.get(sq.getId());
+        sq.modifySubContent(modifiedSubContent);
+      });
+    }
   }
 
   public void addSubQuestion(final SubQuestion subQuestion){
+    subQuestion.addParentQuestion(this);
     subQuestions.add(subQuestion);
   }
 }
