@@ -1,6 +1,7 @@
 package gdgoc.tuk.official.question.controller;
 
 import gdgoc.tuk.official.question.domain.Question;
+import gdgoc.tuk.official.question.dto.QuestionDeleteRequest;
 import gdgoc.tuk.official.question.dto.QuestionListResponse;
 import gdgoc.tuk.official.question.dto.QuestionUpdateRequest;
 import gdgoc.tuk.official.question.service.QuestionService;
@@ -45,7 +46,8 @@ public class QuestionController {
 
   @DeleteMapping("/{questionId}")
   @Operation(summary = "질문 삭제", description = "질문 식별자를 이용해 질문을 삭제합니다.")
-  public void deleteQuestion(@PathVariable final Long questionId) {
-    questionService.deleteQuestion(questionId);
+  public void deleteQuestion(@PathVariable final Long questionId, @RequestBody
+      QuestionDeleteRequest request) {
+    questionService.deleteQuestion(questionId,request);
   }
 }

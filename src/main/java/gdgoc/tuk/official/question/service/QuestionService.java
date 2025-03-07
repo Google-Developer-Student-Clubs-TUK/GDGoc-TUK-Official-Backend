@@ -4,6 +4,7 @@ import gdgoc.tuk.official.global.ErrorCode;
 import gdgoc.tuk.official.question.domain.Question;
 import gdgoc.tuk.official.question.domain.SubQuestion;
 import gdgoc.tuk.official.question.dto.ModifiedQuestion;
+import gdgoc.tuk.official.question.dto.QuestionDeleteRequest;
 import gdgoc.tuk.official.question.dto.QuestionListResponse;
 import gdgoc.tuk.official.question.dto.QuestionOrderResponse;
 import gdgoc.tuk.official.question.dto.QuestionResponse;
@@ -91,12 +92,23 @@ public class QuestionService {
     return questionOrderMap;
   }
 
-  public void deleteQuestion(final Long questionId) {
+  @Transactional
+  public void deleteQuestion(final Long questionId,final QuestionDeleteRequest request) {
     final Question question = getQuestion(questionId);
     if (question.isRequired()) {
       throw new DeleteNotAllowedException(ErrorCode.DELETE_NOT_ALLOWED);
     }
     questionRepository.deleteById(questionId);
+    questionOrderRepository.deleteByQuestionId(questionId);
+    reorder(request.questionOrders());
+  }
+
+  private void reorder(final List<UpdatedQuestionOrder> questionOrders){
+    Map<Long, Long> questionOrderMap = questionOrders.stream()
+        .collect(Collectors.toMap(UpdatedQuestionOrder::getQuestionId,
+            UpdatedQuestionOrder::getOrder));
+    questionOrderRepository.findAll()
+        .forEach(qo->qo.changeOrder(questionOrderMap.get(qo.getQuestionId())));
   }
 
   public Question getQuestion(final Long questionId) {
