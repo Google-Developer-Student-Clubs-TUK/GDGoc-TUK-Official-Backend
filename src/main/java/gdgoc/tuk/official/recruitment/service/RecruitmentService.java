@@ -5,6 +5,7 @@ import gdgoc.tuk.official.global.ErrorCode;
 import gdgoc.tuk.official.google.initializer.SpreadSheetsInitializer;
 import gdgoc.tuk.official.question.service.QuestionService;
 import gdgoc.tuk.official.recruitment.domain.Recruitment;
+import gdgoc.tuk.official.recruitment.dto.GenerationResponse;
 import gdgoc.tuk.official.recruitment.dto.RecruitmentOpenRequest;
 import gdgoc.tuk.official.recruitment.exception.GenerationDuplicationException;
 import gdgoc.tuk.official.recruitment.exception.RecruitmentDuplicationException;
@@ -60,5 +61,11 @@ public class RecruitmentService {
     return recruitmentRepository
             .findByBetweenOpenAtAndCloseAt(LocalDateTime.now())
             .orElseThrow(() -> new RecruitmentNotExistException(ErrorCode.RECRUITMENT_NOT_FOUND));
+  }
+
+  public GenerationResponse getGenerations(){
+    List<String> generations = recruitmentRepository.findGenerationByLocalTime(LocalDateTime.now())
+        .stream().map(Recruitment::getGeneration).toList();
+    return new GenerationResponse(generations);
   }
 }

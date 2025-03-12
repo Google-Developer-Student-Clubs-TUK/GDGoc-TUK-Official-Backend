@@ -20,7 +20,7 @@ public enum ErrorCode {
   /** Google Spread Sheets Error Code 300 ~ 399 */
   SHEETS_CREATION_FAILED(HttpStatus.BAD_GATEWAY, "300", "구글 스프레드시트 생성에 실패했습니다. 잠시 후 다시 시도해주세요."),
 
-  /** Member Error Code 400 ~ 499 */
+  /** Account Error Code 400 ~ 499 */
   MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "400", "회원을 찾을 수 없습니다."),
 
   /**

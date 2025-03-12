@@ -3,37 +3,35 @@ package gdgoc.tuk.official.member.domain;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
+public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Account account;
+    private String email;
+    private String password;
     @Enumerated(EnumType.STRING)
-    private Field field;
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
-    private String generation;
+    private Role role;
 
-    public Member(final Account account, final Field field, final Gender gender,
-        final String generation) {
-        this.account = account;
+    @Builder
+    public Account(final String email, final String password, final Field field, final Gender gender,
+        final Role role) {
+        this.email = email;
+        this.password = password;
         this.field = field;
         this.gender = gender;
-        this.generation = generation;
+        this.role = role;
     }
 }
