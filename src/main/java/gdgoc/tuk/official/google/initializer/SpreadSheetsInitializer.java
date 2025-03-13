@@ -87,6 +87,7 @@ public class SpreadSheetsInitializer {
     try {
       result = sheetsClient.spreadsheets().create(spreadsheet).execute();
     } catch (IOException e) {
+      log.error(e.getLocalizedMessage());
       throw new SheetsCreationException(ErrorCode.SHEETS_CREATION_FAILED);
     }
     return result;

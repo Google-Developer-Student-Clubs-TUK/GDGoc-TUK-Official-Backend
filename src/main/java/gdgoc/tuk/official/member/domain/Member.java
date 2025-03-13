@@ -27,6 +27,10 @@ public class Member {
     private Field field;
     @Enumerated(EnumType.STRING)
     private Gender gender;
+    @Enumerated(EnumType.STRING)
+    private EnrollmentStatus enrollmentStatus;
+    @Enumerated(EnumType.STRING)
+    private UniversityYear universityYear;
     private String generation;
 
     public Member(final Account account, final Field field, final Gender gender,

@@ -3,7 +3,10 @@ package gdgoc.tuk.official.recruitment.service;
 import gdgoc.tuk.official.answer.repository.NextAnswerRowRedisRepository;
 import gdgoc.tuk.official.global.ErrorCode;
 import gdgoc.tuk.official.google.initializer.SpreadSheetsInitializer;
+import gdgoc.tuk.official.question.domain.Question;
 import gdgoc.tuk.official.question.service.QuestionService;
+import gdgoc.tuk.official.questionorder.domain.QuestionOrders;
+import gdgoc.tuk.official.questionorder.service.QuestionOrderService;
 import gdgoc.tuk.official.recruitment.domain.Recruitment;
 import gdgoc.tuk.official.recruitment.dto.GenerationResponse;
 import gdgoc.tuk.official.recruitment.dto.RecruitmentOpenRequest;
@@ -12,7 +15,10 @@ import gdgoc.tuk.official.recruitment.exception.RecruitmentDuplicationException;
 import gdgoc.tuk.official.recruitment.exception.RecruitmentNotExistException;
 import gdgoc.tuk.official.recruitment.repository.RecruitmentRepository;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +30,7 @@ public class RecruitmentService {
 
   private final RecruitmentRepository recruitmentRepository;
   private final QuestionService questionService;
+  private final QuestionOrderService questionOrderService;
   private final SpreadSheetsInitializer spreadSheetsInitializer;
   private final NextAnswerRowRedisRepository nextAnswerRowRedisRepository;
 
@@ -40,8 +47,14 @@ public class RecruitmentService {
   }
 
   private List<List<Object>> getSpreadSheetQuestions() {
+    Map<Long, Integer> orderMap = questionOrderService.findAllQuestionOrders()
+        .stream().collect(Collectors.toMap(QuestionOrders::getQuestionId,
+            QuestionOrders::getOrders));
+    List<Question> sortedQuestions = questionService.findAllQuestions().stream()
+        .sorted(Comparator.comparing(q -> orderMap.getOrDefault(q.getId(), Integer.MAX_VALUE)))
+        .toList();
     return List.of(
-        questionService.findAllQuestions().stream().map(q -> (Object) q.getContent()).toList());
+        sortedQuestions.stream().map(q -> (Object) q.getContent()).toList());
   }
 
   private void checkAlreadyExistRecruitment() {

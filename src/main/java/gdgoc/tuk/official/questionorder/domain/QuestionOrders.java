@@ -18,13 +18,13 @@ public class QuestionOrders {
     private Long id;
 
     private Long questionId;
-    private Long orders;
+    private Integer orders;
 
-    public void changeOrder(final Long order){
+    public void changeOrder(final Integer order){
         this.orders = order;
     }
 
-    public QuestionOrders(final Long questionId, final Long orders) {
+    public QuestionOrders(final Long questionId, final Integer orders) {
         this.questionId = questionId;
         this.orders = orders;
     }

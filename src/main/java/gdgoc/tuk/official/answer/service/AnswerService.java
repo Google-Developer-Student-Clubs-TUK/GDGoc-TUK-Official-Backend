@@ -8,6 +8,7 @@ import gdgoc.tuk.official.google.service.SpreadSheetsService;
 import gdgoc.tuk.official.recruitment.domain.Recruitment;
 import gdgoc.tuk.official.recruitment.service.RecruitmentService;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,20 +26,21 @@ public class AnswerService {
   @Transactional
   public void apply(final AnswerRequestList request) {
     Recruitment recruitment = recruitmentService.getRecruitment();
-    final List<Answer> answerList = getAnswerList(request);
     final List<Object> sheetsValues = getSheetsValues(request);
-    answerRepository.saveAll(answerList);
     spreadSheetsService.write(
         recruitment.getSpreadSheetsId(), List.of(sheetsValues), recruitment.getGeneration());
   }
 
-  private List<Answer> getAnswerList(final AnswerRequestList request) {
-    return request.answerRequests().stream()
-        .map(a -> new Answer(a.answer(), a.questionId()))
-        .toList();
+  private List<Object> getSheetsValues(final AnswerRequestList request) {
+    return request.answerRequests().stream().map(a -> (Object) getAnswer(a.answer())).toList();
   }
 
-  private List<Object> getSheetsValues(final AnswerRequestList request) {
-    return request.answerRequests().stream().map(a -> (Object) a.answer()).toList();
+  private String getAnswer(List<String> answers){
+    if(answers.size() == 1){
+      return answers.get(0);
+    }else{
+      return answers.stream()
+          .collect(Collectors.joining(","));
+    }
   }
 }

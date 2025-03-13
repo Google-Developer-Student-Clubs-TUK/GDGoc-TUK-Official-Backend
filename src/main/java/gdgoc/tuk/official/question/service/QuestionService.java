@@ -11,11 +11,14 @@ import gdgoc.tuk.official.question.dto.QuestionResponse;
 import gdgoc.tuk.official.question.dto.QuestionUpdateRequest;
 import gdgoc.tuk.official.question.dto.UpdatedQuestionOrder;
 import gdgoc.tuk.official.question.exception.DeleteNotAllowedException;
+import gdgoc.tuk.official.question.exception.QuestionModifyNotAllowed;
 import gdgoc.tuk.official.question.exception.QuestionNotFoundException;
 import gdgoc.tuk.official.question.repository.QuestionRepository;
 import gdgoc.tuk.official.question.service.mapper.QuestionMapper;
 import gdgoc.tuk.official.questionorder.domain.QuestionOrders;
 import gdgoc.tuk.official.questionorder.repository.QuestionOrderRepository;
+import gdgoc.tuk.official.recruitment.repository.RecruitmentRepository;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -31,6 +34,7 @@ public class QuestionService {
   private final QuestionRepository questionRepository;
   private final QuestionMapper questionMapper;
   private final QuestionOrderRepository questionOrderRepository;
+  private final RecruitmentRepository recruitmentRepository;
 
   public QuestionListResponse findAllQuestionResponses() {
     final List<QuestionResponse> questionResponses =
@@ -43,17 +47,23 @@ public class QuestionService {
     return new QuestionListResponse(questionResponses,questionOrderResponseList);
   }
 
-
   @Transactional
   public void updateQuestions(final QuestionUpdateRequest request) {
-    Map<Long, Long> newOrderMap = createNewQuestion(request);
+    checkAlreadyOpened();
+    Map<Long, Integer> newOrderMap = createNewQuestion(request);
     updateModifiedQuestion(request);
     if(!newOrderMap.isEmpty()){
       updateQuestionOrder(newOrderMap);
     }
   }
 
-  private void updateQuestionOrder(final Map<Long,Long> orderMap) {
+  private void checkAlreadyOpened() {
+    if(recruitmentRepository.existsByCloseAtIsAfter(LocalDateTime.now())){
+      throw new QuestionModifyNotAllowed(ErrorCode.MODIFY_NOT_ALLOWED);
+    }
+  }
+
+  private void updateQuestionOrder(final Map<Long,Integer> orderMap) {
     List<QuestionOrders> questionOrders = questionOrderRepository.findAll();
     questionOrders.forEach(qo->qo.changeOrder(orderMap.get(qo.getQuestionId())));
   }
@@ -73,8 +83,8 @@ public class QuestionService {
     });
   }
 
-  private Map<Long,Long> createNewQuestion(final QuestionUpdateRequest request) {
-    final Map<Long, Long> questionOrderMap = request.updatedQuestionOrders().stream().collect(
+  private Map<Long,Integer> createNewQuestion(final QuestionUpdateRequest request) {
+    final Map<Long, Integer> questionOrderMap = request.updatedQuestionOrders().stream().collect(
         Collectors.toMap(UpdatedQuestionOrder::getQuestionId, UpdatedQuestionOrder::getOrder));
     if(request.newQuestions().isEmpty())
       return questionOrderMap;
@@ -104,7 +114,7 @@ public class QuestionService {
   }
 
   private void reorder(final List<UpdatedQuestionOrder> questionOrders){
-    Map<Long, Long> questionOrderMap = questionOrders.stream()
+    Map<Long, Integer> questionOrderMap = questionOrders.stream()
         .collect(Collectors.toMap(UpdatedQuestionOrder::getQuestionId,
             UpdatedQuestionOrder::getOrder));
     questionOrderRepository.findAll()

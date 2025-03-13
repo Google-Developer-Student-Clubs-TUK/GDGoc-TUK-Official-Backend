@@ -32,7 +32,7 @@ public class QuestionController {
 
   @PostMapping
   @Operation(
-      summary = "질문 등록",
+      summary = "질문 등록/수정/순서변경",
       description =
           """
           질문을 수정/등록 하는 API입니다.
