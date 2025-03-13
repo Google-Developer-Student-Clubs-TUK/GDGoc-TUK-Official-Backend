@@ -1,15 +1,19 @@
 package gdgoc.tuk.official.applicant.domain;
 
-import gdgoc.tuk.official.member.domain.Field;
-import gdgoc.tuk.official.member.domain.Gender;
-import gdgoc.tuk.official.member.domain.Role;
+import gdgoc.tuk.official.generationmember.domain.EnrollmentStatus;
+import gdgoc.tuk.official.generationmember.domain.Field;
+import gdgoc.tuk.official.generationmember.domain.Gender;
+import gdgoc.tuk.official.generationmember.domain.UniversityYear;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,44 +22,51 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Applicant {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  private String name;
+    private String name;
+    private String studentNumber;
+    private EnrollmentStatus enrollmentStatus;
+    private UniversityYear universityYear;
+    private Field field;
+    private Gender gender;
+    private String email;
+    private String major;
+    private String generation;
 
-  private String studentNumber;
+    @Enumerated(EnumType.STRING)
+    private ApplicationStatus applicationStatus;
 
-  @Enumerated(EnumType.STRING)
-  private Field field;
+    @Builder
+    public Applicant(
+            final String name,
+            final String studentNumber,
+            final EnrollmentStatus enrollmentStatus,
+            final UniversityYear universityYear,
+            final Field field,
+            final Gender gender,
+            final String email,
+            final String major,
+            String generation) {
+        this.name = name;
+        this.studentNumber = studentNumber;
+        this.enrollmentStatus = enrollmentStatus;
+        this.universityYear = universityYear;
+        this.field = field;
+        this.gender = gender;
+        this.email = email;
+        this.major = major;
+        this.generation = generation;
+        this.applicationStatus = ApplicationStatus.PENDING;
+    }
 
-  @Enumerated(EnumType.STRING)
-  private Gender gender;
+    public void approve() {
+        this.applicationStatus = ApplicationStatus.ACCEPTED;
+    }
 
-  private String email;
-
-  private String major;
-
-  @Enumerated(EnumType.STRING)
-  private ApplicationStatus applicationStatus;
-
-  @Enumerated(EnumType.STRING)
-  private Role role;
-
-  public Applicant(
-      final String name,
-      final String studentNumber,
-      final Field field,
-      final Gender gender,
-      final String email,
-      String major) {
-    this.name = name;
-    this.studentNumber = studentNumber;
-    this.field = field;
-    this.gender = gender;
-    this.email = email;
-    this.major = major;
-    this.applicationStatus = ApplicationStatus.PENDING;
-    this.role = Role.ROLE_ORGANIZER;
-  }
+    public void reject() {
+        this.applicationStatus = ApplicationStatus.REJECTED;
+    }
 }

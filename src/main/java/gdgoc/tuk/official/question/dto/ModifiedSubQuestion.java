@@ -1,6 +1,3 @@
 package gdgoc.tuk.official.question.dto;
 
-public record ModifiedSubQuestion(
-    Long subQuestionId,
-    String modifiedSubContent
-) {}
+public record ModifiedSubQuestion(Long subQuestionId, String modifiedSubContent) {}

@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,11 +31,11 @@ public class SubQuestion {
         this.subContent = subContent;
     }
 
-    public void addParentQuestion(final Question question){
+    public void addParentQuestion(final Question question) {
         this.question = question;
     }
 
-    public void modifySubContent(final String subContent){
+    public void modifySubContent(final String subContent) {
         this.subContent = subContent;
     }
 }

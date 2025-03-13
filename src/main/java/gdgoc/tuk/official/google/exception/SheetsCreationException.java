@@ -5,7 +5,7 @@ import gdgoc.tuk.official.global.exception.GoogleSpreadSheetsException;
 
 public class SheetsCreationException extends GoogleSpreadSheetsException {
 
-  public SheetsCreationException(final ErrorCode errorCode) {
-    super(errorCode);
-  }
+    public SheetsCreationException(final ErrorCode errorCode) {
+        super(errorCode);
+    }
 }

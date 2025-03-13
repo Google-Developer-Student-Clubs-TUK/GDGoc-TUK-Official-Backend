@@ -7,5 +7,5 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class GoogleSpreadSheetsException extends IllegalStateException {
-  private final ErrorCode errorCode;
+    private final ErrorCode errorCode;
 }

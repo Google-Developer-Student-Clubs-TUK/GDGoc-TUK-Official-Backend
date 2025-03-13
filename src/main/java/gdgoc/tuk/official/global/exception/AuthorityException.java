@@ -8,5 +8,4 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthorityException extends IllegalStateException {
     private final ErrorCode errorCode;
-
 }

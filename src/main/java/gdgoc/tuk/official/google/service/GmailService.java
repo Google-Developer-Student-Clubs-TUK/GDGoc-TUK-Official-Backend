@@ -2,36 +2,41 @@ package gdgoc.tuk.official.google.service;
 
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.model.Message;
+
+import lombok.RequiredArgsConstructor;
+
+import org.apache.commons.codec.binary.Base64;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Properties;
+
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
-import lombok.RequiredArgsConstructor;
-import org.apache.commons.codec.binary.Base64;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class GmailService {
 
+    private final Gmail gmail;
     @Value("${google.gmail.address}")
     private String gdgocTukMailAddress;
     @Value("${google.gmail.title}")
     private String title;
-    private final Gmail gmail;
 
-    public void sendEmail(String to,String subject, String content) throws MessagingException,
-        IOException {
+    public void sendEmail(String to, String subject, String content)
+            throws MessagingException, IOException {
         MimeMessage email = createEmail(to, gdgocTukMailAddress, subject, content);
         sendMessage(email);
     }
 
-    private MimeMessage createEmail(String to, String from, String subject, String bodyHtml) throws MessagingException {
+    private MimeMessage createEmail(String to, String from, String subject, String bodyHtml)
+            throws MessagingException {
         Properties props = new Properties();
         Session session = Session.getDefaultInstance(props, null);
         MimeMessage email = new MimeMessage(session);

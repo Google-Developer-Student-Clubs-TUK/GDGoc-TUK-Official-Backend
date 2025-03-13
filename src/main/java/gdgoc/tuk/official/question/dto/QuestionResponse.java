@@ -6,5 +6,9 @@ import java.util.List;
 import lombok.Builder;
 
 @Builder
-public record QuestionResponse(Long id, String content, List<SubQuestionResponse> subQuestions,
-                               boolean isRequired, QuestionType questionType) {}
+public record QuestionResponse(
+        Long id,
+        String content,
+        List<SubQuestionResponse> subQuestions,
+        boolean isRequired,
+        QuestionType questionType) {}

@@ -11,13 +11,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RecruitmentRepository extends JpaRepository<Recruitment, Long> {
 
-  boolean existsByGeneration(String generation);
+    boolean existsByGeneration(String generation);
 
-  boolean existsByCloseAtIsAfter(LocalDateTime now);
+    boolean existsByCloseAtIsAfter(LocalDateTime now);
 
-  @Query("select r from Recruitment r where :now BETWEEN r.openAt and r.closeAt")
-  Optional<Recruitment> findByBetweenOpenAtAndCloseAt(LocalDateTime now);
+    @Query("select r from Recruitment r where :now BETWEEN r.openAt and r.closeAt")
+    Optional<Recruitment> findByBetweenOpenAtAndCloseAt(LocalDateTime now);
 
-  @Query("select r from Recruitment r where r.closeAt < :now")
-  List<Recruitment> findGenerationByLocalTime(LocalDateTime now);
+    @Query("select r from Recruitment r where r.closeAt < :now")
+    List<Recruitment> findGenerationByLocalTime(LocalDateTime now);
 }

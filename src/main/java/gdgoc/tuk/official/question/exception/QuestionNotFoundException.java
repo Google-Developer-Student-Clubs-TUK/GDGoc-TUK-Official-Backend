@@ -5,7 +5,7 @@ import gdgoc.tuk.official.global.exception.ResourceNotFoundException;
 
 public class QuestionNotFoundException extends ResourceNotFoundException {
 
-  public QuestionNotFoundException(final ErrorCode errorCode) {
-    super(errorCode);
-  }
+    public QuestionNotFoundException(final ErrorCode errorCode) {
+        super(errorCode);
+    }
 }

@@ -5,7 +5,7 @@ import gdgoc.tuk.official.global.exception.DuplicationException;
 
 public class GenerationDuplicationException extends DuplicationException {
 
-  public GenerationDuplicationException(final ErrorCode errorCode) {
-    super(errorCode);
-  }
+    public GenerationDuplicationException(final ErrorCode errorCode) {
+        super(errorCode);
+    }
 }

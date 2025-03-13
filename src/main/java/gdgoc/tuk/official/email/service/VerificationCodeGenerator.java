@@ -1,7 +1,8 @@
 package gdgoc.tuk.official.email.service;
 
-import java.security.SecureRandom;
 import org.springframework.stereotype.Service;
+
+import java.security.SecureRandom;
 
 @Service
 public class VerificationCodeGenerator {

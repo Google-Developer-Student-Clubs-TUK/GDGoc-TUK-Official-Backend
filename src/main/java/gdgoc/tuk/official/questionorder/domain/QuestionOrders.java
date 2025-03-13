@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,12 +21,12 @@ public class QuestionOrders {
     private Long questionId;
     private Integer orders;
 
-    public void changeOrder(final Integer order){
-        this.orders = order;
-    }
-
     public QuestionOrders(final Long questionId, final Integer orders) {
         this.questionId = questionId;
         this.orders = orders;
+    }
+
+    public void changeOrder(final Integer order){
+        this.orders = order;
     }
 }

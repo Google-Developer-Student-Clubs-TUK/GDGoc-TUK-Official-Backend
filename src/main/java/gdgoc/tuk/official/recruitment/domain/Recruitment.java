@@ -14,23 +14,23 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Recruitment {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  private String generation;
-  private String spreadSheetsId;
-  private LocalDateTime openAt;
-  private LocalDateTime closeAt;
+    private String generation;
+    private String spreadSheetsId;
+    private LocalDateTime openAt;
+    private LocalDateTime closeAt;
 
-  public Recruitment(
-      final String generation,
-      final String spreadSheetsId,
-      final LocalDateTime openAt,
-      final LocalDateTime closeAt) {
-    this.generation = generation;
-    this.spreadSheetsId = spreadSheetsId;
-    this.openAt = openAt;
-    this.closeAt = closeAt;
-  }
+    public Recruitment(
+            final String generation,
+            final String spreadSheetsId,
+            final LocalDateTime openAt,
+            final LocalDateTime closeAt) {
+        this.generation = generation;
+        this.spreadSheetsId = spreadSheetsId;
+        this.openAt = openAt;
+        this.closeAt = closeAt;
+    }
 }
