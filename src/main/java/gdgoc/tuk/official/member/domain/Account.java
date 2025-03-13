@@ -30,8 +30,6 @@ public class Account {
         final Role role) {
         this.email = email;
         this.password = password;
-        this.field = field;
-        this.gender = gender;
         this.role = role;
     }
 }

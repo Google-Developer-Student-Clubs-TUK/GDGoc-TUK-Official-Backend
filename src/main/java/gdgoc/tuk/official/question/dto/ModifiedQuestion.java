@@ -1,7 +1,6 @@
 package gdgoc.tuk.official.question.dto;
 
 import gdgoc.tuk.official.question.domain.QuestionType;
-import java.util.ArrayList;
 import java.util.List;
 
 public record ModifiedQuestion(
