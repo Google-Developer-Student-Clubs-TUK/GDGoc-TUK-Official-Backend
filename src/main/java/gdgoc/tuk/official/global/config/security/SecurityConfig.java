@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -22,35 +23,22 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(
-                        auth ->
-                                auth.requestMatchers(
-                                                "/api/login",
-                                                "/api/logout",
-                                                "/api/questions/**",
-                                                "/api/answers/**",
-                                                "/api/recruitments/**",
-                                                "/api/emails/**",
-                                                "api/v3/**",
-                                                "api/swagger-ui/**",
-                                                "/api/applicants/**")
-                                        .permitAll()
-                                        .anyRequest()
-                                        .authenticated())
                 .formLogin(
                         login ->
                                 login.loginProcessingUrl("/api/login")
                                         .usernameParameter("email")
                                         .successHandler(
-                                                (request, response, authentication) ->
-                                                        response.setStatus(
-                                                                HttpServletResponse.SC_OK))
+                                                (request, response, authentication) ->{
+                                                    response.setStatus(
+                                                        HttpServletResponse.SC_OK);
+                                                })
                                         .failureHandler(
                                                 (request, response, exception) ->
                                                         response.setStatus(

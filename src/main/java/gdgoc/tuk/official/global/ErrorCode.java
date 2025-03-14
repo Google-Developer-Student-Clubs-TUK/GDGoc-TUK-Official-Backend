@@ -22,7 +22,7 @@ public enum ErrorCode {
     /** Google Spread Sheets Error Code 300 ~ 399 */
     SHEETS_CREATION_FAILED(HttpStatus.BAD_GATEWAY, "300", "구글 스프레드시트 생성에 실패했습니다. 잠시 후 다시 시도해주세요."),
 
-    /** Account Error Code 400 ~ 499 */
+    /** Accounts Error Code 400 ~ 499 */
     ACCOUNT_NOT_FOUND(HttpStatus.NOT_FOUND, "400", "계정을 찾을 수 없습니다."),
     DUPLICATED_ACCOUNT(HttpStatus.BAD_REQUEST, "401", "중복된 계정 가입입니다."),
 
@@ -33,7 +33,13 @@ public enum ErrorCode {
 
     /** Email Error Code 600 ~ 699 */
     NOT_VERIFIED_EMAIL(HttpStatus.NOT_FOUND, "600", "인증되지 않은 메일입니다. 인증을 시도해주세요."),
-    INVALID_CODE(HttpStatus.BAD_REQUEST, "601", "잘못된 인증코드입니다.");
+    INVALID_CODE(HttpStatus.BAD_REQUEST, "601", "잘못된 인증코드입니다."),
+
+    /** Generation Member Error Code 700 ~ 799 */
+    DUPLICATED_GENERATION_MEMBER(HttpStatus.NOT_FOUND, "700", "해당 계정으로 현재 기수에 존재하는 회원입니다."),
+
+    /** Answer Error Code 800 ~ 899 */
+    DUPLICATED_ANSWER(HttpStatus.BAD_REQUEST, "800", "중복된 지원입니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

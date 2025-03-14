@@ -12,6 +12,9 @@ public interface ApplicantRepository extends JpaRepository<Applicant, Long> {
 
     boolean existsByApplicationStatusAndEmail(ApplicationStatus applicationStatus, String email);
 
+    Optional<Applicant> findByApplicationStatusAndEmail(ApplicationStatus applicationStatus,
+        String email);
+
     Optional<Applicant> findByEmail(String email);
 
     List<Applicant> findByApplicationStatus(ApplicationStatus applicationStatus);

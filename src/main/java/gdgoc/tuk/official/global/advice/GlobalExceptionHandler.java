@@ -36,7 +36,6 @@ public class GlobalExceptionHandler {
         return new ErrorResponse(e.getErrorCode());
     }
 
-
     @ExceptionHandler(GoogleSpreadSheetsException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse retryFailed(final GoogleSpreadSheetsException e) {

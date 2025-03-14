@@ -18,7 +18,7 @@ import gdgoc.tuk.official.question.service.mapper.QuestionMapper;
 import gdgoc.tuk.official.questionorder.domain.QuestionOrders;
 import gdgoc.tuk.official.questionorder.repository.QuestionOrderRepository;
 import gdgoc.tuk.official.recruitment.repository.RecruitmentRepository;
-import gdgoc.tuk.official.recruitment.service.RecruitmentService;
+import gdgoc.tuk.official.recruitment.service.RecruitmentGenerationService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -39,7 +39,7 @@ public class QuestionService {
     private final QuestionMapper questionMapper;
     private final QuestionOrderRepository questionOrderRepository;
     private final RecruitmentRepository recruitmentRepository;
-    private final RecruitmentService recruitmentService;
+    private final RecruitmentGenerationService recruitmentGenerationService;
 
     public QuestionListResponse findAllQuestionResponses() {
         final List<QuestionResponse> questionResponses =
@@ -48,7 +48,7 @@ public class QuestionService {
                         .toList();
         final List<QuestionOrderResponse> questionOrderResponseList =
                 questionMapper.toQuestionOrderResponseList(questionOrderRepository.findAll());
-        String generation = recruitmentService.getOnGoingRecruitment().getGeneration();
+        String generation = recruitmentGenerationService.getOnGoingRecruitmentGeneration().getGeneration();
         return new QuestionListResponse(questionResponses, questionOrderResponseList, generation);
     }
 

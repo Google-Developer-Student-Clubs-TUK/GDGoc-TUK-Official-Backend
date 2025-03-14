@@ -3,6 +3,8 @@ package gdgoc.tuk.official.recruitment.service;
 import gdgoc.tuk.official.answer.repository.NextAnswerRowRedisRepository;
 import gdgoc.tuk.official.global.ErrorCode;
 import gdgoc.tuk.official.google.initializer.SpreadSheetsInitializer;
+import gdgoc.tuk.official.google.service.SpreadSheetsQuestionService;
+import gdgoc.tuk.official.google.service.SpreadSheetsService;
 import gdgoc.tuk.official.question.domain.Question;
 import gdgoc.tuk.official.question.service.QuestionService;
 import gdgoc.tuk.official.questionorder.domain.QuestionOrders;
@@ -32,37 +34,21 @@ import java.util.stream.Collectors;
 public class RecruitmentService {
 
     private final RecruitmentRepository recruitmentRepository;
-    private final QuestionService questionService;
-    private final QuestionOrderService questionOrderService;
     private final SpreadSheetsInitializer spreadSheetsInitializer;
     private final NextAnswerRowRedisRepository nextAnswerRowRedisRepository;
+    private final SpreadSheetsQuestionService spreadSheetsQuestionService;
 
     @Transactional
     public void openRecruitment(final RecruitmentOpenRequest request) {
         checkGeneration(request.generation());
         checkAlreadyExistRecruitment();
         nextAnswerRowRedisRepository.saveNewGeneration(request.generation());
-        String spreadSheetsId =
-                spreadSheetsInitializer.init(request.generation(), getSpreadSheetQuestions());
+        final String spreadSheetsId =
+                spreadSheetsInitializer.init(request.generation(), spreadSheetsQuestionService.getSpreadSheetQuestions());
         final Recruitment recruitment =
                 new Recruitment(
                         request.generation(), spreadSheetsId, request.openAt(), request.closeAt());
         recruitmentRepository.save(recruitment);
-    }
-
-    private List<List<Object>> getSpreadSheetQuestions() {
-        Map<Long, Integer> orderMap =
-                questionOrderService.findAllQuestionOrders().stream()
-                        .collect(
-                                Collectors.toMap(
-                                        QuestionOrders::getQuestionId, QuestionOrders::getOrders));
-        List<Question> sortedQuestions =
-                questionService.findAllQuestions().stream()
-                        .sorted(
-                                Comparator.comparing(
-                                        q -> orderMap.getOrDefault(q.getId(), Integer.MAX_VALUE)))
-                        .toList();
-        return List.of(sortedQuestions.stream().map(q -> (Object) q.getContent()).toList());
     }
 
     private void checkAlreadyExistRecruitment() {
@@ -76,15 +62,6 @@ public class RecruitmentService {
         if (recruitmentRepository.existsByGeneration(generation)) {
             throw new GenerationDuplicationException(ErrorCode.GENERATION_DUPLICATED);
         }
-    }
-
-    public Recruitment getOnGoingRecruitment() {
-        return recruitmentRepository
-                .findByBetweenOpenAtAndCloseAt(LocalDateTime.now())
-                .orElseThrow(
-                        () ->
-                                new RecruitmentNotExistException(
-                                        ErrorCode.ON_GOING_RECRUITMENT_NOT_FOUND));
     }
 
     public GenerationResponse getGenerations() {

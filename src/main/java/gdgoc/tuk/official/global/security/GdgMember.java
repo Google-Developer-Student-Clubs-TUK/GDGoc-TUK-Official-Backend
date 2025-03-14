@@ -1,18 +1,21 @@
 package gdgoc.tuk.official.global.security;
 
-import gdgoc.tuk.official.account.domain.Account;
+import gdgoc.tuk.official.account.domain.Accounts;
 
+import gdgoc.tuk.official.generationmember.domain.GenerationMember;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 
 public class GdgMember extends User {
-    private final Account account;
+    private final Accounts accounts;
+    private final GenerationMember generationMember;
 
-    public GdgMember(final Account account) {
+    public GdgMember(final Accounts accounts, final GenerationMember generationMember) {
         super(
-                account.getEmail(),
-                account.getPassword(),
-                AuthorityUtils.createAuthorityList(account.getRole().toString()));
-        this.account = account;
+                accounts.getEmail(),
+                accounts.getPassword(),
+                AuthorityUtils.createAuthorityList(accounts.getRole().toString()));
+        this.accounts = accounts;
+        this.generationMember = generationMember;
     }
 }

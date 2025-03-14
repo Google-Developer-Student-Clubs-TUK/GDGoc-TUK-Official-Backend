@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,11 +29,13 @@ public class QuestionController {
 
     @GetMapping
     @Operation(summary = "전체 질문 조회", description = "질문 식별자, 질문 내용, 질문 순서를 반환합니다.")
+    @PreAuthorize("permitAll()")
     public QuestionListResponse findAllQuestion() {
         return questionService.findAllQuestionResponses();
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('LEADER')")
     @Operation(
             summary = "질문 등록/수정/순서변경",
             description =
@@ -47,6 +50,7 @@ public class QuestionController {
     }
 
     @DeleteMapping("/{questionId}")
+    @PreAuthorize("hasRole('LEADER')")
     @Operation(summary = "질문 삭제", description = "질문 식별자를 이용해 질문을 삭제합니다.")
     public void deleteQuestion(
             @PathVariable final Long questionId, @RequestBody QuestionDeleteRequest request) {

@@ -28,9 +28,13 @@ public class Applicant {
 
     private String name;
     private String studentNumber;
+    @Enumerated(EnumType.STRING)
     private EnrollmentStatus enrollmentStatus;
+    @Enumerated(EnumType.STRING)
     private UniversityYear universityYear;
+    @Enumerated(EnumType.STRING)
     private Field field;
+    @Enumerated(EnumType.STRING)
     private Gender gender;
     private String email;
     private String major;

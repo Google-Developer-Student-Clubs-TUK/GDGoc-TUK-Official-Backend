@@ -1,11 +1,12 @@
 package gdgoc.tuk.official.answer.service;
 
 import gdgoc.tuk.official.answer.dto.AnswerRequestList;
-import gdgoc.tuk.official.answer.repository.AnswerRepository;
+import gdgoc.tuk.official.answer.exception.DuplicatedAnswerException;
 import gdgoc.tuk.official.applicant.service.ApplicantService;
+import gdgoc.tuk.official.global.ErrorCode;
 import gdgoc.tuk.official.google.service.SpreadSheetsService;
 import gdgoc.tuk.official.recruitment.domain.Recruitment;
-import gdgoc.tuk.official.recruitment.service.RecruitmentService;
+import gdgoc.tuk.official.recruitment.service.RecruitmentGenerationService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,14 +21,14 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class AnswerService {
 
-    private final AnswerRepository answerRepository;
-    private final RecruitmentService recruitmentService;
+    private final RecruitmentGenerationService recruitmentGenerationService;
     private final SpreadSheetsService spreadSheetsService;
     private final ApplicantService applicantService;
 
     @Transactional
     public void apply(final AnswerRequestList request) {
-        Recruitment recruitment = recruitmentService.getOnGoingRecruitment();
+        Recruitment recruitment = recruitmentGenerationService.getOnGoingRecruitmentGeneration();
+        checkDuplicatedAnswer(request);
         final List<Object> sheetsValues = getSheetsValues(request);
         spreadSheetsService.write(
                 recruitment.getSpreadSheetsId(),
@@ -36,11 +37,18 @@ public class AnswerService {
         applicantService.saveApplicant(request.requiredAnswer(), recruitment.getGeneration());
     }
 
-    private List<Object> getSheetsValues(final AnswerRequestList request) {
-        return request.answerRequests().stream().map(a -> (Object) getAnswer(a.answer())).toList();
+    private void checkDuplicatedAnswer(final AnswerRequestList request) {
+        boolean alreadyApplied = applicantService.isAlreadyApplied(request.requiredAnswer().email());
+        if(alreadyApplied){
+            throw new DuplicatedAnswerException(ErrorCode.DUPLICATED_ANSWER);
+        }
     }
 
-    private String getAnswer(List<String> answers) {
+    private List<Object> getSheetsValues(final AnswerRequestList request) {
+        return request.answerRequests().stream().map(a -> (Object) createSheetsAnswer(a.answer())).toList();
+    }
+
+    private String createSheetsAnswer(List<String> answers) {
         if (answers.size() == 1) {
             return answers.get(0);
         } else {

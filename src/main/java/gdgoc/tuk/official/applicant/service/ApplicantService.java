@@ -5,7 +5,6 @@ import gdgoc.tuk.official.applicant.domain.Applicant;
 import gdgoc.tuk.official.applicant.domain.ApplicationStatus;
 import gdgoc.tuk.official.applicant.dto.ApplicantResponse;
 import gdgoc.tuk.official.applicant.exception.ApplicantNotFoundException;
-import gdgoc.tuk.official.applicant.exception.NotAcceptedApplicantException;
 import gdgoc.tuk.official.applicant.repository.ApplicantRepository;
 import gdgoc.tuk.official.applicant.service.mapper.ApplicantMapper;
 import gdgoc.tuk.official.generationmember.service.GenerationMemberService;
@@ -31,10 +30,9 @@ public class ApplicantService {
         applicantRepository.save(applicant);
     }
 
-    public Applicant getApplicantByEmail(final String email) {
-        return applicantRepository
-                .findByEmail(email)
-                .orElseThrow(() -> new ApplicantNotFoundException(ErrorCode.APPLICANT_NOT_FOUND));
+    public boolean isAlreadyApplied(final String email){
+        return applicantRepository.existsByApplicationStatusAndEmail(ApplicationStatus.PENDING,
+            email);
     }
 
     public Applicant getApplicantById(final Long applicantId) {
@@ -48,23 +46,16 @@ public class ApplicantService {
                 applicantRepository.findByApplicationStatus(ApplicationStatus.PENDING));
     }
 
-    public void checkAcceptedApplicant(final String email) {
-        if (!applicantRepository.existsByApplicationStatusAndEmail(
-                ApplicationStatus.ACCEPTED, email)) {
-            throw new NotAcceptedApplicantException(ErrorCode.NOT_ACCEPTED_APPLICANT);
-        }
-    }
-
     @Transactional
     public void approve(final Long applicantId) {
         Applicant applicant = getApplicantById(applicantId);
-        generationMemberService.createGenerationMember(applicant);
+        generationMemberService.createGenerationMemberForRegisteredAccount(applicant);
         applicant.approve();
     }
 
     @Transactional
     public void reject(final Long applicantId) {
         Applicant applicant = getApplicantById(applicantId);
-        applicant.approve();
+        applicant.reject();
     }
 }

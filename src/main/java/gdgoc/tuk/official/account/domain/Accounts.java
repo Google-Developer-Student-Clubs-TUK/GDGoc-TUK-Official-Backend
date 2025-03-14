@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Account {
+public class Accounts {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +28,7 @@ public class Account {
     private Role role;
 
     @Builder
-    public Account(final String email, final String password, final Role role) {
+    public Accounts(final String email, final String password, final Role role) {
         this.email = email;
         this.password = password;
         this.role = role;
