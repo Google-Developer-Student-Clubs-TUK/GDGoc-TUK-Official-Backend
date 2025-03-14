@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ErrorCode {
 
+    /** Global Error 0~99 */
+    AUTHORITY_NOT_VALID(HttpStatus.FORBIDDEN, "000", "접근 권한이 없습니다."),
+
     /** Question Error 100 ~ 199 */
     QUESTION_NOT_FOUND(HttpStatus.NOT_FOUND, "100", "등록된 질문을 찾을 수 없습니다."),
     DELETE_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "101", "삭제할 수 없는 질문입니다."),
@@ -37,6 +40,7 @@ public enum ErrorCode {
 
     /** Generation Member Error Code 700 ~ 799 */
     DUPLICATED_GENERATION_MEMBER(HttpStatus.NOT_FOUND, "700", "해당 계정으로 현재 기수에 존재하는 회원입니다."),
+    GENERATION_MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "701", "등록된 기수 정보가 없습니다."),
 
     /** Answer Error Code 800 ~ 899 */
     DUPLICATED_ANSWER(HttpStatus.BAD_REQUEST, "800", "중복된 지원입니다.");

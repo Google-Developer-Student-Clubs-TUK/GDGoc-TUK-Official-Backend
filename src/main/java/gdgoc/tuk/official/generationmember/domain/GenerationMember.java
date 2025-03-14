@@ -1,6 +1,7 @@
 package gdgoc.tuk.official.generationmember.domain;
 
 import gdgoc.tuk.official.account.domain.Accounts;
+import gdgoc.tuk.official.global.BaseTimeEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class GenerationMember {
+public class GenerationMember extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

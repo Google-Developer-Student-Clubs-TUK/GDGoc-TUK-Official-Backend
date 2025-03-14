@@ -5,15 +5,8 @@ import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.UpdateValuesResponse;
 import com.google.api.services.sheets.v4.model.ValueRange;
 
-import gdgoc.tuk.official.answer.repository.NextAnswerRowRedisRepository;
+import gdgoc.tuk.official.answer.repository.SpreadSheetsPrimaryKeyRepository;
 
-import gdgoc.tuk.official.question.domain.Question;
-import gdgoc.tuk.official.question.service.QuestionService;
-import gdgoc.tuk.official.questionorder.domain.QuestionOrders;
-import gdgoc.tuk.official.questionorder.service.QuestionOrderService;
-import java.util.Comparator;
-import java.util.Map;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,7 +24,7 @@ public class SpreadSheetsService {
     private static final String POSITION = "시트1!%s:%s";
     private final Sheets sheetsClient;
     private final ReentrantLock reentrantLock = new ReentrantLock();
-    private final NextAnswerRowRedisRepository nextAnswerRowRedisRepository;
+    private final SpreadSheetsPrimaryKeyRepository spreadSheetsPrimaryKeyRepository;
 
     public UpdateValuesResponse write(
             String spreadsheetId, List<List<Object>> values, String generation) {
@@ -53,7 +46,7 @@ public class SpreadSheetsService {
         final ValueRange body = new ValueRange().setValues(values).setMajorDimension("ROWS");
         UpdateValuesResponse response;
         reentrantLock.lock();
-        String nextRow = (String) nextAnswerRowRedisRepository.findNextRow(generation);
+        String nextRow = (String) spreadSheetsPrimaryKeyRepository.findNextRow(generation);
         try {
             final String formattedPosition = POSITION.formatted(nextRow, nextRow);
             response =
@@ -63,7 +56,7 @@ public class SpreadSheetsService {
                             .update(spreadsheetId, formattedPosition, body)
                             .setValueInputOption("USER_ENTERED")
                             .execute();
-            nextAnswerRowRedisRepository.increaseNextRow(generation);
+            spreadSheetsPrimaryKeyRepository.increaseNextRow(generation);
         } finally {
             reentrantLock.unlock();
         }

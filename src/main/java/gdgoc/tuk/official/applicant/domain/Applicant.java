@@ -5,6 +5,7 @@ import gdgoc.tuk.official.generationmember.domain.Field;
 import gdgoc.tuk.official.generationmember.domain.Gender;
 import gdgoc.tuk.official.generationmember.domain.UniversityYear;
 
+import gdgoc.tuk.official.global.BaseTimeEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Applicant {
+public class Applicant extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

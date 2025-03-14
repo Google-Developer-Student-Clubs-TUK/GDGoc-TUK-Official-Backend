@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 @Slf4j
-public class NextAnswerRowRedisRepository {
+public class SpreadSheetsPrimaryKeyRepository {
 
     private static final String INITIAL_NEXT_ROW = "1";
     private final RedisTemplate<String, Object> redisTemplate;
