@@ -3,6 +3,8 @@ package gdgoc.tuk.official.applicant.controller;
 import gdgoc.tuk.official.applicant.dto.ApplicantResponse;
 import gdgoc.tuk.official.applicant.service.ApplicantService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,24 +18,28 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/applicants")
+@Tag(name = "지원자 관리 API")
 public class ApplicantController {
 
     private final ApplicantService applicantService;
 
     @PostMapping("/{applicantId}")
     @PreAuthorize("hasRole('LEADER')")
+    @Operation(summary = "합격", description = "리더 전용 API로 지원자를 합격시킵니다.")
     public void approve(@PathVariable final Long applicantId) {
         applicantService.approve(applicantId);
     }
 
     @PatchMapping("/{applicantId}")
     @PreAuthorize("hasRole('LEADER')")
+    @Operation(summary = "불합격", description = "리더 전용 API로 지원자를 불합격시킵니다.")
     public void reject(@PathVariable final Long applicantId) {
         applicantService.reject(applicantId);
     }
 
     @GetMapping
     @PreAuthorize("hasRole('LEADER')")
+    @Operation(summary = "지원자 조회", description = "모든 지원자를 조회합니다. 페이징 없습니다.")
     public ApplicantResponse findApplicants() {
         return applicantService.findAllApplicants();
     }

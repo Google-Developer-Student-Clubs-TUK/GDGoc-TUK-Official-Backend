@@ -31,7 +31,7 @@ public class AnswerController {
             summary = "지원하기",
             description =
                     """
-        필수응답 정보를 리스트 형식에도 넘겨주셔야하지만, 따로 객체를 만들어 중복으로 넘겨주셔야합니다.
+        필수응답 정보는 별도 객체를 만들어 넘겨주셔야합니다.
         응답의 순서는 질문의 순서 그대로 넘겨주시면 됩니다.""")
     public void apply(@RequestBody final AnswerRequestList request) {
         answerService.apply(request);

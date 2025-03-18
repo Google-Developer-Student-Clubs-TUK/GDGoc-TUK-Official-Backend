@@ -4,6 +4,8 @@ import gdgoc.tuk.official.recruitment.dto.GenerationResponse;
 import gdgoc.tuk.official.recruitment.dto.RecruitmentOpenRequest;
 import gdgoc.tuk.official.recruitment.service.RecruitmentService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,18 +18,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/recruitments")
+@Tag(name = "모집 API")
 public class RecruitmentController {
 
     private final RecruitmentService recruitmentService;
 
     @PostMapping
     @PreAuthorize("hasRole('LEADER')")
+    @Operation(summary = "모집 시작",description = "리더 전용 API로 모집을 시작하는 API입니다.")
     public void openRecruitment(@RequestBody final RecruitmentOpenRequest request) {
         recruitmentService.openRecruitment(request);
     }
 
     @GetMapping("/generations")
     @PreAuthorize("permitAll()")
+    @Operation(summary = "기수(Generation) 정보", description = "기수 정보 리스트를 반환합니다.")
     public GenerationResponse getRecentGeneration() {
         return recruitmentService.getGenerations();
     }
