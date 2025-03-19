@@ -10,9 +10,13 @@ import gdgoc.tuk.official.applicant.dto.ApplicantRoleRequest;
 import gdgoc.tuk.official.applicant.exception.ApplicantNotFoundException;
 import gdgoc.tuk.official.applicant.repository.ApplicantRepository;
 import gdgoc.tuk.official.applicant.service.mapper.ApplicantMapper;
+import gdgoc.tuk.official.email.service.EmailService;
 import gdgoc.tuk.official.generationmember.service.GenerationMemberService;
 import gdgoc.tuk.official.global.ErrorCode;
 
+import jakarta.validation.constraints.Email;
+import java.io.IOException;
+import javax.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -27,6 +31,7 @@ public class ApplicantService {
     private final ApplicantMapper applicantMapper;
     private final GenerationMemberService generationMemberService;
     private final AccountRegisterService accountRegisterService;
+    private final EmailService emailService;
 
     @Transactional
     public void saveApplicant(final RequiredAnswer requiredAnswer, final String generation) {
@@ -51,11 +56,13 @@ public class ApplicantService {
     }
 
     @Transactional
-    public void approve(final Long applicantId,final ApplicantRoleRequest request) {
+    public void approve(final Long applicantId,final ApplicantRoleRequest request)
+        throws MessagingException, IOException {
         Applicant applicant = getApplicantById(applicantId);
         Accounts accounts = accountRegisterService.createOrFindAccount(applicant,request.role());
         generationMemberService.createGenerationMember(applicant,accounts);
         applicant.approve();
+        emailService.sendWelcomMail(accounts.getEmail(),applicant.getGeneration());
     }
 
     @Transactional

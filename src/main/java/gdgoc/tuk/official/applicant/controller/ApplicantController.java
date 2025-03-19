@@ -6,6 +6,8 @@ import gdgoc.tuk.official.applicant.service.ApplicantService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.io.IOException;
+import javax.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,7 +31,7 @@ public class ApplicantController {
 //    @PreAuthorize("hasRole('LEADER')")
     @Operation(summary = "합격", description = "리더 전용 API로 지원자를 합격시킵니다.")
     public void approve(@PathVariable final Long applicantId,
-        @RequestBody ApplicantRoleRequest request) {
+        @RequestBody ApplicantRoleRequest request) throws MessagingException, IOException {
         applicantService.approve(applicantId,request);
     }
 
@@ -41,7 +43,7 @@ public class ApplicantController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('LEADER')")
+//    @PreAuthorize("hasRole('LEADER')")
     @Operation(summary = "지원자 조회", description = "모든 지원자를 조회합니다. 페이징 없습니다.")
     public ApplicantResponse findApplicants() {
         return applicantService.findAllApplicants();
