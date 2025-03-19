@@ -1,9 +1,12 @@
 package gdgoc.tuk.official.applicant.service;
 
+import gdgoc.tuk.official.account.domain.Accounts;
+import gdgoc.tuk.official.account.service.AccountRegisterService;
 import gdgoc.tuk.official.answer.dto.RequiredAnswer;
 import gdgoc.tuk.official.applicant.domain.Applicant;
 import gdgoc.tuk.official.applicant.domain.ApplicationStatus;
 import gdgoc.tuk.official.applicant.dto.ApplicantResponse;
+import gdgoc.tuk.official.applicant.dto.ApplicantRoleRequest;
 import gdgoc.tuk.official.applicant.exception.ApplicantNotFoundException;
 import gdgoc.tuk.official.applicant.repository.ApplicantRepository;
 import gdgoc.tuk.official.applicant.service.mapper.ApplicantMapper;
@@ -23,6 +26,7 @@ public class ApplicantService {
     private final ApplicantRepository applicantRepository;
     private final ApplicantMapper applicantMapper;
     private final GenerationMemberService generationMemberService;
+    private final AccountRegisterService accountRegisterService;
 
     @Transactional
     public void saveApplicant(final RequiredAnswer requiredAnswer, final String generation) {
@@ -47,9 +51,10 @@ public class ApplicantService {
     }
 
     @Transactional
-    public void approve(final Long applicantId) {
+    public void approve(final Long applicantId,final ApplicantRoleRequest request) {
         Applicant applicant = getApplicantById(applicantId);
-        generationMemberService.createGenerationMemberForRegisteredAccount(applicant);
+        Accounts accounts = accountRegisterService.createOrFindAccount(applicant,request.role());
+        generationMemberService.createGenerationMember(applicant,accounts);
         applicant.approve();
     }
 

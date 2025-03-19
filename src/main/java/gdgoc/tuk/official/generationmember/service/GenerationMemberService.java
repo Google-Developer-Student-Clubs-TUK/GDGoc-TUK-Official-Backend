@@ -21,22 +21,11 @@ public class GenerationMemberService {
 
     private final GenerationMemberMapper generationMemberMapper;
     private final GenerationMemberRepository generationMemberRepository;
-    private final AccountService accountService;
 
-    public void createGenerationMemberForRegisteredAccount(final Applicant applicant) {
-        if(accountService.isNotRegistered(applicant.getEmail())){
-            return;
-        }
-        Accounts accounts = accountService.getAccountByEmail(applicant.getEmail());
+    public void createGenerationMember(final Applicant applicant,final Accounts accounts) {
         checkDuplicateGenerationMember(accounts,applicant.getGeneration());
         final GenerationMember generationMember =
                 generationMemberMapper.toGenerationMember(applicant, accounts);
-        generationMemberRepository.save(generationMember);
-    }
-
-    public void createGenerationMemberForNewAccount(final Applicant applicant, final Accounts accounts){
-        final GenerationMember generationMember =
-            generationMemberMapper.toGenerationMember(applicant, accounts);
         generationMemberRepository.save(generationMember);
     }
 

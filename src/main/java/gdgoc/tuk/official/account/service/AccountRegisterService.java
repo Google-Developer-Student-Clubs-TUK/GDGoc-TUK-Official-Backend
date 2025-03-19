@@ -22,28 +22,16 @@ public class AccountRegisterService {
 
     private final PasswordEncoder passwordEncoder;
     private final AccountRepository accountRepository;
-    private final ApplicantRepository applicantRepository;
-    private final GenerationMemberService generationMemberService;
 
-    public RegisterResponse createAccount(final RegisterRequest request) {
-        checkDuplicateAccount(request.email());
-        Applicant acceptedApplicant = getAcceptedApplicant(ApplicationStatus.ACCEPTED,
-            request.email());
-        final String encodedPassword = passwordEncoder.encode(request.password());
-        Accounts accounts = new Accounts(request.email(), encodedPassword, Role.ROLE_ORGANIZER);
+    public Accounts createOrFindAccount(final Applicant applicant, final Role role) {
+        return accountRepository.findByEmail(applicant.getEmail())
+            .orElse(createAccounts(applicant,role));
+    }
+
+    private Accounts createAccounts(final Applicant applicant,final Role role){
+        final String encodedPassword = passwordEncoder.encode(applicant.getStudentNumber());
+        Accounts accounts = new Accounts(applicant.getEmail(), encodedPassword, role);
         accountRepository.save(accounts);
-        generationMemberService.createGenerationMemberForNewAccount(acceptedApplicant, accounts);
-        return new RegisterResponse(accounts.getId(), accounts.getEmail());
-    }
-
-    public Applicant getAcceptedApplicant(final ApplicationStatus applicationStatus,final String email) {
-        return applicantRepository.findByApplicationStatusAndEmail(applicationStatus,email)
-            .orElseThrow(()->new NotAcceptedApplicantException(ErrorCode.NOT_ACCEPTED_APPLICANT));
-    }
-
-    private void checkDuplicateAccount(final String email) {
-        if (accountRepository.existsByEmail(email)) {
-            throw new DuplicatedRegisterException(ErrorCode.DUPLICATED_ACCOUNT);
-        }
+        return accounts;
     }
 }
