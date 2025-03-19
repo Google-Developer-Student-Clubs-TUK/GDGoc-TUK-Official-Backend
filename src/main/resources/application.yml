@@ -3,7 +3,8 @@ server:
 
 spring:
   profiles:
-    active: develop
+    active: local
     group:
       develop: dev
+      local: local
       production:

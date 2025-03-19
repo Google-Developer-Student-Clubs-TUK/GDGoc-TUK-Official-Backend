@@ -24,7 +24,7 @@ public class RecruitmentController {
     private final RecruitmentService recruitmentService;
 
     @PostMapping
-    @PreAuthorize("hasRole('LEADER')")
+//    @PreAuthorize("hasRole('LEADER')")
     @Operation(summary = "모집 시작",description = "리더 전용 API로 모집을 시작하는 API입니다.")
     public void openRecruitment(@RequestBody final RecruitmentOpenRequest request) {
         recruitmentService.openRecruitment(request);

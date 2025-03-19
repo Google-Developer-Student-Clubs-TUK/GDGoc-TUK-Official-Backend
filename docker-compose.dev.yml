@@ -10,7 +10,7 @@ services:
     ports:
       - "8080:8080"
     networks:
-      sportify:
+      gdgoc-tuk:
     restart: always
     tty: true
     environment:
@@ -22,7 +22,7 @@ services:
     ports:
       - "6379:6379"
     networks:
-      sportify:
+      gdgoc-tuk:
     restart: always
     tty: true
 

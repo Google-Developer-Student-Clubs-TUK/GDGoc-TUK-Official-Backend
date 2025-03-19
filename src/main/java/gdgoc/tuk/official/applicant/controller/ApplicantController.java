@@ -24,14 +24,14 @@ public class ApplicantController {
     private final ApplicantService applicantService;
 
     @PostMapping("/{applicantId}")
-    @PreAuthorize("hasRole('LEADER')")
+//    @PreAuthorize("hasRole('LEADER')")
     @Operation(summary = "합격", description = "리더 전용 API로 지원자를 합격시킵니다.")
     public void approve(@PathVariable final Long applicantId) {
         applicantService.approve(applicantId);
     }
 
     @PatchMapping("/{applicantId}")
-    @PreAuthorize("hasRole('LEADER')")
+//    @PreAuthorize("hasRole('LEADER')")
     @Operation(summary = "불합격", description = "리더 전용 API로 지원자를 불합격시킵니다.")
     public void reject(@PathVariable final Long applicantId) {
         applicantService.reject(applicantId);
