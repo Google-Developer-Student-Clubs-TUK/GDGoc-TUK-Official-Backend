@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +33,8 @@ public class AnswerService {
                 recruitment.getSpreadSheetsId(),
                 List.of(sheetsValues),
                 recruitment.getGeneration());
-        applicantService.saveApplicant(request.requiredAnswer(), recruitment.getGeneration());
+        applicantService.saveApplicant(request.requiredAnswer(),
+            recruitment.getGeneration());
     }
 
     private void checkDuplicatedAnswer(final AnswerRequestList request) {
@@ -52,7 +52,7 @@ public class AnswerService {
         if (answers.size() == 1) {
             return answers.get(0);
         } else {
-            return answers.stream().collect(Collectors.joining(","));
+            return String.join(",", answers);
         }
     }
 }

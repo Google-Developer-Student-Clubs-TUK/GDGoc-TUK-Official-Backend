@@ -26,8 +26,6 @@ public class GmailService {
     private final Gmail gmail;
     @Value("${google.gmail.address}")
     private String gdgocTukMailAddress;
-    @Value("${google.gmail.title}")
-    private String title;
 
     public void sendEmail(String to, String subject, String content)
             throws MessagingException, IOException {

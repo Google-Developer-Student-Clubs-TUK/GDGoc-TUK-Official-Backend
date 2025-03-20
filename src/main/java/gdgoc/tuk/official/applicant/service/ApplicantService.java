@@ -34,9 +34,10 @@ public class ApplicantService {
     private final EmailService emailService;
 
     @Transactional
-    public void saveApplicant(final RequiredAnswer requiredAnswer, final String generation) {
+    public Applicant saveApplicant(final RequiredAnswer requiredAnswer, final String generation) {
         final Applicant applicant = applicantMapper.toApplicant(requiredAnswer, generation);
         applicantRepository.save(applicant);
+        return applicant;
     }
 
     public boolean isAlreadyApplied(final String email){
