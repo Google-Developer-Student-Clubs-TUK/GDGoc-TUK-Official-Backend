@@ -48,13 +48,12 @@ public class QuestionService {
                         .toList();
         final List<QuestionOrderResponse> questionOrderResponseList =
                 questionMapper.toQuestionOrderResponseList(questionOrderRepository.findAll());
-        String generation = recruitmentGenerationService.getOnGoingRecruitmentGeneration().getGeneration();
-        return new QuestionListResponse(questionResponses, questionOrderResponseList, generation);
+        return new QuestionListResponse(questionResponses, questionOrderResponseList);
     }
 
     @Transactional
     public void updateQuestions(final QuestionUpdateRequest request) {
-        checkAlreadyOpened();
+        checkRecruiting();
         Map<Long, Integer> newOrderMap = createNewQuestion(request);
         updateModifiedQuestion(request);
         if (!newOrderMap.isEmpty()) {
@@ -62,7 +61,7 @@ public class QuestionService {
         }
     }
 
-    private void checkAlreadyOpened() {
+    private void checkRecruiting() {
         if (recruitmentRepository.existsByCloseAtIsAfter(LocalDateTime.now())) {
             throw new QuestionModifyNotAllowed(ErrorCode.MODIFY_NOT_ALLOWED);
         }

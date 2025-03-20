@@ -1,6 +1,7 @@
 package gdgoc.tuk.official.question.domain;
 
 import gdgoc.tuk.official.global.BaseTimeEntity;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -19,22 +20,12 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Question extends BaseTimeEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String content;
-
-    @Enumerated(EnumType.STRING)
-    private QuestionType questionType;
-
-    private boolean isRequired;
 
     @OneToMany(
             fetch = FetchType.LAZY,
@@ -42,6 +33,13 @@ public class Question extends BaseTimeEntity {
             cascade = CascadeType.ALL,
             orphanRemoval = true)
     private final List<SubQuestion> subQuestions = new ArrayList<>();
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String content;
+    @Enumerated(EnumType.STRING)
+    private QuestionType questionType;
+    private boolean isRequired;
 
     @Builder
     public Question(
@@ -49,6 +47,12 @@ public class Question extends BaseTimeEntity {
         this.content = content;
         this.questionType = questionType;
         this.isRequired = isRequired;
+    }
+
+    private void modifySubContent(final Map<Long, String> modifiedSubQuestionMap,
+        final SubQuestion sq) {
+        String modifiedSubContent = modifiedSubQuestionMap.get(sq.getId());
+        if( Objects.nonNull(modifiedSubContent)) sq.modifySubContent(modifiedSubContent);
     }
 
     public void modifyContent(
@@ -60,11 +64,7 @@ public class Question extends BaseTimeEntity {
         this.questionType = questionType;
         this.isRequired = isRequired;
         if (!modifiedSubQuestionMap.isEmpty()) {
-            subQuestions.forEach(
-                    sq -> {
-                        String modifiedSubContent = modifiedSubQuestionMap.get(sq.getId());
-                        sq.modifySubContent(modifiedSubContent);
-                    });
+            subQuestions.forEach(sq -> modifySubContent(modifiedSubQuestionMap, sq));
         }
     }
 

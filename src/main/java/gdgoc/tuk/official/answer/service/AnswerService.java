@@ -1,7 +1,10 @@
 package gdgoc.tuk.official.answer.service;
 
+import gdgoc.tuk.official.answer.domain.Answer;
 import gdgoc.tuk.official.answer.dto.AnswerRequestList;
 import gdgoc.tuk.official.answer.exception.DuplicatedAnswerException;
+import gdgoc.tuk.official.answer.repository.AnswerRepository;
+import gdgoc.tuk.official.applicant.domain.Applicant;
 import gdgoc.tuk.official.applicant.service.ApplicantService;
 import gdgoc.tuk.official.global.ErrorCode;
 import gdgoc.tuk.official.google.service.SpreadSheetsService;
@@ -23,6 +26,7 @@ public class AnswerService {
     private final RecruitmentGenerationService recruitmentGenerationService;
     private final SpreadSheetsService spreadSheetsService;
     private final ApplicantService applicantService;
+    private final AnswerRepository answerRepository;
 
     @Transactional
     public void apply(final AnswerRequestList request) {
@@ -33,8 +37,9 @@ public class AnswerService {
                 recruitment.getSpreadSheetsId(),
                 List.of(sheetsValues),
                 recruitment.getGeneration());
-        applicantService.saveApplicant(request.requiredAnswer(),
+        Applicant applicant = applicantService.saveApplicant(request.requiredAnswer(),
             recruitment.getGeneration());
+        answerRepository.save(new Answer(request.questionAndAnswerJson(),applicant));
     }
 
     private void checkDuplicatedAnswer(final AnswerRequestList request) {
@@ -45,7 +50,7 @@ public class AnswerService {
     }
 
     private List<Object> getSheetsValues(final AnswerRequestList request) {
-        return request.answerRequests().stream().map(a -> (Object) createSheetsAnswer(a.answer())).toList();
+        return request.answers().stream().map(a -> (Object) createSheetsAnswer(a)).toList();
     }
 
     private String createSheetsAnswer(List<String> answers) {
