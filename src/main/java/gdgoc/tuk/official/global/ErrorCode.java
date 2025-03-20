@@ -43,7 +43,8 @@ public enum ErrorCode {
     GENERATION_MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "701", "등록된 기수 정보가 없습니다."),
 
     /** Answer Error Code 800 ~ 899 */
-    DUPLICATED_ANSWER(HttpStatus.BAD_REQUEST, "800", "중복된 지원입니다.");
+    DUPLICATED_ANSWER(HttpStatus.BAD_REQUEST, "800", "중복된 지원서입니다."),
+    ANSWER_NOT_FOUND(HttpStatus.NOT_FOUND,"801","지원자의 응답을 찾을 수 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

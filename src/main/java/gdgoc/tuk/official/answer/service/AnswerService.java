@@ -2,12 +2,15 @@ package gdgoc.tuk.official.answer.service;
 
 import gdgoc.tuk.official.answer.domain.Answer;
 import gdgoc.tuk.official.answer.dto.AnswerRequestList;
+import gdgoc.tuk.official.answer.dto.AnswerResponse;
+import gdgoc.tuk.official.answer.exception.AnswerNotFoundException;
 import gdgoc.tuk.official.answer.exception.DuplicatedAnswerException;
 import gdgoc.tuk.official.answer.repository.AnswerRepository;
 import gdgoc.tuk.official.applicant.domain.Applicant;
 import gdgoc.tuk.official.applicant.service.ApplicantService;
 import gdgoc.tuk.official.global.ErrorCode;
 import gdgoc.tuk.official.google.service.SpreadSheetsService;
+import gdgoc.tuk.official.question.domain.Question;
 import gdgoc.tuk.official.recruitment.domain.Recruitment;
 import gdgoc.tuk.official.recruitment.service.RecruitmentGenerationService;
 
@@ -40,6 +43,14 @@ public class AnswerService {
         Applicant applicant = applicantService.saveApplicant(request.requiredAnswer(),
             recruitment.getGeneration());
         answerRepository.save(new Answer(request.questionAndAnswerJson(),applicant));
+    }
+
+    public AnswerResponse findQuestionAndAnswer(final Long applicantId){
+        final Applicant applicant = applicantService.getApplicantById(applicantId);
+        final Answer answer = answerRepository
+            .findByApplicant(applicant)
+            .orElseThrow(() -> new AnswerNotFoundException(ErrorCode.ANSWER_NOT_FOUND));
+        return new AnswerResponse(answer.getQuestionAndAnswer());
     }
 
     private void checkDuplicatedAnswer(final AnswerRequestList request) {

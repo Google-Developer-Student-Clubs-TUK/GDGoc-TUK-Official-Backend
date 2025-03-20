@@ -1,6 +1,7 @@
 package gdgoc.tuk.official.answer.controller;
 
 import gdgoc.tuk.official.answer.dto.AnswerRequestList;
+import gdgoc.tuk.official.answer.dto.AnswerResponse;
 import gdgoc.tuk.official.answer.service.AnswerService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,5 +38,13 @@ public class AnswerController {
         응답의 순서는 질문의 순서 그대로 넘겨주시면 됩니다.""")
     public void apply(@RequestBody final AnswerRequestList request) {
         answerService.apply(request);
+    }
+
+    @GetMapping("/applicants/{applicantId}")
+//    @PreAuthorize("hasRole('LEADER')")
+    @Operation(
+        summary = "지원자 질문&응답 조회")
+    public AnswerResponse findApplicantAnswer(@PathVariable final Long applicantId) {
+        return answerService.findQuestionAndAnswer(applicantId);
     }
 }

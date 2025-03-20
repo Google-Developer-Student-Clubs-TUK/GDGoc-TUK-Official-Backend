@@ -44,8 +44,15 @@ public class ApplicantController {
 
     @GetMapping
 //    @PreAuthorize("hasRole('LEADER')")
-    @Operation(summary = "지원자 조회", description = "모든 지원자를 조회합니다. 페이징 없습니다.")
-    public ApplicantResponse findApplicants() {
+    @Operation(summary = "지원자 목록 조회", description = "모든 지원자를 조회합니다. 페이징 없습니다.")
+    public ApplicantResponse findApplicantsList() {
+        return applicantService.findAllApplicants();
+    }
+
+    @GetMapping("/{applicantId}")
+//    @PreAuthorize("hasRole('LEADER')")
+    @Operation(summary = "지원자 상세 조회", description = "특정 지원자를 조회합니다.")
+    public ApplicantResponse findApplicant() {
         return applicantService.findAllApplicants();
     }
 }
