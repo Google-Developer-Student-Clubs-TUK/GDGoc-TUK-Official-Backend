@@ -1,7 +1,7 @@
 package gdgoc.tuk.official.answer.service;
 
 import gdgoc.tuk.official.answer.domain.Answer;
-import gdgoc.tuk.official.answer.dto.AnswerRequestList;
+import gdgoc.tuk.official.answer.dto.AnswerRequest;
 import gdgoc.tuk.official.answer.dto.AnswerResponse;
 import gdgoc.tuk.official.answer.exception.AnswerNotFoundException;
 import gdgoc.tuk.official.answer.exception.DuplicatedAnswerException;
@@ -10,7 +10,6 @@ import gdgoc.tuk.official.applicant.domain.Applicant;
 import gdgoc.tuk.official.applicant.service.ApplicantService;
 import gdgoc.tuk.official.global.ErrorCode;
 import gdgoc.tuk.official.google.service.SpreadSheetsService;
-import gdgoc.tuk.official.question.domain.Question;
 import gdgoc.tuk.official.recruitment.domain.Recruitment;
 import gdgoc.tuk.official.recruitment.service.RecruitmentGenerationService;
 
@@ -32,7 +31,7 @@ public class AnswerService {
     private final AnswerRepository answerRepository;
 
     @Transactional
-    public void apply(final AnswerRequestList request) {
+    public void apply(final AnswerRequest request) {
         Recruitment recruitment = recruitmentGenerationService.getOnGoingRecruitmentGeneration();
         checkDuplicatedAnswer(request);
         final List<Object> sheetsValues = getSheetsValues(request);
@@ -53,14 +52,14 @@ public class AnswerService {
         return new AnswerResponse(answer.getQuestionAndAnswer());
     }
 
-    private void checkDuplicatedAnswer(final AnswerRequestList request) {
+    private void checkDuplicatedAnswer(final AnswerRequest request) {
         boolean alreadyApplied = applicantService.isAlreadyApplied(request.requiredAnswer().email());
         if(alreadyApplied){
             throw new DuplicatedAnswerException(ErrorCode.DUPLICATED_ANSWER);
         }
     }
 
-    private List<Object> getSheetsValues(final AnswerRequestList request) {
+    private List<Object> getSheetsValues(final AnswerRequest request) {
         return request.answers().stream().map(a -> (Object) createSheetsAnswer(a)).toList();
     }
 

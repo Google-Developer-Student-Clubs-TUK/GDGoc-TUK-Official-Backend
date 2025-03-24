@@ -1,6 +1,6 @@
 package gdgoc.tuk.official.answer.controller;
 
-import gdgoc.tuk.official.answer.dto.AnswerRequestList;
+import gdgoc.tuk.official.answer.dto.AnswerRequest;
 import gdgoc.tuk.official.answer.dto.AnswerResponse;
 import gdgoc.tuk.official.answer.service.AnswerService;
 
@@ -36,7 +36,7 @@ public class AnswerController {
                     """
         필수응답 정보는 별도 객체를 만들어 넘겨주셔야합니다.
         응답의 순서는 질문의 순서 그대로 넘겨주시면 됩니다.""")
-    public void apply(@RequestBody final AnswerRequestList request) {
+    public void apply(@RequestBody final AnswerRequest request) {
         answerService.apply(request);
     }
 
