@@ -46,12 +46,15 @@ public class QuestionMapper {
                 subQuestionMap);
     }
 
-    public QuestionResponse toQuestionResponse(final Question question) {
+    public QuestionResponse toQuestionResponse(
+            final Question question, final Integer questionOrder) {
         return QuestionResponse.builder()
                 .id(question.getId())
                 .questionType(question.getQuestionType())
                 .content(question.getContent())
                 .isRequired(question.isRequired())
+                .isDeletable(question.isDeletable())
+                .order(questionOrder)
                 .subQuestions(
                         question.getSubQuestions().stream()
                                 .map(sq -> new SubQuestionResponse(sq.getId(), sq.getSubContent()))

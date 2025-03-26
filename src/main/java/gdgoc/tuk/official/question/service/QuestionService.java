@@ -19,8 +19,9 @@ import gdgoc.tuk.official.question.service.mapper.QuestionMapper;
 import gdgoc.tuk.official.questionorder.domain.QuestionOrders;
 import gdgoc.tuk.official.questionorder.repository.QuestionOrderRepository;
 import gdgoc.tuk.official.recruitment.repository.RecruitmentRepository;
-import gdgoc.tuk.official.recruitment.service.RecruitmentGenerationService;
 
+import java.util.Collections;
+import java.util.Comparator;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -40,20 +41,39 @@ public class QuestionService {
     private final QuestionMapper questionMapper;
     private final QuestionOrderRepository questionOrderRepository;
     private final RecruitmentRepository recruitmentRepository;
-    private final RecruitmentGenerationService recruitmentGenerationService;
 
-    public QuestionListResponse findAllQuestionResponses() {
+    private Map<Long, Integer> createQuestionOrderMap(final List<QuestionOrders> questionOrders) {
+        return questionOrders.stream()
+                .collect(
+                        Collectors.toMap(QuestionOrders::getQuestionId, QuestionOrders::getOrders));
+    }
+
+    public QuestionListResponse findAllQuestionsWithOrder() {
+        final List<QuestionOrders> questionOrders = questionOrderRepository.findAll();
+        final Map<Long, Integer> questionOrdersMap = createQuestionOrderMap(questionOrders);
         final List<QuestionResponse> questionResponses =
-                questionRepository.findAllFetchSubQuestion().stream()
-                        .map(questionMapper::toQuestionResponse)
-                        .toList();
+                createQuestionResponsesWithQuestionOrder(questionOrdersMap);
         final List<QuestionOrderResponse> questionOrderResponseList =
-                questionMapper.toQuestionOrderResponseList(questionOrderRepository.findAll());
+                questionMapper.toQuestionOrderResponseList(questionOrders);
         return new QuestionListResponse(questionResponses, questionOrderResponseList);
     }
 
+    private List<QuestionResponse> createQuestionResponsesWithQuestionOrder(
+            final Map<Long, Integer> questionOrdersMap) {
+        List<Question> allFetchSubQuestion = questionRepository.findAllFetchSubQuestion();
+        List<QuestionResponse> questionResponses =
+                allFetchSubQuestion.stream()
+                        .map(
+                                q ->
+                                        questionMapper.toQuestionResponse(
+                                                q, questionOrdersMap.get(q.getId())))
+                        .collect(Collectors.toList());
+        questionResponses.sort(Comparator.comparing(QuestionResponse::order));
+        return questionResponses;
+    }
+
     @Transactional
-    public void updateQuestions(final QuestionUpdateRequest request) {
+    public void updateQuestionsAndOrder(final QuestionUpdateRequest request) {
         checkRecruiting();
         Map<Long, Integer> newOrderMap = createNewQuestion(request);
         updateModifiedQuestion(request);

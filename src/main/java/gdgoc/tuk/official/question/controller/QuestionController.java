@@ -31,7 +31,7 @@ public class QuestionController {
     @Operation(summary = "전체 질문 조회", description = "질문 식별자, 질문 내용, 질문 순서를 반환합니다.")
     @PreAuthorize("permitAll()")
     public QuestionListResponse findAllQuestion() {
-        return questionService.findAllQuestionResponses();
+        return questionService.findAllQuestionsWithOrder();
     }
 
     @PostMapping
@@ -46,7 +46,7 @@ public class QuestionController {
           수정만 하는 경우엔 전체 질문의 순서를 넘기지 않아도 됩니다.
           질문 순서를 변경하는 경우에도 모든 질문의 순서를 넘겨야합니다.""")
     public void updateQuestions(@RequestBody QuestionUpdateRequest request) {
-        questionService.updateQuestions(request);
+        questionService.updateQuestionsAndOrder(request);
     }
 
     @DeleteMapping("/{questionId}")

@@ -11,4 +11,6 @@ public record QuestionResponse(
         String content,
         List<SubQuestionResponse> subQuestions,
         boolean isRequired,
+        boolean isDeletable,
+        Integer order,
         QuestionType questionType) {}
