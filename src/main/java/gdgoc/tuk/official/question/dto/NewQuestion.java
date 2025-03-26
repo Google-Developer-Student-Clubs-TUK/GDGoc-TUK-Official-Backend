@@ -8,4 +8,5 @@ public record NewQuestion(
         String content,
         QuestionType questionType,
         boolean isRequired,
+        boolean isDeletable,
         List<NewSubQuestion> newSubQuestions) {}

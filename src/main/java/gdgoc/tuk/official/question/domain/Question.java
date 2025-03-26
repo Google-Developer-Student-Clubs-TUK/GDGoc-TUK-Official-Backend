@@ -40,13 +40,20 @@ public class Question extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private QuestionType questionType;
     private boolean isRequired;
+    private boolean deletable;
 
     @Builder
     public Question(
-            final String content, final QuestionType questionType, final boolean isRequired) {
+            final String content, final QuestionType questionType, final boolean isRequired,
+        boolean deletable) {
         this.content = content;
         this.questionType = questionType;
         this.isRequired = isRequired;
+        this.deletable = deletable;
+    }
+
+    public boolean isNotDeletable(){
+        return !this.deletable;
     }
 
     private void modifySubContent(final Map<Long, String> modifiedSubQuestionMap,

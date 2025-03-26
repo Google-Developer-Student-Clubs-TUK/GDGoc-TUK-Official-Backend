@@ -4,6 +4,7 @@ import gdgoc.tuk.official.global.ErrorCode;
 import gdgoc.tuk.official.question.domain.Question;
 import gdgoc.tuk.official.question.domain.SubQuestion;
 import gdgoc.tuk.official.question.dto.ModifiedQuestion;
+import gdgoc.tuk.official.question.dto.NewQuestion;
 import gdgoc.tuk.official.question.dto.QuestionDeleteRequest;
 import gdgoc.tuk.official.question.dto.QuestionListResponse;
 import gdgoc.tuk.official.question.dto.QuestionOrderResponse;
@@ -90,38 +91,32 @@ public class QuestionService {
     }
 
     private Map<Long, Integer> createNewQuestion(final QuestionUpdateRequest request) {
-        final Map<Long, Integer> questionOrderMap =
+        final Map<Long, Integer> newQuestionOrder =
                 request.updatedQuestionOrders().stream()
                         .collect(
                                 Collectors.toMap(
                                         UpdatedQuestionOrder::getQuestionId,
                                         UpdatedQuestionOrder::getOrder));
-        if (request.newQuestions().isEmpty()) return questionOrderMap;
-        request.newQuestions()
-                .forEach(
-                        nq -> {
-                            Question newQuestion =
-                                    questionRepository.save(questionMapper.toQuestion(nq));
-                            questionOrderRepository.save(
-                                    new QuestionOrders(
-                                            newQuestion.getId(),
-                                            questionOrderMap.get(nq.questionId())));
-                            questionOrderMap.put(
-                                    newQuestion.getId(), questionOrderMap.get(nq.questionId()));
-                            questionOrderMap.remove(nq.questionId());
-                            nq.newSubQuestions()
-                                    .forEach(
-                                            sq ->
-                                                    newQuestion.addSubQuestion(
-                                                            new SubQuestion(sq.newSubContent())));
-                        });
-        return questionOrderMap;
+        if (request.newQuestions().isEmpty()) return newQuestionOrder;
+        request.newQuestions().forEach(nq -> saveQuestionAndOrder(nq, newQuestionOrder));
+        return newQuestionOrder;
+    }
+
+    private void saveQuestionAndOrder(
+            final NewQuestion nq, final Map<Long, Integer> newQuestionOrder) {
+        Question newQuestion = questionRepository.save(questionMapper.toQuestion(nq));
+        questionOrderRepository.save(
+                new QuestionOrders(newQuestion.getId(), newQuestionOrder.get(nq.questionId())));
+        newQuestionOrder.put(newQuestion.getId(), newQuestionOrder.get(nq.questionId()));
+        newQuestionOrder.remove(nq.questionId());
+        nq.newSubQuestions()
+                .forEach(sq -> newQuestion.addSubQuestion(new SubQuestion(sq.newSubContent())));
     }
 
     @Transactional
     public void deleteQuestion(final Long questionId, final QuestionDeleteRequest request) {
         final Question question = getQuestion(questionId);
-        if (question.isRequired()) {
+        if (question.isNotDeletable()) {
             throw new DeleteNotAllowedException(ErrorCode.DELETE_NOT_ALLOWED);
         }
         questionRepository.deleteById(questionId);
