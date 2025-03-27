@@ -66,13 +66,16 @@ public class Question extends BaseTimeEntity {
             final String content,
             final QuestionType questionType,
             final boolean isRequired,
-            final Map<Long, String> modifiedSubQuestionMap) {
+            final Map<Long, String> modifiedSubQuestionMap,
+        final List<String> newSubQuestions
+        ) {
         this.content = content;
         this.questionType = questionType;
         this.isRequired = isRequired;
         if (!modifiedSubQuestionMap.isEmpty()) {
             subQuestions.forEach(sq -> modifySubContent(modifiedSubQuestionMap, sq));
         }
+        newSubQuestions.forEach(s->subQuestions.add(new SubQuestion(s)));
     }
 
     public void addSubQuestion(final SubQuestion subQuestion) {

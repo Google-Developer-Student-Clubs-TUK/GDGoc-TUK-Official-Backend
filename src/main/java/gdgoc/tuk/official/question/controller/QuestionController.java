@@ -30,8 +30,8 @@ public class QuestionController {
     @GetMapping
     @Operation(summary = "전체 질문 조회", description = "질문 식별자, 질문 내용, 질문 순서를 반환합니다.")
     @PreAuthorize("permitAll()")
-    public QuestionListResponse findAllQuestion() {
-        return questionService.findAllQuestionsWithOrder();
+    public QuestionListResponse findAllQuestions() {
+        return questionService.findAllQuestionsAndSubQuestionsWithOrder();
     }
 
     @PostMapping
@@ -41,12 +41,13 @@ public class QuestionController {
             description =
                     """
           질문을 수정/등록 하는 API입니다.
-          새로운 질문을 등록하는 경우엔 질문의 임시 식별자를 -1, -2, -3으로 넣어주시고 새로운 질문이 존재하는 경우엔
-          모든 질문의 순서를 같이 넘겨야합니다.
-          수정만 하는 경우엔 전체 질문의 순서를 넘기지 않아도 됩니다.
-          질문 순서를 변경하는 경우에도 모든 질문의 순서를 넘겨야합니다.""")
-    public void updateQuestions(@RequestBody QuestionUpdateRequest request) {
-        questionService.updateQuestionsAndOrder(request);
+          새로운 부모 질문(Question)을 등록하는 경우엔 부모 질문의 임시 식별자를 -1, -2, -3으로 증가하도록 요청해야합니다.
+          부모 질문(Question)에 딸려있는 자식 질문(SubQuestion)은 생성 시 식별자나 임시식별자는 필요하지 않습니다.
+          자식 질문(SubQuestion) 수정 시엔 반환된 식별자와 같이 요청해야합니다.
+          질문 순서 목록은 어떠한 요청이더라도 항상 포함시켜 요청해야합니다.
+          """)
+    public void saveAndModifyQuestions(@RequestBody QuestionUpdateRequest request) {
+        questionService.saveAndModifyQuestions(request);
     }
 
     @DeleteMapping("/{questionId}")

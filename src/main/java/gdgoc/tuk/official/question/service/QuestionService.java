@@ -20,8 +20,6 @@ import gdgoc.tuk.official.questionorder.domain.QuestionOrders;
 import gdgoc.tuk.official.questionorder.repository.QuestionOrderRepository;
 import gdgoc.tuk.official.recruitment.repository.RecruitmentRepository;
 
-import java.util.Collections;
-import java.util.Comparator;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -42,47 +40,27 @@ public class QuestionService {
     private final QuestionOrderRepository questionOrderRepository;
     private final RecruitmentRepository recruitmentRepository;
 
-    private Map<Long, Integer> createQuestionOrderMap(final List<QuestionOrders> questionOrders) {
-        return questionOrders.stream()
-                .collect(
-                        Collectors.toMap(QuestionOrders::getQuestionId, QuestionOrders::getOrders));
-    }
-
-    public QuestionListResponse findAllQuestionsWithOrder() {
+    public QuestionListResponse findAllQuestionsAndSubQuestionsWithOrder() {
+        List<Question> questions = questionRepository.findAll();
         final List<QuestionOrders> questionOrders = questionOrderRepository.findAll();
-        final Map<Long, Integer> questionOrdersMap = createQuestionOrderMap(questionOrders);
         final List<QuestionResponse> questionResponses =
-                createQuestionResponsesWithQuestionOrder(questionOrdersMap);
-        final List<QuestionOrderResponse> questionOrderResponseList =
+                questionMapper.toSortedQuestionResponseList(questions, questionOrders);
+        final List<QuestionOrderResponse> questionOrderResponses =
                 questionMapper.toQuestionOrderResponseList(questionOrders);
-        return new QuestionListResponse(questionResponses, questionOrderResponseList);
-    }
-
-    private List<QuestionResponse> createQuestionResponsesWithQuestionOrder(
-            final Map<Long, Integer> questionOrdersMap) {
-        List<Question> allFetchSubQuestion = questionRepository.findAllFetchSubQuestion();
-        List<QuestionResponse> questionResponses =
-                allFetchSubQuestion.stream()
-                        .map(
-                                q ->
-                                        questionMapper.toQuestionResponse(
-                                                q, questionOrdersMap.get(q.getId())))
-                        .collect(Collectors.toList());
-        questionResponses.sort(Comparator.comparing(QuestionResponse::order));
-        return questionResponses;
+        return new QuestionListResponse(questionResponses, questionOrderResponses);
     }
 
     @Transactional
-    public void updateQuestionsAndOrder(final QuestionUpdateRequest request) {
-        checkRecruiting();
-        Map<Long, Integer> newOrderMap = createNewQuestion(request);
-        updateModifiedQuestion(request);
+    public void saveAndModifyQuestions(final QuestionUpdateRequest request) {
+        checkModifiable();
+        Map<Long, Integer> newOrderMap = saveQuestions(request);
+        modifyQuestion(request);
         if (!newOrderMap.isEmpty()) {
             updateQuestionOrder(newOrderMap);
         }
     }
 
-    private void checkRecruiting() {
+    private void checkModifiable() {
         if (recruitmentRepository.existsByCloseAtIsAfter(LocalDateTime.now())) {
             throw new QuestionModifyNotAllowed(ErrorCode.MODIFY_NOT_ALLOWED);
         }
@@ -93,16 +71,11 @@ public class QuestionService {
         questionOrders.forEach(qo -> qo.changeOrder(orderMap.get(qo.getQuestionId())));
     }
 
-    private void updateModifiedQuestion(final QuestionUpdateRequest request) {
+    private void modifyQuestion(final QuestionUpdateRequest request) {
         if (request.modifiedQuestions().isEmpty()) return;
-        final List<ModifiedQuestion> modifiedQuestions = request.modifiedQuestions();
         final Map<Long, ModifiedQuestion> modifiedQuestionMap =
-                modifiedQuestions.stream()
-                        .collect(Collectors.toMap(ModifiedQuestion::questionId, q -> q));
-        final List<Long> modifiedQuestionIds =
-                modifiedQuestions.stream().map(ModifiedQuestion::questionId).toList();
-        final List<Question> questions =
-                questionRepository.findAllByIdsFetchSubQuestion(modifiedQuestionIds);
+                getModifiedQuestionMap(request);
+        final List<Question> questions = findAllQuestionsByIds(request.modifiedQuestions());
         questions.forEach(
                 q -> {
                     ModifiedQuestion modifiedQuestion = modifiedQuestionMap.get(q.getId());
@@ -110,19 +83,35 @@ public class QuestionService {
                 });
     }
 
-    private Map<Long, Integer> createNewQuestion(final QuestionUpdateRequest request) {
-        final Map<Long, Integer> newQuestionOrder =
-                request.updatedQuestionOrders().stream()
-                        .collect(
-                                Collectors.toMap(
-                                        UpdatedQuestionOrder::getQuestionId,
-                                        UpdatedQuestionOrder::getOrder));
+    private Map<Long, ModifiedQuestion> getModifiedQuestionMap(
+            final QuestionUpdateRequest request) {
+        return request.modifiedQuestions().stream()
+                .collect(Collectors.toMap(ModifiedQuestion::questionId, q -> q));
+    }
+
+    private List<Question> findAllQuestionsByIds(final List<ModifiedQuestion> modifiedQuestions) {
+        final List<Long> modifiedQuestionIds =
+                modifiedQuestions.stream().map(ModifiedQuestion::questionId).toList();
+        return questionRepository.findAllByIdsFetchSubQuestion(modifiedQuestionIds);
+    }
+
+    private Map<Long, Integer> saveQuestions(final QuestionUpdateRequest request) {
+        final Map<Long, Integer> newQuestionOrder = getNewQuestionOrderMap(request);
         if (request.newQuestions().isEmpty()) return newQuestionOrder;
-        request.newQuestions().forEach(nq -> saveQuestionAndOrder(nq, newQuestionOrder));
+        request.newQuestions()
+                .forEach(nq -> saveQuestionsAndSubQuestionsAndOrder(nq, newQuestionOrder));
         return newQuestionOrder;
     }
 
-    private void saveQuestionAndOrder(
+    private Map<Long, Integer> getNewQuestionOrderMap(final QuestionUpdateRequest request) {
+        return request.updatedQuestionOrders().stream()
+                .collect(
+                        Collectors.toMap(
+                                UpdatedQuestionOrder::getQuestionId,
+                                UpdatedQuestionOrder::getOrder));
+    }
+
+    private void saveQuestionsAndSubQuestionsAndOrder(
             final NewQuestion nq, final Map<Long, Integer> newQuestionOrder) {
         Question newQuestion = questionRepository.save(questionMapper.toQuestion(nq));
         questionOrderRepository.save(

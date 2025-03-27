@@ -8,4 +8,5 @@ public record ModifiedQuestion(
         String modifiedContent,
         QuestionType questionType,
         boolean isRequired,
-        List<ModifiedSubQuestion> modifiedSubQuestions) {}
+        List<ModifiedSubQuestion> modifiedSubQuestions,
+        List<NewSubQuestion> newSubQuestions) {}

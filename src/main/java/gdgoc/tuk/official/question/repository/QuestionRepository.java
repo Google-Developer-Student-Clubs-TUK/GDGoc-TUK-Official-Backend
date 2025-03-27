@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface QuestionRepository extends JpaRepository<Question, Long> {
 
-    @Query("select q from Question q join fetch q.subQuestions where q.id in (:questionIds)")
+    @Query("select q from Question q left join fetch q.subQuestions where q.id in (:questionIds)")
     List<Question> findAllByIdsFetchSubQuestion(List<Long> questionIds);
 
     @Query("select q from Question q left join fetch q.subQuestions")

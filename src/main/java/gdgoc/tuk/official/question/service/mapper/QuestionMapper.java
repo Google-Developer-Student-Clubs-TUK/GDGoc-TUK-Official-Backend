@@ -4,13 +4,16 @@ import gdgoc.tuk.official.question.domain.Question;
 import gdgoc.tuk.official.question.dto.ModifiedQuestion;
 import gdgoc.tuk.official.question.dto.ModifiedSubQuestion;
 import gdgoc.tuk.official.question.dto.NewQuestion;
+import gdgoc.tuk.official.question.dto.NewSubQuestion;
 import gdgoc.tuk.official.question.dto.QuestionOrderResponse;
 import gdgoc.tuk.official.question.dto.QuestionResponse;
 import gdgoc.tuk.official.question.dto.SubQuestionResponse;
 import gdgoc.tuk.official.questionorder.domain.QuestionOrders;
 
+import java.util.ArrayList;
 import org.springframework.stereotype.Component;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,21 +32,58 @@ public class QuestionMapper {
                 .build();
     }
 
+    private Map<Long, Integer> toQuestionOrderMap(final List<QuestionOrders> questionOrders) {
+        return questionOrders.stream()
+                .collect(
+                        Collectors.toMap(QuestionOrders::getQuestionId, QuestionOrders::getOrders));
+    }
+
+    public List<QuestionResponse> toSortedQuestionResponseList(
+            List<Question> questions, final List<QuestionOrders> questionOrders) {
+        final Map<Long, Integer> questionOrdersMap = toQuestionOrderMap(questionOrders);
+        final List<QuestionResponse> questionResponses =
+                questions.stream()
+                        .map(q -> toQuestionResponse(q, questionOrdersMap.get(q.getId())))
+                        .collect(Collectors.toList());
+        questionResponses.sort(Comparator.comparing(QuestionResponse::order));
+        return questionResponses;
+    }
+
     public void modifyQuestion(final Question question, final ModifiedQuestion modifiedQuestion) {
-        Map<Long, String> subQuestionMap = new HashMap<>();
+        Map<Long, String> modifiedSubQuestionMap = new HashMap<>();
+        List<String> newSubQuestionList = new ArrayList<>();
+        if (Objects.nonNull(modifiedQuestion.newSubQuestions())) {
+            newSubQuestionList = getSubContent(modifiedQuestion);
+        }
         if (Objects.nonNull(modifiedQuestion.modifiedSubQuestions())) {
-            subQuestionMap =
-                    modifiedQuestion.modifiedSubQuestions().stream()
-                            .collect(
-                                    Collectors.toMap(
-                                            ModifiedSubQuestion::subQuestionId,
-                                            ModifiedSubQuestion::modifiedSubContent));
+            modifiedSubQuestionMap = getModifiedSubQuestionMap(modifiedQuestion);
         }
         question.modifyContent(
                 modifiedQuestion.modifiedContent(),
                 modifiedQuestion.questionType(),
                 modifiedQuestion.isRequired(),
-                subQuestionMap);
+                modifiedSubQuestionMap,
+                newSubQuestionList);
+    }
+
+    private Map<Long, String> getModifiedSubQuestionMap(final ModifiedQuestion modifiedQuestion) {
+        Map<Long, String> modifiedSubQuestionMap;
+        modifiedSubQuestionMap =
+                modifiedQuestion.modifiedSubQuestions().stream()
+                        .collect(
+                                Collectors.toMap(
+                                        ModifiedSubQuestion::subQuestionId,
+                                        ModifiedSubQuestion::modifiedSubContent));
+        return modifiedSubQuestionMap;
+    }
+
+    private List<String> getSubContent(final ModifiedQuestion modifiedQuestion) {
+        List<String> newSubQuestionList;
+        newSubQuestionList =
+                modifiedQuestion.newSubQuestions().stream()
+                        .map(NewSubQuestion::newSubContent)
+                        .toList();
+        return newSubQuestionList;
     }
 
     public QuestionResponse toQuestionResponse(
