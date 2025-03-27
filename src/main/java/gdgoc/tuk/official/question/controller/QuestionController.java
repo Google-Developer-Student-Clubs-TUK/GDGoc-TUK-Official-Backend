@@ -50,11 +50,18 @@ public class QuestionController {
         questionService.saveAndModifyQuestions(request);
     }
 
-    @DeleteMapping("/{questionId}")
+    @DeleteMapping("/parent/{questionId}")
 //    @PreAuthorize("hasRole('LEADER')")
-    @Operation(summary = "질문 삭제", description = "질문 식별자를 이용해 질문을 삭제합니다.")
+    @Operation(summary = "부모 질문 삭제", description = "부모 질문(Question) 식별자를 이용해 질문을 삭제합니다.")
     public void deleteQuestion(
             @PathVariable final Long questionId, @RequestBody QuestionDeleteRequest request) {
         questionService.deleteQuestion(questionId, request);
+    }
+
+    @DeleteMapping("/parent/{questionId}/child/{subQuestionId}")
+    @Operation(summary = "자식 질문 삭제", description = "자식 질문(SubQuestion) 식별자를 이용해 질문을 삭제합니다.")
+    public void deleteSubQuestion(@PathVariable final Long questionId,
+        @PathVariable final Long subQuestionId) {
+        questionService.deleteSubQuestion(questionId,subQuestionId);
     }
 }

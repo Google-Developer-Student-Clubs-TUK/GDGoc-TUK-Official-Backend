@@ -2,6 +2,8 @@ package gdgoc.tuk.official.question.domain;
 
 import gdgoc.tuk.official.global.BaseTimeEntity;
 
+import gdgoc.tuk.official.global.ErrorCode;
+import gdgoc.tuk.official.question.exception.QuestionNotFoundException;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -75,11 +77,21 @@ public class Question extends BaseTimeEntity {
         if (!modifiedSubQuestionMap.isEmpty()) {
             subQuestions.forEach(sq -> modifySubContent(modifiedSubQuestionMap, sq));
         }
-        newSubQuestions.forEach(s->subQuestions.add(new SubQuestion(s)));
+        newSubQuestions.forEach(s->addSubQuestion(new SubQuestion(s)));
     }
 
     public void addSubQuestion(final SubQuestion subQuestion) {
         subQuestion.addParentQuestion(this);
         subQuestions.add(subQuestion);
+    }
+
+    public void deleteBySubQuestionId(final Long subQuestionId){
+        SubQuestion subQuestion =
+                subQuestions.stream()
+                        .filter(sq -> sq.getId().equals(subQuestionId))
+                        .findFirst()
+                        .orElseThrow(
+                                () -> new QuestionNotFoundException(ErrorCode.QUESTION_NOT_FOUND));
+        subQuestions.remove(subQuestion);
     }
 }

@@ -41,7 +41,7 @@ public class QuestionService {
     private final RecruitmentRepository recruitmentRepository;
 
     public QuestionListResponse findAllQuestionsAndSubQuestionsWithOrder() {
-        List<Question> questions = questionRepository.findAll();
+        List<Question> questions = questionRepository.findAllFetchSubQuestion();
         final List<QuestionOrders> questionOrders = questionOrderRepository.findAll();
         final List<QuestionResponse> questionResponses =
                 questionMapper.toSortedQuestionResponseList(questions, questionOrders);
@@ -133,6 +133,15 @@ public class QuestionService {
         reorder(request.questionOrders());
     }
 
+    @Transactional
+    public void deleteSubQuestion(final Long questionId,final Long subQuestionId) {
+        final Question question = getQuestionFetchSubQuestions(questionId);
+        if (question.isNotDeletable()) {
+            throw new DeleteNotAllowedException(ErrorCode.DELETE_NOT_ALLOWED);
+        }
+        question.deleteBySubQuestionId(subQuestionId);
+    }
+
     private void reorder(final List<UpdatedQuestionOrder> questionOrders) {
         Map<Long, Integer> questionOrderMap =
                 questionOrders.stream()
@@ -149,6 +158,12 @@ public class QuestionService {
         return questionRepository
                 .findById(questionId)
                 .orElseThrow(() -> new QuestionNotFoundException(ErrorCode.QUESTION_NOT_FOUND));
+    }
+
+    public Question getQuestionFetchSubQuestions(final Long questionId) {
+        return questionRepository
+            .findByIdFetchSubQuestions(questionId)
+            .orElseThrow(() -> new QuestionNotFoundException(ErrorCode.QUESTION_NOT_FOUND));
     }
 
     public List<Question> findAllQuestions() {
