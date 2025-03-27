@@ -49,7 +49,7 @@ public class QuestionMapper {
     public QuestionResponse toQuestionResponse(
             final Question question, final Integer questionOrder) {
         return QuestionResponse.builder()
-                .id(question.getId())
+                .questionId(question.getId())
                 .questionType(question.getQuestionType())
                 .content(question.getContent())
                 .isRequired(question.isRequired())
