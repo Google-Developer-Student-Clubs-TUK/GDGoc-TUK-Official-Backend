@@ -30,14 +30,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(c -> c.configurationSource(corsConfigurationSource()))
                 .formLogin(
                         login ->
                                 login.loginProcessingUrl("/api/login")
                                         .usernameParameter("email")
                                         .successHandler(
-                                                (request, response, authentication) ->{
-                                                    response.setStatus(
-                                                        HttpServletResponse.SC_OK);
+                                                (request, response, authentication) -> {
+                                                    response.setStatus(HttpServletResponse.SC_OK);
                                                 })
                                         .failureHandler(
                                                 (request, response, exception) ->

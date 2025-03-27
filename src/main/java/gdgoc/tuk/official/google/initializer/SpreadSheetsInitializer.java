@@ -136,7 +136,7 @@ public class SpreadSheetsInitializer {
         } catch (GoogleJsonResponseException e) {
             GoogleJsonError error = e.getDetails();
             if (error.getCode() == 404) {
-                log.error("Spreadsheet not found with id '%s'.\n", spreadsheetId);
+                log.error("Spreadsheet not found with questionId '%s'.\n", spreadsheetId);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
