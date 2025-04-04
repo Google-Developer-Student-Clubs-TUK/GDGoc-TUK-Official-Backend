@@ -1,6 +1,6 @@
 package gdgoc.tuk.official.applicant.service.mapper;
 
-import gdgoc.tuk.official.answer.dto.RequiredAnswer;
+import gdgoc.tuk.official.answer.dto.MemberProfile;
 import gdgoc.tuk.official.applicant.domain.Applicant;
 import gdgoc.tuk.official.applicant.dto.ApplicantResponse;
 import gdgoc.tuk.official.applicant.dto.ApplicantResponse.ApplicantInfo;
@@ -12,16 +12,16 @@ import java.util.List;
 @Component
 public class ApplicantMapper {
 
-    public Applicant toApplicant(final RequiredAnswer requiredAnswer, final String generation) {
+    public Applicant toApplicant(final MemberProfile memberProfile, final String generation) {
         return Applicant.builder()
-                .major(requiredAnswer.major())
-                .email(requiredAnswer.email())
-                .enrollmentStatus(requiredAnswer.enrollmentStatus())
-                .field(requiredAnswer.field())
-                .gender(requiredAnswer.gender())
-                .name(requiredAnswer.name())
-                .studentNumber(requiredAnswer.studentNumber())
-                .universityYear(requiredAnswer.universityYear())
+                .major(memberProfile.major())
+                .email(memberProfile.email())
+                .enrollmentStatus(memberProfile.enrollmentStatus())
+                .field(memberProfile.field())
+                .gender(memberProfile.gender())
+                .name(memberProfile.name())
+                .studentNumber(memberProfile.studentNumber())
+                .universityYear(memberProfile.universityYear())
                 .generation(generation)
                 .build();
     }

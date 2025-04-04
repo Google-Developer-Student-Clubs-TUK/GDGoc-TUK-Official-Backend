@@ -1,7 +1,7 @@
 package gdgoc.tuk.official.answer.service;
 
 import gdgoc.tuk.official.answer.domain.Answer;
-import gdgoc.tuk.official.answer.dto.AnswerRequest;
+import gdgoc.tuk.official.answer.dto.AnswerListRequest;
 import gdgoc.tuk.official.answer.dto.AnswerResponse;
 import gdgoc.tuk.official.answer.exception.AnswerNotFoundException;
 import gdgoc.tuk.official.answer.exception.DuplicatedAnswerException;
@@ -25,45 +25,45 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class AnswerService {
 
-    private final RecruitmentGenerationService recruitmentGenerationService;
     private final SpreadSheetsService spreadSheetsService;
     private final ApplicantService applicantService;
     private final AnswerRepository answerRepository;
+    private final RecruitmentGenerationService recruitmentGenerationService;
 
     @Transactional
-    public void apply(final AnswerRequest request) {
-        Recruitment recruitment = recruitmentGenerationService.getOnGoingRecruitmentGeneration();
+    public void apply(final AnswerListRequest request) {
         checkDuplicatedAnswer(request);
-        final List<Object> sheetsValues = getSheetsValues(request);
-        spreadSheetsService.write(
-                recruitment.getSpreadSheetsId(),
-                List.of(sheetsValues),
-                recruitment.getGeneration());
-        Applicant applicant = applicantService.saveApplicant(request.requiredAnswer(),
+        Recruitment recruitment = recruitmentGenerationService.getOnGoingRecruitment();
+        final List<Object> spreadSheetContent = extractAnswersForSpreadSheets(request);
+        spreadSheetsService.write(recruitment.getSpreadSheetsId(), List.of(spreadSheetContent),
             recruitment.getGeneration());
-        answerRepository.save(new Answer(request.questionAndAnswerJson(),applicant));
+        Applicant applicant =
+                applicantService.saveApplicant(
+                        request.memberProfile(), recruitment.getGeneration());
+        answerRepository.save(new Answer(request.questionAndAnswerJson(), applicant));
     }
 
-    public AnswerResponse findQuestionAndAnswer(final Long applicantId){
+    public AnswerResponse findQuestionAndAnswer(final Long applicantId) {
         final Applicant applicant = applicantService.getApplicantById(applicantId);
-        final Answer answer = answerRepository
-            .findByApplicant(applicant)
-            .orElseThrow(() -> new AnswerNotFoundException(ErrorCode.ANSWER_NOT_FOUND));
+        final Answer answer =
+                answerRepository
+                        .findByApplicant(applicant)
+                        .orElseThrow(() -> new AnswerNotFoundException(ErrorCode.ANSWER_NOT_FOUND));
         return new AnswerResponse(answer.getQuestionAndAnswer());
     }
 
-    private void checkDuplicatedAnswer(final AnswerRequest request) {
-        boolean alreadyApplied = applicantService.isAlreadyApplied(request.requiredAnswer().email());
-        if(alreadyApplied){
+    private void checkDuplicatedAnswer(final AnswerListRequest request) {
+        boolean alreadyApplied = applicantService.isAlreadyApplied(request.memberProfile().email());
+        if (alreadyApplied) {
             throw new DuplicatedAnswerException(ErrorCode.DUPLICATED_ANSWER);
         }
     }
 
-    private List<Object> getSheetsValues(final AnswerRequest request) {
-        return request.answers().stream().map(a -> (Object) createSheetsAnswer(a)).toList();
+    private List<Object> extractAnswersForSpreadSheets(final AnswerListRequest request) {
+        return request.answers().stream().map(a -> (Object) joinContents(a.contents())).toList();
     }
 
-    private String createSheetsAnswer(List<String> answers) {
+    private String joinContents(List<String> answers) {
         if (answers.size() == 1) {
             return answers.get(0);
         } else {

@@ -1,12 +1,13 @@
 package gdgoc.tuk.official.answer.controller;
 
-import gdgoc.tuk.official.answer.dto.AnswerRequest;
+import gdgoc.tuk.official.answer.dto.AnswerListRequest;
 import gdgoc.tuk.official.answer.dto.AnswerResponse;
 import gdgoc.tuk.official.answer.service.AnswerService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
@@ -34,9 +35,9 @@ public class AnswerController {
             summary = "지원하기",
             description =
                     """
-        필수응답 정보는 별도 객체를 만들어 넘겨주셔야합니다.
+        회원 신상 정보는 별도 객체를 만들어 넘겨주셔야합니다.
         응답의 순서는 질문의 순서 그대로 넘겨주시면 됩니다.""")
-    public void apply(@RequestBody final AnswerRequest request) {
+    public void apply(@Valid @RequestBody final AnswerListRequest request) {
         answerService.apply(request);
     }
 

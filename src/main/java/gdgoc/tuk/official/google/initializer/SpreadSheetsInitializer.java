@@ -34,7 +34,7 @@ import java.util.List;
 @Slf4j
 public class SpreadSheetsInitializer {
 
-    private static final String SPREAD_SHEET_TITLE = "GDGOC-TUK %s기 지원자 응답";
+    private static final String SPREAD_SHEET_TITLE = "GDGOC-TUK %s년도 지원자 응답";
     private static final int INITIAL_SHEET_ID = 0;
     private static final String POSITION = "시트1!1:1";
     private final Sheets sheetsClient;

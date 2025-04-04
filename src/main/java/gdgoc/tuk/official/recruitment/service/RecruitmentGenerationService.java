@@ -16,7 +16,7 @@ public class RecruitmentGenerationService {
 
     private final RecruitmentRepository recruitmentRepository;
 
-    public Recruitment getOnGoingRecruitmentGeneration() {
+    public Recruitment getOnGoingRecruitment() {
         return recruitmentRepository
             .findByBetweenOpenAtAndCloseAt(LocalDateTime.now())
             .orElseThrow(

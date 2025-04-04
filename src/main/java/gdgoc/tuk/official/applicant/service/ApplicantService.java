@@ -2,7 +2,7 @@ package gdgoc.tuk.official.applicant.service;
 
 import gdgoc.tuk.official.account.domain.Accounts;
 import gdgoc.tuk.official.account.service.AccountRegisterService;
-import gdgoc.tuk.official.answer.dto.RequiredAnswer;
+import gdgoc.tuk.official.answer.dto.MemberProfile;
 import gdgoc.tuk.official.applicant.domain.Applicant;
 import gdgoc.tuk.official.applicant.domain.ApplicationStatus;
 import gdgoc.tuk.official.applicant.dto.ApplicantResponse;
@@ -14,7 +14,6 @@ import gdgoc.tuk.official.email.service.EmailService;
 import gdgoc.tuk.official.generationmember.service.GenerationMemberService;
 import gdgoc.tuk.official.global.ErrorCode;
 
-import jakarta.validation.constraints.Email;
 import java.io.IOException;
 import javax.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +33,8 @@ public class ApplicantService {
     private final EmailService emailService;
 
     @Transactional
-    public Applicant saveApplicant(final RequiredAnswer requiredAnswer, final String generation) {
-        final Applicant applicant = applicantMapper.toApplicant(requiredAnswer, generation);
+    public Applicant saveApplicant(final MemberProfile memberProfile, final String generation) {
+        final Applicant applicant = applicantMapper.toApplicant(memberProfile, generation);
         applicantRepository.save(applicant);
         return applicant;
     }

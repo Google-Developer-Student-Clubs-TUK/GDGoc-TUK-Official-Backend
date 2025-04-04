@@ -7,6 +7,7 @@ import com.google.api.services.sheets.v4.model.ValueRange;
 
 import gdgoc.tuk.official.answer.repository.SpreadSheetsPrimaryKeyRepository;
 
+import gdgoc.tuk.official.recruitment.domain.Recruitment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

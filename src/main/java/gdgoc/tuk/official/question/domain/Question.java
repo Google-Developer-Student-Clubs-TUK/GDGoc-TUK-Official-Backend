@@ -46,18 +46,18 @@ public class Question extends BaseTimeEntity {
     private QuestionType questionType;
 
     private boolean isRequired;
-    private boolean deletable;
+    private boolean isDeletable;
 
     @Builder
     public Question(
             final String content,
             final QuestionType questionType,
             final boolean isRequired,
-            boolean deletable) {
+            boolean isDeletable) {
         this.content = content;
         this.questionType = questionType;
         this.isRequired = isRequired;
-        this.deletable = deletable;
+        this.isDeletable = isDeletable;
     }
 
     @Builder
@@ -65,17 +65,17 @@ public class Question extends BaseTimeEntity {
             final String content,
             final QuestionType questionType,
             final boolean isRequired,
-            boolean deletable,
+            boolean isDeletable,
             List<SubQuestion> subQuestionList) {
         this.content = content;
         this.questionType = questionType;
         this.isRequired = isRequired;
-        this.deletable = deletable;
+        this.isDeletable = isDeletable;
         subQuestionList.forEach(this::addSubQuestion);
     }
 
     public boolean isNotDeletable() {
-        return !this.deletable;
+        return !this.isDeletable;
     }
 
     private void modifySubContent(

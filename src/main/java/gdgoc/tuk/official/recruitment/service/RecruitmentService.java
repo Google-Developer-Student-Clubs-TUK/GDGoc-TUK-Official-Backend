@@ -31,8 +31,7 @@ public class RecruitmentService {
 
     @Transactional
     public void openRecruitment(final RecruitmentOpenRequest request) {
-        checkGeneration(request.generation());
-        checkAlreadyExistRecruitment();
+        checkOnGoingRecruitment();
         spreadSheetsPrimaryKeyRepository.saveNewGeneration(request.generation());
         final String spreadSheetsId =
                 spreadSheetsInitializer.init(request.generation(), spreadSheetsQuestionService.getSpreadSheetQuestions());
@@ -42,16 +41,10 @@ public class RecruitmentService {
         recruitmentRepository.save(recruitment);
     }
 
-    private void checkAlreadyExistRecruitment() {
+    private void checkOnGoingRecruitment() {
         LocalDateTime currentTime = LocalDateTime.now();
         if (recruitmentRepository.existsByCloseAtIsAfter(currentTime)) {
             throw new RecruitmentDuplicationException(ErrorCode.RECRUITMENT_ALREADY_EXIST);
-        }
-    }
-
-    private void checkGeneration(final String generation) {
-        if (recruitmentRepository.existsByGeneration(generation)) {
-            throw new GenerationDuplicationException(ErrorCode.GENERATION_DUPLICATED);
         }
     }
 
