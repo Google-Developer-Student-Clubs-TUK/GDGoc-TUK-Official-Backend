@@ -14,6 +14,8 @@ import gdgoc.tuk.official.email.service.EmailService;
 import gdgoc.tuk.official.generationmember.service.GenerationMemberService;
 import gdgoc.tuk.official.global.ErrorCode;
 
+import gdgoc.tuk.official.recruitment.domain.Recruitment;
+import gdgoc.tuk.official.recruitment.service.RecruitmentGenerationService;
 import java.io.IOException;
 import javax.mail.MessagingException;
 import lombok.RequiredArgsConstructor;

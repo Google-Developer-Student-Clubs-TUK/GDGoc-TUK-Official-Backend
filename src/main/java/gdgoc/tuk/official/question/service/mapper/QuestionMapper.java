@@ -28,7 +28,7 @@ public class QuestionMapper {
                 .questionType(newQuestion.questionType())
                 .content(newQuestion.content())
                 .isRequired(newQuestion.isRequired())
-                .deletable(newQuestion.isDeletable())
+                .isDeletable(newQuestion.isDeletable())
                 .build();
     }
 

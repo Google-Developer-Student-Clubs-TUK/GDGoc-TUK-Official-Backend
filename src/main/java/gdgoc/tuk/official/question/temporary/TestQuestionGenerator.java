@@ -57,7 +57,13 @@ public class TestQuestionGenerator implements CommandLineRunner {
                                 QuestionType.SINGLE_CHOICE,
                                 true,
                                 false,
-                                List.of(new SubQuestion("남"), new SubQuestion("여"))));
+                                List.of(new SubQuestion("남"), new SubQuestion("여"))),
+                        new Question(
+                                "학적 상태",
+                                QuestionType.SINGLE_CHOICE,
+                                true,
+                                false,
+                                List.of(new SubQuestion("재학"), new SubQuestion("휴학"))));
         List<Question> savedQuestions = questionRepository.saveAll(questions);
         List<QuestionOrders> questionOrders = new ArrayList<>();
         for (int i = 0; i < savedQuestions.size(); i++) {
