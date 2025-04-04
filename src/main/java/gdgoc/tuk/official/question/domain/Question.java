@@ -34,7 +34,7 @@ public class Question extends BaseTimeEntity {
             mappedBy = "question",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
-    private final List<SubQuestion> subQuestions = new ArrayList<>();
+    private List<SubQuestion> subQuestions = new ArrayList<>();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -52,6 +52,17 @@ public class Question extends BaseTimeEntity {
         this.questionType = questionType;
         this.isRequired = isRequired;
         this.deletable = deletable;
+    }
+
+    @Builder
+    public Question(
+        final String content, final QuestionType questionType, final boolean isRequired,
+        boolean deletable,List<SubQuestion> subQuestionList) {
+        this.content = content;
+        this.questionType = questionType;
+        this.isRequired = isRequired;
+        this.deletable = deletable;
+        subQuestionList.forEach(this::addSubQuestion);
     }
 
     public boolean isNotDeletable(){

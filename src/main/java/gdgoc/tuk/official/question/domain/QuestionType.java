@@ -4,5 +4,6 @@ public enum QuestionType {
     LONG_TEXT,
     SHORT_TEXT,
     SINGLE_CHOICE,
-    MULTIPLE_CHOICE
+    MULTIPLE_CHOICE,
+    EMAIL
 }
