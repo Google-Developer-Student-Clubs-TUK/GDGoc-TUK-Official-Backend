@@ -58,7 +58,7 @@ public class QuestionMapper {
         if (Objects.nonNull(modifiedQuestion.modifiedSubQuestions())) {
             modifiedSubQuestionMap = getModifiedSubQuestionMap(modifiedQuestion);
         }
-        question.modifyContent(
+        question.modifyQuestion(
                 modifiedQuestion.modifiedContent(),
                 modifiedQuestion.questionType(),
                 modifiedQuestion.isRequired(),

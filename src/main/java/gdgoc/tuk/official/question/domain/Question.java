@@ -35,19 +35,25 @@ public class Question extends BaseTimeEntity {
             cascade = CascadeType.ALL,
             orphanRemoval = true)
     private List<SubQuestion> subQuestions = new ArrayList<>();
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String content;
+
     @Enumerated(EnumType.STRING)
     private QuestionType questionType;
+
     private boolean isRequired;
     private boolean deletable;
 
     @Builder
     public Question(
-            final String content, final QuestionType questionType, final boolean isRequired,
-        boolean deletable) {
+            final String content,
+            final QuestionType questionType,
+            final boolean isRequired,
+            boolean deletable) {
         this.content = content;
         this.questionType = questionType;
         this.isRequired = isRequired;
@@ -56,8 +62,11 @@ public class Question extends BaseTimeEntity {
 
     @Builder
     public Question(
-        final String content, final QuestionType questionType, final boolean isRequired,
-        boolean deletable,List<SubQuestion> subQuestionList) {
+            final String content,
+            final QuestionType questionType,
+            final boolean isRequired,
+            boolean deletable,
+            List<SubQuestion> subQuestionList) {
         this.content = content;
         this.questionType = questionType;
         this.isRequired = isRequired;
@@ -65,30 +74,36 @@ public class Question extends BaseTimeEntity {
         subQuestionList.forEach(this::addSubQuestion);
     }
 
-    public boolean isNotDeletable(){
+    public boolean isNotDeletable() {
         return !this.deletable;
     }
 
-    private void modifySubContent(final Map<Long, String> modifiedSubQuestionMap,
-        final SubQuestion sq) {
+    private void modifySubContent(
+            final Map<Long, String> modifiedSubQuestionMap, final SubQuestion sq) {
         String modifiedSubContent = modifiedSubQuestionMap.get(sq.getId());
-        if( Objects.nonNull(modifiedSubContent)) sq.modifySubContent(modifiedSubContent);
+        if (Objects.nonNull(modifiedSubContent)) sq.modifySubContent(modifiedSubContent);
     }
 
-    public void modifyContent(
+    public void modifyQuestion(
             final String content,
             final QuestionType questionType,
             final boolean isRequired,
             final Map<Long, String> modifiedSubQuestionMap,
-        final List<String> newSubQuestions
-        ) {
+            final List<String> newSubQuestions) {
         this.content = content;
-        this.questionType = questionType;
+        modifyQuestionType(questionType);
         this.isRequired = isRequired;
         if (!modifiedSubQuestionMap.isEmpty()) {
             subQuestions.forEach(sq -> modifySubContent(modifiedSubQuestionMap, sq));
         }
-        newSubQuestions.forEach(s->addSubQuestion(new SubQuestion(s)));
+        newSubQuestions.forEach(s -> addSubQuestion(new SubQuestion(s)));
+    }
+
+    private void modifyQuestionType(final QuestionType questionType) {
+        if (questionType.equals(QuestionType.LONG_TEXT)
+                || questionType.equals(QuestionType.SHORT_TEXT)) {
+            this.subQuestions.clear();
+        }
     }
 
     public void addSubQuestion(final SubQuestion subQuestion) {
@@ -96,7 +111,7 @@ public class Question extends BaseTimeEntity {
         subQuestions.add(subQuestion);
     }
 
-    public void deleteBySubQuestionId(final Long subQuestionId){
+    public void deleteBySubQuestionId(final Long subQuestionId) {
         SubQuestion subQuestion =
                 subQuestions.stream()
                         .filter(sq -> sq.getId().equals(subQuestionId))
