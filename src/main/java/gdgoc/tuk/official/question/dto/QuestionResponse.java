@@ -9,6 +9,7 @@ public record QuestionResponse(
         Long questionId,
         String content,
         List<SubQuestionResponse> subQuestions,
+        int page,
         boolean isRequired,
         boolean isDeletable,
         Integer order,

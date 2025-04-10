@@ -7,6 +7,7 @@ public record NewQuestion(
         Long questionId,
         String content,
         QuestionType questionType,
+        int page,
         boolean isRequired,
         boolean isDeletable,
         List<NewSubQuestion> newSubQuestions) {}

@@ -44,18 +44,19 @@ public class Question extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private QuestionType questionType;
-
+    private int page;
     private boolean isRequired;
     private boolean isDeletable;
 
     @Builder
     public Question(
             final String content,
-            final QuestionType questionType,
+            final QuestionType questionType, int page,
             final boolean isRequired,
             boolean isDeletable) {
         this.content = content;
         this.questionType = questionType;
+        this.page = page;
         this.isRequired = isRequired;
         this.isDeletable = isDeletable;
     }
@@ -66,11 +67,12 @@ public class Question extends BaseTimeEntity {
             final QuestionType questionType,
             final boolean isRequired,
             boolean isDeletable,
-            List<SubQuestion> subQuestionList) {
+            List<SubQuestion> subQuestionList, int page) {
         this.content = content;
         this.questionType = questionType;
         this.isRequired = isRequired;
         this.isDeletable = isDeletable;
+        this.page = page;
         subQuestionList.forEach(this::addSubQuestion);
     }
 

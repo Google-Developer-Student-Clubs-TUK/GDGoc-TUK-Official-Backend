@@ -10,9 +10,9 @@ import gdgoc.tuk.official.question.dto.QuestionResponse;
 import gdgoc.tuk.official.question.dto.SubQuestionResponse;
 import gdgoc.tuk.official.questionorder.domain.QuestionOrders;
 
-import java.util.ArrayList;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +27,7 @@ public class QuestionMapper {
         return Question.builder()
                 .questionType(newQuestion.questionType())
                 .content(newQuestion.content())
+                .page(newQuestion.page())
                 .isRequired(newQuestion.isRequired())
                 .isDeletable(newQuestion.isDeletable())
                 .build();
@@ -95,6 +96,7 @@ public class QuestionMapper {
                 .isRequired(question.isRequired())
                 .isDeletable(question.isDeletable())
                 .order(questionOrder)
+                .page(question.getPage())
                 .subQuestions(
                         question.getSubQuestions().stream()
                                 .map(sq -> new SubQuestionResponse(sq.getId(), sq.getSubContent()))

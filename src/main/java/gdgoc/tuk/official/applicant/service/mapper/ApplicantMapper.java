@@ -40,6 +40,5 @@ public class ApplicantMapper {
                                         .name(a.getName())
                                         .build())
                 .toList();
-        return new ApplicantPageResponse(applicantInfos);
     }
 }
