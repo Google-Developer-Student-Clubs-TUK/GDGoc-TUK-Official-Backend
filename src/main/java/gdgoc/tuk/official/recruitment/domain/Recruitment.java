@@ -1,5 +1,7 @@
 package gdgoc.tuk.official.recruitment.domain;
 
+import gdgoc.tuk.official.global.ErrorCode;
+import gdgoc.tuk.official.recruitment.exception.InvalidGenerationException;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,9 +30,18 @@ public class Recruitment {
             final String spreadSheetsId,
             final LocalDateTime openAt,
             final LocalDateTime closeAt) {
+        validateGeneration(generation);
         this.generation = generation;
         this.spreadSheetsId = spreadSheetsId;
         this.openAt = openAt;
         this.closeAt = closeAt;
+    }
+
+    private void validateGeneration(final String generation){
+        String currentYear = String.valueOf(LocalDateTime.now().getYear());
+        String nextYear = String.valueOf(LocalDateTime.now().plusYears(1L).getYear());
+        if(!generation.equals(currentYear) || !generation.equals(nextYear)){
+            throw new InvalidGenerationException(ErrorCode.INVALID_GENERATION);
+        }
     }
 }

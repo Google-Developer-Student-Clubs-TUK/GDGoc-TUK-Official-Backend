@@ -7,6 +7,7 @@ import gdgoc.tuk.official.google.service.SpreadSheetsQuestionService;
 import gdgoc.tuk.official.recruitment.domain.Recruitment;
 import gdgoc.tuk.official.recruitment.dto.GenerationResponse;
 import gdgoc.tuk.official.recruitment.dto.RecruitmentOpenRequest;
+import gdgoc.tuk.official.recruitment.dto.RecruitmentStatusResponse;
 import gdgoc.tuk.official.recruitment.exception.GenerationDuplicationException;
 import gdgoc.tuk.official.recruitment.exception.RecruitmentDuplicationException;
 import gdgoc.tuk.official.recruitment.repository.RecruitmentRepository;
@@ -39,6 +40,14 @@ public class RecruitmentService {
                 new Recruitment(
                         request.generation(), spreadSheetsId, request.openAt(), request.closeAt());
         recruitmentRepository.save(recruitment);
+    }
+
+    public RecruitmentStatusResponse getRecruitmentStatus(){
+        LocalDateTime now = LocalDateTime.now();
+        return recruitmentRepository.findByBetweenOpenAtAndCloseAt(
+                now)
+            .map(r -> new RecruitmentStatusResponse(true))
+            .orElseGet(() -> new RecruitmentStatusResponse(false));
     }
 
     private void checkOnGoingRecruitment() {

@@ -2,6 +2,7 @@ package gdgoc.tuk.official.recruitment.controller;
 
 import gdgoc.tuk.official.recruitment.dto.GenerationResponse;
 import gdgoc.tuk.official.recruitment.dto.RecruitmentOpenRequest;
+import gdgoc.tuk.official.recruitment.dto.RecruitmentStatusResponse;
 import gdgoc.tuk.official.recruitment.service.RecruitmentService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,8 +34,15 @@ public class RecruitmentController {
 
     @GetMapping("/generations")
     @PreAuthorize("permitAll()")
-    @Operation(summary = "기수(Generation) 정보", description = "기수 정보 리스트를 반환합니다.")
+    @Operation(summary = "전체 모집 기수(Generation) 정보", description = "기수 정보 리스트를 반환합니다.")
     public GenerationResponse getRecentGeneration() {
         return recruitmentService.getGenerations();
+    }
+
+    @GetMapping("/status")
+    @PreAuthorize("permitAll()")
+    @Operation(summary = "모집 시작 여부", description = "현재 날짜를 기준으로 모집이 진행 중인지 아닌지를 반환합니다.")
+    public RecruitmentStatusResponse getRecruitmentStatus() {
+        return recruitmentService.getRecruitmentStatus();
     }
 }

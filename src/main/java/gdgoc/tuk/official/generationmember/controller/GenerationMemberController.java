@@ -22,10 +22,14 @@ public class GenerationMemberController {
 
     private final GenerationMemberService generationMemberService;
 
-    @GetMapping("/{generation}")
+    @GetMapping("/introduction/{generation}")
     @PreAuthorize("permitAll()")
-    @Operation(summary = "기수별 회원 조회", description = "기수 조회 API에서 응답한 최근 기수를 경로변수로 주시면됩니다.")
+    @Operation(summary = "People 화면 기수별 회원 조회", description = "기수 조회 API에서 응답한 최근 기수를 경로변수로 "
+        + "주시면됩니다.")
     public GenerationMemberListResponse findMembersWithGeneration(@PathVariable String generation) {
         return generationMemberService.findGenerationMemberByGeneration(generation);
     }
+
+    @GetMapping("/management")
+
 }
