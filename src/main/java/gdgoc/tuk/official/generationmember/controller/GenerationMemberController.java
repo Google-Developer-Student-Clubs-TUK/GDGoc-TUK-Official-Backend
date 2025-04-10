@@ -31,10 +31,4 @@ public class GenerationMemberController {
         return generationMemberService.findGenerationMemberByGeneration(generation);
     }
 
-    @GetMapping("/management")
-    @Operation(summary = "기수별 회원 관리용 조회")
-    public MemberManagementListResponse findAllMembers() {
-        return generationMemberService.findGenerationMemberByGeneration(generation);
-    }
-
 }
