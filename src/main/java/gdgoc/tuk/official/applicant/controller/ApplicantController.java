@@ -1,16 +1,16 @@
 package gdgoc.tuk.official.applicant.controller;
 
-import gdgoc.tuk.official.applicant.dto.ApplicantResponse;
+import gdgoc.tuk.official.applicant.dto.ApplicantPageResponse;
 import gdgoc.tuk.official.applicant.dto.ApplicantRoleRequest;
 import gdgoc.tuk.official.applicant.service.ApplicantService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.awt.print.Pageable;
 import java.io.IOException;
 import javax.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,15 +44,15 @@ public class ApplicantController {
 
     @GetMapping
 //    @PreAuthorize("hasRole('LEADER')")
-    @Operation(summary = "지원자 목록 조회", description = "모든 지원자를 조회합니다. 페이징 없습니다.")
-    public ApplicantResponse findApplicantsList() {
-        return applicantService.findAllApplicants();
+    @Operation(summary = "지원자 목록 조회", description = "모든 지원자를 조회합니다.")
+    public ApplicantPageResponse findApplicantsList(final Pageable pageable) {
+        return applicantService.findAllApplicants(pageable);
     }
 
     @GetMapping("/{applicantId}")
 //    @PreAuthorize("hasRole('LEADER')")
-    @Operation(summary = "지원자 상세 조회", description = "특정 지원자를 조회합니다.")
-    public ApplicantResponse findApplicant() {
+    @Operation(summary = "지원자 상세 조회", description = "특정 지원자를 상세히 조회합니다.")
+    public ApplicantPageResponse findApplicant() {
         return applicantService.findAllApplicants();
     }
 }

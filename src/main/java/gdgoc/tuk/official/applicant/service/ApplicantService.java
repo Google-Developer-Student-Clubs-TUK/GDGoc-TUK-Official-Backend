@@ -5,7 +5,8 @@ import gdgoc.tuk.official.account.service.AccountRegisterService;
 import gdgoc.tuk.official.answer.dto.MemberProfile;
 import gdgoc.tuk.official.applicant.domain.Applicant;
 import gdgoc.tuk.official.applicant.domain.ApplicationStatus;
-import gdgoc.tuk.official.applicant.dto.ApplicantResponse;
+import gdgoc.tuk.official.applicant.dto.ApplicantPageResponse;
+import gdgoc.tuk.official.applicant.dto.ApplicantPageResponse.ApplicantInfo;
 import gdgoc.tuk.official.applicant.dto.ApplicantRoleRequest;
 import gdgoc.tuk.official.applicant.exception.ApplicantNotFoundException;
 import gdgoc.tuk.official.applicant.repository.ApplicantRepository;
@@ -14,12 +15,13 @@ import gdgoc.tuk.official.email.service.EmailService;
 import gdgoc.tuk.official.generationmember.service.GenerationMemberService;
 import gdgoc.tuk.official.global.ErrorCode;
 
-import gdgoc.tuk.official.recruitment.domain.Recruitment;
-import gdgoc.tuk.official.recruitment.service.RecruitmentGenerationService;
+import java.awt.print.Pageable;
 import java.io.IOException;
+import java.util.List;
 import javax.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,9 +43,9 @@ public class ApplicantService {
         return applicant;
     }
 
-    public boolean isAlreadyApplied(final String email){
-        return applicantRepository.existsByApplicationStatusAndEmail(ApplicationStatus.PENDING,
-            email);
+    public boolean isAlreadyApplied(final String email) {
+        return applicantRepository.existsByApplicationStatusAndEmail(
+                ApplicationStatus.PENDING, email);
     }
 
     public Applicant getApplicantById(final Long applicantId) {
@@ -52,19 +54,23 @@ public class ApplicantService {
                 .orElseThrow(() -> new ApplicantNotFoundException(ErrorCode.APPLICANT_NOT_FOUND));
     }
 
-    public ApplicantResponse findAllApplicants() {
-        return applicantMapper.toApplicantResponse(
-                applicantRepository.findByApplicationStatus(ApplicationStatus.PENDING));
+    public ApplicantPageResponse findAllApplicants(final Pageable pageable) {
+        Page<Applicant> applicantPage =
+                applicantRepository.findByApplicationStatus(ApplicationStatus.PENDING, pageable);
+        List<ApplicantInfo> applicantResponse = applicantMapper.toApplicantResponse(
+            applicantPage.getContent());
+        return new ApplicantPageResponse(
+                applicantPage.getTotalPages(), applicantPage.getNumber(), applicantResponse);
     }
 
     @Transactional
-    public void approve(final Long applicantId,final ApplicantRoleRequest request)
-        throws MessagingException, IOException {
+    public void approve(final Long applicantId, final ApplicantRoleRequest request)
+            throws MessagingException, IOException {
         Applicant applicant = getApplicantById(applicantId);
-        Accounts accounts = accountRegisterService.createOrFindAccount(applicant,request.role());
-        generationMemberService.createGenerationMember(applicant,accounts);
+        Accounts accounts = accountRegisterService.createOrFindAccount(applicant, request.role());
+        generationMemberService.createGenerationMember(applicant, accounts);
         applicant.approve();
-        emailService.sendWelcomMail(accounts.getEmail(),applicant.getGeneration());
+        emailService.sendWelcomMail(accounts.getEmail(), applicant.getGeneration());
     }
 
     @Transactional
