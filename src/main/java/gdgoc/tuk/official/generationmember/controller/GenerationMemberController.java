@@ -34,7 +34,7 @@ public class GenerationMemberController {
     }
 
     @GetMapping("/management")
-    @Operation(summary = "기수별 회원 관리용 조회")
+    @Operation(summary = "회원 관리용 조회", description = "리더의 회원관리용 조회 API입니다.")
     public MemberManagementPageResponse searchMembers(MemberSearchCond memberSearchCond,
         Pageable pageable) {
         return generationMemberService.searchMembers(memberSearchCond,pageable);

@@ -48,11 +48,4 @@ public class ApplicantController {
     public ApplicantPageResponse findApplicantsList(final Pageable pageable) {
         return applicantService.findAllApplicants(pageable);
     }
-
-    @GetMapping("/{applicantId}")
-//    @PreAuthorize("hasRole('LEADER')")
-    @Operation(summary = "지원자 상세 조회", description = "특정 지원자를 상세히 조회합니다.")
-    public ApplicantPageResponse findApplicant() {
-        return applicantService.findAllApplicants();
-    }
 }
