@@ -1,7 +1,7 @@
 package gdgoc.tuk.official.question.controller;
 
 import gdgoc.tuk.official.question.dto.QuestionDeleteRequest;
-import gdgoc.tuk.official.question.dto.QuestionListResponse;
+import gdgoc.tuk.official.question.dto.QuestionPageResponse;
 import gdgoc.tuk.official.question.dto.QuestionUpdateRequest;
 import gdgoc.tuk.official.question.service.QuestionService;
 
@@ -30,7 +30,7 @@ public class QuestionController {
     @GetMapping
     @Operation(summary = "전체 질문 조회", description = "질문 식별자, 질문 내용, 질문 순서를 반환합니다.")
     @PreAuthorize("permitAll()")
-    public QuestionListResponse findAllQuestions() {
+    public QuestionPageResponse findAllQuestions() {
         return questionService.findAllQuestionsAndSubQuestionsWithOrder();
     }
 

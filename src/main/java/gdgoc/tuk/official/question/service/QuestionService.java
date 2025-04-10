@@ -6,7 +6,7 @@ import gdgoc.tuk.official.question.domain.SubQuestion;
 import gdgoc.tuk.official.question.dto.ModifiedQuestion;
 import gdgoc.tuk.official.question.dto.NewQuestion;
 import gdgoc.tuk.official.question.dto.QuestionDeleteRequest;
-import gdgoc.tuk.official.question.dto.QuestionListResponse;
+import gdgoc.tuk.official.question.dto.QuestionPageResponse;
 import gdgoc.tuk.official.question.dto.QuestionOrderResponse;
 import gdgoc.tuk.official.question.dto.QuestionResponse;
 import gdgoc.tuk.official.question.dto.QuestionUpdateRequest;
@@ -40,14 +40,21 @@ public class QuestionService {
     private final QuestionOrderRepository questionOrderRepository;
     private final RecruitmentRepository recruitmentRepository;
 
-    public QuestionListResponse findAllQuestionsAndSubQuestionsWithOrder() {
+    public QuestionPageResponse findAllQuestionsAndSubQuestionsWithOrder() {
         List<Question> questions = questionRepository.findAllFetchSubQuestion();
         final List<QuestionOrders> questionOrders = questionOrderRepository.findAll();
-        final List<QuestionResponse> questionResponses =
+        final List<QuestionResponse> questionsSortedByOrder =
                 questionMapper.toSortedQuestionResponseList(questions, questionOrders);
         final List<QuestionOrderResponse> questionOrderResponses =
                 questionMapper.toQuestionOrderResponseList(questionOrders);
-        return new QuestionListResponse(questionResponses, questionOrderResponses);
+        int lastPage = findLastPage(questionsSortedByOrder);
+        return new QuestionPageResponse(questionsSortedByOrder, questionOrderResponses,lastPage);
+    }
+
+    private int findLastPage(final List<QuestionResponse> questionsSortedByOrder) {
+        int lastIndex = questionsSortedByOrder.size() - 1;
+        QuestionResponse questionResponse = questionsSortedByOrder.get(lastIndex);
+        return questionResponse.page();
     }
 
     @Transactional
