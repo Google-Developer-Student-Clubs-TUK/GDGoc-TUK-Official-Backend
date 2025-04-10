@@ -6,11 +6,14 @@ import gdgoc.tuk.official.question.domain.SubQuestion;
 import gdgoc.tuk.official.question.repository.QuestionRepository;
 import gdgoc.tuk.official.questionorder.domain.QuestionOrders;
 import gdgoc.tuk.official.questionorder.repository.QuestionOrderRepository;
-import java.util.ArrayList;
-import java.util.List;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -26,6 +29,16 @@ public class TestQuestionGenerator implements CommandLineRunner {
                         new Question("이름", QuestionType.SHORT_TEXT, true, false),
                         new Question("연락처", QuestionType.SHORT_TEXT, true, false),
                         new Question("학교 이메일", QuestionType.EMAIL, true, false),
+                        new Question(
+                                "학년",
+                                QuestionType.SINGLE_CHOICE,
+                                true,
+                                false,
+                                List.of(
+                                        new SubQuestion("1학년"),
+                                        new SubQuestion("2학년"),
+                                        new SubQuestion("3학년"),
+                                        new SubQuestion("4학년"))),
                         new Question(
                                 "직군",
                                 QuestionType.SINGLE_CHOICE,

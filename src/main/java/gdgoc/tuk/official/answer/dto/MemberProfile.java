@@ -19,6 +19,9 @@ public record MemberProfile(
 
     @NotNull(message = "학년 정보는 필수입니다.") UniversityYear universityYear,
 
+    @NotNull(message = "연락처는 필수입니다.")
+    @Pattern(regexp = "\\d{11}", message = "연락처는 '-'제외 11자리여야 합니다.")String phoneNumber,
+
     @NotNull(message = "전공 분야는 필수입니다.") Field field,
 
     @NotNull(message = "성별은 필수입니다.") Gender gender,
