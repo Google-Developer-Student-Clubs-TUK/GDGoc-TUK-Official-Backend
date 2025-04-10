@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface GenerationMemberRepository extends JpaRepository<GenerationMember, Long> {
+public interface GenerationMemberRepositoryRepository extends JpaRepository<GenerationMember, Long>,
+    GenerationMemberRepositorySearch {
 
     List<GenerationMember> findByGeneration(String generation);
 

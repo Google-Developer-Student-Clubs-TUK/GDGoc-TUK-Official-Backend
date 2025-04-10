@@ -1,6 +1,7 @@
 package gdgoc.tuk.official.generationmember.domain;
 
 import gdgoc.tuk.official.account.domain.Accounts;
+import gdgoc.tuk.official.account.domain.Role;
 import gdgoc.tuk.official.global.BaseTimeEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -39,6 +40,7 @@ public class GenerationMember extends BaseTimeEntity {
     private Gender gender;
     private String major;
     private String generation;
+    private Role role;
 
     @Builder
     public GenerationMember(
@@ -47,7 +49,7 @@ public class GenerationMember extends BaseTimeEntity {
             final Gender gender,
             final EnrollmentStatus enrollmentStatus,
             final UniversityYear universityYear, String major,
-            final String generation) {
+            final String generation, Role role) {
         this.accounts = accounts;
         this.name = name;
         this.studentNumber = studentNumber;
@@ -57,5 +59,6 @@ public class GenerationMember extends BaseTimeEntity {
         this.universityYear = universityYear;
         this.major = major;
         this.generation = generation;
+        this.role = role;
     }
 }

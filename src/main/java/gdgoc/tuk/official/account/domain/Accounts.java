@@ -34,4 +34,8 @@ public class Accounts extends BaseTimeEntity {
         this.password = password;
         this.role = role;
     }
+
+    public void changeRole(final Role newRole){
+        this.role = newRole;
+    }
 }

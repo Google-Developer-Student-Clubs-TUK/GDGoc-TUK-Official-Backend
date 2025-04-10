@@ -1,7 +1,8 @@
 package gdgoc.tuk.official.generationmember.controller;
 
 import gdgoc.tuk.official.generationmember.dto.MemberIntroductionListResponse;
-import gdgoc.tuk.official.generationmember.dto.MemberManagementListResponse;
+import gdgoc.tuk.official.generationmember.dto.MemberManagementPageResponse;
+import gdgoc.tuk.official.generationmember.dto.MemberSearchCond;
 import gdgoc.tuk.official.generationmember.service.GenerationMemberService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +31,13 @@ public class GenerationMemberController {
         + "주시면됩니다.")
     public MemberIntroductionListResponse findMembersWithGeneration(@PathVariable String generation) {
         return generationMemberService.findGenerationMemberByGeneration(generation);
+    }
+
+    @GetMapping("/management")
+    @Operation(summary = "기수별 회원 관리용 조회")
+    public MemberManagementPageResponse searchMembers(MemberSearchCond memberSearchCond,
+        Pageable pageable) {
+        return generationMemberService.searchMembers(memberSearchCond,pageable);
     }
 
 }

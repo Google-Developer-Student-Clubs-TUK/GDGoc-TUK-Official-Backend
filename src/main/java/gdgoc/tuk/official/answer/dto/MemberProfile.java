@@ -1,5 +1,6 @@
 package gdgoc.tuk.official.answer.dto;
 
+import gdgoc.tuk.official.account.domain.Role;
 import gdgoc.tuk.official.generationmember.domain.EnrollmentStatus;
 import gdgoc.tuk.official.generationmember.domain.Field;
 import gdgoc.tuk.official.generationmember.domain.Gender;
@@ -29,4 +30,6 @@ public record MemberProfile(
     @Pattern(regexp = "^[A-Za-z0-9._%+-]+@tukorea\\.ac\\.kr$", message = "이메일은 @tukorea.ac.kr 도메인만 허용됩니다.")
     @NotBlank(message = "이메일은 필수 입력값입니다.") String email,
 
-    @NotBlank(message = "전공은 필수 입력값입니다.") String major) {}
+    @NotBlank(message = "전공은 필수 입력값입니다.") String major,
+
+    @NotNull(message = "활동할 직책은 필수 입력값입니다.") Role role) {}

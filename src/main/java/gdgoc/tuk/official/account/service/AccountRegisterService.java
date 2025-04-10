@@ -24,8 +24,10 @@ public class AccountRegisterService {
     private final AccountRepository accountRepository;
 
     public Accounts createOrFindAccount(final Applicant applicant, final Role role) {
-        return accountRepository.findByEmail(applicant.getEmail())
-            .orElse(createAccounts(applicant,role));
+        Accounts accounts = accountRepository.findByEmail(applicant.getEmail())
+            .orElse(createAccounts(applicant, role));
+        accounts.changeRole(role);
+        return accounts;
     }
 
     private Accounts createAccounts(final Applicant applicant,final Role role){

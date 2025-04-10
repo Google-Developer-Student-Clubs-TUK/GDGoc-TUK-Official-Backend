@@ -23,6 +23,7 @@ public class ApplicantMapper {
                 .studentNumber(memberProfile.studentNumber())
                 .universityYear(memberProfile.universityYear())
                 .generation(generation)
+                .role(memberProfile.role())
                 .build();
     }
 

@@ -1,5 +1,6 @@
 package gdgoc.tuk.official.applicant.domain;
 
+import gdgoc.tuk.official.account.domain.Role;
 import gdgoc.tuk.official.generationmember.domain.EnrollmentStatus;
 import gdgoc.tuk.official.generationmember.domain.Field;
 import gdgoc.tuk.official.generationmember.domain.Gender;
@@ -40,6 +41,7 @@ public class Applicant extends BaseTimeEntity {
     private String email;
     private String major;
     private String generation;
+    private Role role;
 
     @Enumerated(EnumType.STRING)
     private ApplicationStatus applicationStatus;
@@ -54,7 +56,7 @@ public class Applicant extends BaseTimeEntity {
             final Gender gender,
             final String email,
             final String major,
-            String generation) {
+            String generation, Role role) {
         this.name = name;
         this.studentNumber = studentNumber;
         this.enrollmentStatus = enrollmentStatus;
@@ -64,6 +66,7 @@ public class Applicant extends BaseTimeEntity {
         this.email = email;
         this.major = major;
         this.generation = generation;
+        this.role = role;
         this.applicationStatus = ApplicationStatus.PENDING;
     }
 
