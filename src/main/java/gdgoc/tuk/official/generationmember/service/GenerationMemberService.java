@@ -1,10 +1,9 @@
 package gdgoc.tuk.official.generationmember.service;
 
 import gdgoc.tuk.official.account.domain.Accounts;
-import gdgoc.tuk.official.account.service.AccountService;
 import gdgoc.tuk.official.applicant.domain.Applicant;
 import gdgoc.tuk.official.generationmember.domain.GenerationMember;
-import gdgoc.tuk.official.generationmember.dto.GenerationMemberListResponse;
+import gdgoc.tuk.official.generationmember.dto.MemberIntroductionListResponse;
 import gdgoc.tuk.official.generationmember.exception.DuplicatedGenerationMemberException;
 import gdgoc.tuk.official.generationmember.repository.GenerationMemberRepository;
 import gdgoc.tuk.official.generationmember.service.mapper.GenerationMemberMapper;
@@ -35,7 +34,7 @@ public class GenerationMemberService {
         }
     }
 
-    public GenerationMemberListResponse findGenerationMemberByGeneration(final String generation){
+    public MemberIntroductionListResponse findGenerationMemberByGeneration(final String generation){
         List<GenerationMember> generationMembers = generationMemberRepository.findByGeneration(
             generation);
         return generationMemberMapper.toGenerationMemberResponse(generationMembers);

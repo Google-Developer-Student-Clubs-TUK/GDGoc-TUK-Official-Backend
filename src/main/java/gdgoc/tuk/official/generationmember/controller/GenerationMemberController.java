@@ -1,6 +1,7 @@
 package gdgoc.tuk.official.generationmember.controller;
 
-import gdgoc.tuk.official.generationmember.dto.GenerationMemberListResponse;
+import gdgoc.tuk.official.generationmember.dto.MemberIntroductionListResponse;
+import gdgoc.tuk.official.generationmember.dto.MemberManagementListResponse;
 import gdgoc.tuk.official.generationmember.service.GenerationMemberService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,12 +25,16 @@ public class GenerationMemberController {
 
     @GetMapping("/introduction/{generation}")
     @PreAuthorize("permitAll()")
-    @Operation(summary = "People 화면 기수별 회원 조회", description = "기수 조회 API에서 응답한 최근 기수를 경로변수로 "
+    @Operation(summary = "기수별 회원 소개용 조회", description = "기수 조회 API에서 응답한 최근 기수를 경로변수로 "
         + "주시면됩니다.")
-    public GenerationMemberListResponse findMembersWithGeneration(@PathVariable String generation) {
+    public MemberIntroductionListResponse findMembersWithGeneration(@PathVariable String generation) {
         return generationMemberService.findGenerationMemberByGeneration(generation);
     }
 
     @GetMapping("/management")
+    @Operation(summary = "기수별 회원 관리용 조회")
+    public MemberManagementListResponse findAllMembers() {
+        return generationMemberService.findGenerationMemberByGeneration(generation);
+    }
 
 }

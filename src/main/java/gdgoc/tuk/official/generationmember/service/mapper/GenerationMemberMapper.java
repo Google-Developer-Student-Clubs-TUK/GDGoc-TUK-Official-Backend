@@ -3,8 +3,8 @@ package gdgoc.tuk.official.generationmember.service.mapper;
 import gdgoc.tuk.official.account.domain.Accounts;
 import gdgoc.tuk.official.applicant.domain.Applicant;
 import gdgoc.tuk.official.generationmember.domain.GenerationMember;
-import gdgoc.tuk.official.generationmember.dto.GenerationMemberListResponse;
-import gdgoc.tuk.official.generationmember.dto.GenerationMemberResponse;
+import gdgoc.tuk.official.generationmember.dto.MemberIntroductionListResponse;
+import gdgoc.tuk.official.generationmember.dto.MemberIntroductionResponse;
 import java.util.List;
 import org.springframework.stereotype.Component;
 
@@ -25,10 +25,10 @@ public class GenerationMemberMapper {
                 .build();
     }
 
-    public GenerationMemberListResponse toGenerationMemberResponse(final List<GenerationMember> generationMembers){
-        List<GenerationMemberResponse> generationMemberResponses = generationMembers.stream()
-            .map(gm -> new GenerationMemberResponse(gm.getName(),
+    public MemberIntroductionListResponse toGenerationMemberResponse(final List<GenerationMember> generationMembers){
+        List<MemberIntroductionResponse> memberIntroductionRespons = generationMembers.stream()
+            .map(gm -> new MemberIntroductionResponse(gm.getName(),
                 gm.getField(), gm.getGender())).toList();
-        return new GenerationMemberListResponse(generationMemberResponses);
+        return new MemberIntroductionListResponse(memberIntroductionRespons);
     }
 }
