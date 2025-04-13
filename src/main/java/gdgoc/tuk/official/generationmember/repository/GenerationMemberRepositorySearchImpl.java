@@ -9,30 +9,31 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import gdgoc.tuk.official.generationmember.domain.EnrollmentStatus;
 import gdgoc.tuk.official.generationmember.domain.Field;
 import gdgoc.tuk.official.generationmember.domain.GenerationMember;
-import gdgoc.tuk.official.generationmember.dto.MemberManagementResponse;
 import gdgoc.tuk.official.generationmember.dto.MemberSearchCond;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Repository;
 
-public class GenerationMemberRepositoryImpl implements GenerationMemberRepositorySearch {
+@Repository
+public class GenerationMemberRepositorySearchImpl implements GenerationMemberRepositorySearch {
 
     private final JPAQueryFactory queryFactory;
 
-    public GenerationMemberRepositoryImpl(EntityManager em) {
+    public GenerationMemberRepositorySearchImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
     @Override
-    public Page<GenerationMember> findByCondition(final MemberSearchCond condition,
+    public Page<GenerationMember> findByCondition(final MemberSearchCond memberSearchCond,
         final Pageable pageable) {
         List<GenerationMember> result = queryFactory.select(generationMember)
             .from(generationMember)
             .leftJoin(generationMember.accounts)
-            .where(fieldEq(condition.field()), enrollmentEq(condition.enrollmentStatus()),
-                nameEq(condition.name()), generationEq(condition.generation()))
+            .where(fieldEq(memberSearchCond.field()), enrollmentEq(memberSearchCond.enrollmentStatus()),
+                nameEq(memberSearchCond.name()), generationEq(memberSearchCond.generation()))
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();

@@ -15,13 +15,13 @@ import gdgoc.tuk.official.email.service.EmailService;
 import gdgoc.tuk.official.generationmember.service.GenerationMemberService;
 import gdgoc.tuk.official.global.ErrorCode;
 
-import java.awt.print.Pageable;
 import java.io.IOException;
 import java.util.List;
 import javax.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

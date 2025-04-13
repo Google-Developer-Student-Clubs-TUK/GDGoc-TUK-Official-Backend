@@ -11,8 +11,9 @@ import gdgoc.tuk.official.applicant.service.ApplicantService;
 import gdgoc.tuk.official.global.ErrorCode;
 import gdgoc.tuk.official.google.service.SpreadSheetsService;
 import gdgoc.tuk.official.recruitment.domain.Recruitment;
-import gdgoc.tuk.official.recruitment.service.RecruitmentGenerationService;
+import gdgoc.tuk.official.recruitment.service.RecruitmentTimeService;
 
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -28,12 +29,13 @@ public class AnswerService {
     private final SpreadSheetsService spreadSheetsService;
     private final ApplicantService applicantService;
     private final AnswerRepository answerRepository;
-    private final RecruitmentGenerationService recruitmentGenerationService;
+    private final RecruitmentTimeService recruitmentTimeService;
 
     @Transactional
     public void apply(final AnswerListRequest request) {
         checkDuplicatedAnswer(request);
-        Recruitment recruitment = recruitmentGenerationService.getOnGoingRecruitment();
+        Recruitment recruitment = recruitmentTimeService.getOnGoingRecruitment(
+            LocalDateTime.now());
         final List<Object> spreadSheetContent = extractAnswersForSpreadSheets(request);
         spreadSheetsService.write(recruitment.getSpreadSheetsId(), List.of(spreadSheetContent),
             recruitment.getGeneration());

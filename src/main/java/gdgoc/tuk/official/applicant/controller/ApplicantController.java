@@ -6,11 +6,11 @@ import gdgoc.tuk.official.applicant.service.ApplicantService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.awt.print.Pageable;
 import java.io.IOException;
 import javax.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;

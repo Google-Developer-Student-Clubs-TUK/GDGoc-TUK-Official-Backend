@@ -83,7 +83,9 @@ public class Question extends BaseTimeEntity {
     private void modifySubContent(
             final Map<Long, String> modifiedSubQuestionMap, final SubQuestion sq) {
         String modifiedSubContent = modifiedSubQuestionMap.get(sq.getId());
-        if (Objects.nonNull(modifiedSubContent)) sq.modifySubContent(modifiedSubContent);
+        if (Objects.nonNull(modifiedSubContent)) {
+            sq.modifySubContent(modifiedSubContent);
+        }
     }
 
     public void modifyQuestion(

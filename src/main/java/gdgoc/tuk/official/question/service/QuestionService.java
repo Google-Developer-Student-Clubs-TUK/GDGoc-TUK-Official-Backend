@@ -12,14 +12,13 @@ import gdgoc.tuk.official.question.dto.QuestionResponse;
 import gdgoc.tuk.official.question.dto.QuestionUpdateRequest;
 import gdgoc.tuk.official.question.dto.UpdatedQuestionOrder;
 import gdgoc.tuk.official.question.exception.DeleteNotAllowedException;
-import gdgoc.tuk.official.question.exception.QuestionModifyNotAllowed;
 import gdgoc.tuk.official.question.exception.QuestionNotFoundException;
 import gdgoc.tuk.official.question.repository.QuestionRepository;
 import gdgoc.tuk.official.question.service.mapper.QuestionMapper;
 import gdgoc.tuk.official.questionorder.domain.QuestionOrders;
 import gdgoc.tuk.official.questionorder.repository.QuestionOrderRepository;
-import gdgoc.tuk.official.recruitment.repository.RecruitmentRepository;
 
+import gdgoc.tuk.official.recruitment.service.RecruitmentTimeService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -38,7 +37,7 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
     private final QuestionMapper questionMapper;
     private final QuestionOrderRepository questionOrderRepository;
-    private final RecruitmentRepository recruitmentRepository;
+    private final RecruitmentTimeService recruitmentTimeService;
 
     public QuestionPageResponse findAllQuestionsAndSubQuestionsWithOrder() {
         List<Question> questions = questionRepository.findAllFetchSubQuestion();
@@ -59,17 +58,11 @@ public class QuestionService {
 
     @Transactional
     public void saveAndModifyQuestions(final QuestionUpdateRequest request) {
-        checkModifiable();
+        recruitmentTimeService.checkQuestionModifiable(LocalDateTime.now());
         Map<Long, Integer> newOrderMap = saveQuestions(request);
         modifyQuestion(request);
         if (!newOrderMap.isEmpty()) {
             updateQuestionOrder(newOrderMap);
-        }
-    }
-
-    private void checkModifiable() {
-        if (recruitmentRepository.existsByCloseAtIsAfter(LocalDateTime.now())) {
-            throw new QuestionModifyNotAllowed(ErrorCode.MODIFY_NOT_ALLOWED);
         }
     }
 
