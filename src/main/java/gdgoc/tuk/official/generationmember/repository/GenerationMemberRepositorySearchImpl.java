@@ -37,8 +37,16 @@ public class GenerationMemberRepositorySearchImpl implements GenerationMemberRep
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();
-
-        return new PageImpl(result,pageable,result.size());
+        Long total = queryFactory.select(generationMember.count())
+            .from(generationMember)
+            .where(
+                fieldEq(memberSearchCond.field()),
+                enrollmentEq(memberSearchCond.enrollmentStatus()),
+                nameEq(memberSearchCond.name()),
+                generationEq(memberSearchCond.generation())
+            )
+            .fetchOne();
+        return new PageImpl(result,pageable,total);
     }
 
     private Predicate generationEq(final String generation) {
