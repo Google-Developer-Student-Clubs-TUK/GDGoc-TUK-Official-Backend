@@ -5,10 +5,9 @@ import gdgoc.tuk.official.applicant.domain.Applicant;
 import gdgoc.tuk.official.generationmember.domain.GenerationMember;
 import gdgoc.tuk.official.generationmember.dto.MemberIntroductionListResponse;
 import gdgoc.tuk.official.generationmember.dto.MemberManagementPageResponse;
-import gdgoc.tuk.official.generationmember.dto.MemberManagementResponse;
 import gdgoc.tuk.official.generationmember.dto.MemberSearchCond;
 import gdgoc.tuk.official.generationmember.exception.DuplicatedGenerationMemberException;
-import gdgoc.tuk.official.generationmember.repository.GenerationMemberRepositoryRepository;
+import gdgoc.tuk.official.generationmember.repository.GenerationMemberRepository;
 import gdgoc.tuk.official.generationmember.service.mapper.GenerationMemberMapper;
 import gdgoc.tuk.official.global.ErrorCode;
 
@@ -25,7 +24,7 @@ import java.util.List;
 public class GenerationMemberService {
 
     private final GenerationMemberMapper generationMemberMapper;
-    private final GenerationMemberRepositoryRepository generationMemberRepository;
+    private final GenerationMemberRepository generationMemberRepository;
 
     public void createGenerationMember(final Applicant applicant, final Accounts accounts) {
         checkDuplicateGenerationMember(accounts, applicant.getGeneration());

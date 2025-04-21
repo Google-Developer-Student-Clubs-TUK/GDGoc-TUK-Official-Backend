@@ -1,4 +1,4 @@
-package gdgoc.tuk.official.question.generator;
+package gdgoc.tuk.official.global.generator;
 
 import gdgoc.tuk.official.question.domain.Question;
 import gdgoc.tuk.official.question.domain.QuestionType;

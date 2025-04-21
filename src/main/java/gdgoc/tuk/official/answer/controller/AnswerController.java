@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
@@ -42,9 +43,8 @@ public class AnswerController {
     }
 
     @GetMapping("/applicants/{applicantId}")
-//    @PreAuthorize("hasRole('LEADER')")
-    @Operation(
-        summary = "지원자 질문&응답 조회")
+    //    @PreAuthorize("hasRole('LEADER')")
+    @Operation(summary = "지원자 질문&응답 조회")
     public AnswerResponse findApplicantAnswer(@PathVariable final Long applicantId) {
         return answerService.findQuestionAndAnswer(applicantId);
     }
