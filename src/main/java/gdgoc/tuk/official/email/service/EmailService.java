@@ -6,7 +6,7 @@ import gdgoc.tuk.official.email.repository.VerificationCodeRedisRepository;
 import gdgoc.tuk.official.email.template.VerificationCodeMailTemplate;
 import gdgoc.tuk.official.email.template.WelcomMailTemplate;
 import gdgoc.tuk.official.global.ErrorCode;
-import gdgoc.tuk.official.google.service.GmailService;
+import gdgoc.tuk.official.google.service.EmailSender;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,7 +21,7 @@ import javax.mail.MessagingException;
 @RequiredArgsConstructor
 public class EmailService {
 
-    private final GmailService gmailService;
+    private final EmailSender emailSender;
     private final VerificationCodeRedisRepository redisRepository;
 
     @Value("${google.gmail.code-timeout}")
@@ -32,14 +32,14 @@ public class EmailService {
         final String code = VerificationCodeGenerator.generate();
         redisRepository.saveVerificationCode(receiverEmail, code, codeTimeout);
         final String mailBody = VerificationCodeMailTemplate.code(code);
-        gmailService.sendEmail(receiverEmail, VerificationCodeMailTemplate.TITLE, mailBody);
+        emailSender.send(receiverEmail, VerificationCodeMailTemplate.TITLE, mailBody);
     }
 
     public void sendWelcomMail(final String receiverEmail, final String generation)
             throws MessagingException, IOException {
         final String mailBody = WelcomMailTemplate.body(generation);
         final String title = WelcomMailTemplate.title(generation);
-        gmailService.sendEmail(receiverEmail, title, mailBody);
+        emailSender.send(receiverEmail, title, mailBody);
     }
 
     public void verifyEmail(final EmailVerificationRequest request) {

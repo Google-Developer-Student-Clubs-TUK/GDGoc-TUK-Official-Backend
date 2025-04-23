@@ -67,7 +67,7 @@ public class MemberGenerator implements CommandLineRunner {
                     Gender.values()[i % 2],
                     faker.name().lastName() + "tukorea.ac.kr",
                     majors[i % 4],
-                    "2024",
+                    "2025",
                     Role.values()[i % 3]));
             String s = objectMapper.writeValueAsString(new ApplicantAnswer());
             answerRepository.save(new Answer(s, save));
