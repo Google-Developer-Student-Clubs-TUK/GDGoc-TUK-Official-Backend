@@ -3,6 +3,7 @@ package gdgoc.tuk.official.email.service;
 import gdgoc.tuk.official.email.dto.EmailVerificationRequest;
 import gdgoc.tuk.official.email.exception.NotVerifiedEmailException;
 import gdgoc.tuk.official.email.repository.VerificationCodeRedisRepository;
+import gdgoc.tuk.official.email.repository.VerificationCodeRedisRepositoryImpl;
 import gdgoc.tuk.official.email.template.VerificationCodeMailTemplate;
 import gdgoc.tuk.official.email.template.WelcomMailTemplate;
 import gdgoc.tuk.official.global.ErrorCode;
@@ -12,10 +13,6 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-
-import javax.mail.MessagingException;
 
 @Service
 @RequiredArgsConstructor
@@ -27,16 +24,14 @@ public class EmailService {
     @Value("${google.gmail.code-timeout}")
     private Integer codeTimeout;
 
-    public void sendVerificationMail(final String receiverEmail)
-            throws MessagingException, IOException {
+    public void sendVerificationMail(final String receiverEmail) {
         final String code = VerificationCodeGenerator.generate();
         redisRepository.saveVerificationCode(receiverEmail, code, codeTimeout);
         final String mailBody = VerificationCodeMailTemplate.code(code);
         emailSender.send(receiverEmail, VerificationCodeMailTemplate.TITLE, mailBody);
     }
 
-    public void sendWelcomMail(final String receiverEmail, final String generation)
-            throws MessagingException, IOException {
+    public void sendWelcomMail(final String receiverEmail, final String generation) {
         final String mailBody = WelcomMailTemplate.body(generation);
         final String title = WelcomMailTemplate.title(generation);
         emailSender.send(receiverEmail, title, mailBody);

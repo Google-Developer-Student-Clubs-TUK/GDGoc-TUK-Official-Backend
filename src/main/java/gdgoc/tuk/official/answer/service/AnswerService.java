@@ -8,6 +8,7 @@ import gdgoc.tuk.official.answer.exception.DuplicatedAnswerException;
 import gdgoc.tuk.official.answer.repository.AnswerRepository;
 import gdgoc.tuk.official.applicant.domain.Applicant;
 import gdgoc.tuk.official.applicant.service.ApplicantService;
+import gdgoc.tuk.official.applicant.service.ApplicantValidator;
 import gdgoc.tuk.official.global.ErrorCode;
 import gdgoc.tuk.official.google.service.SpreadSheetsService;
 import gdgoc.tuk.official.recruitment.domain.Recruitment;
@@ -28,6 +29,7 @@ public class AnswerService {
 
     private final SpreadSheetsService spreadSheetsService;
     private final ApplicantService applicantService;
+    private final ApplicantValidator applicantValidator;
     private final AnswerRepository answerRepository;
     private final RecruitmentTimeService recruitmentTimeService;
 
@@ -55,7 +57,7 @@ public class AnswerService {
     }
 
     private void checkDuplicatedAnswer(final AnswerListRequest request) {
-        boolean alreadyApplied = applicantService.isAlreadyApplied(request.memberProfile().email());
+        boolean alreadyApplied = applicantValidator.isAlreadyApplied(request.memberProfile().email());
         if (alreadyApplied) {
             throw new DuplicatedAnswerException(ErrorCode.DUPLICATED_ANSWER);
         }

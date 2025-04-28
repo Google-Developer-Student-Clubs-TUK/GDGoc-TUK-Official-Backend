@@ -43,11 +43,6 @@ public class ApplicantService {
         return applicant;
     }
 
-    public boolean isAlreadyApplied(final String email) {
-        return applicantRepository.existsByApplicationStatusAndEmail(
-                ApplicationStatus.PENDING, email);
-    }
-
     public Applicant getApplicantById(final Long applicantId) {
         return applicantRepository
                 .findById(applicantId)

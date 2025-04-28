@@ -40,7 +40,7 @@ public class Recruitment {
     private void validateGeneration(final String generation){
         String currentYear = String.valueOf(LocalDateTime.now().getYear());
         String nextYear = String.valueOf(LocalDateTime.now().plusYears(1L).getYear());
-        if(!generation.equals(currentYear) || !generation.equals(nextYear)){
+        if (!generation.equals(currentYear) && !generation.equals(nextYear)) {
             throw new InvalidGenerationException(ErrorCode.INVALID_GENERATION);
         }
     }
