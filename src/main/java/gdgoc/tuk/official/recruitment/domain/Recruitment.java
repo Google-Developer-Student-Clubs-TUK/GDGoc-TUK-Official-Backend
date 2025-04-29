@@ -37,6 +37,14 @@ public class Recruitment {
         this.closeAt = closeAt;
     }
 
+    public Recruitment(
+        final String generation) {
+        this.generation = generation;
+        this.spreadSheetsId = "spreadSheetsId";
+        this.openAt = LocalDateTime.now().minusDays(5);
+        this.closeAt = LocalDateTime.now().minusDays(5);
+    }
+
     private void validateGeneration(final String generation){
         String currentYear = String.valueOf(LocalDateTime.now().getYear());
         String nextYear = String.valueOf(LocalDateTime.now().plusYears(1L).getYear());
