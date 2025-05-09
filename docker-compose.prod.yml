@@ -1,6 +1,6 @@
 services:
   backend:
-    image: gdgoctuk/backend:latest
+    image: gdgoctuk/gdgoctuk-backend:latest
     depends_on:
       - redis
     container_name: backend
