@@ -28,7 +28,7 @@ jobs:
 
       - name: Copy gradle.properties
         run: |
-          echo "${{ secrets.GOOGLE_CREDENTIAL_JSON }}"| base64 -d > src/main/resources/credential.json
+          echo "${{ secrets.GRADLE_PROPERTIES }}" > gradle.properties
 
       - name: Cache Jib layers
         uses: actions/cache@v3
