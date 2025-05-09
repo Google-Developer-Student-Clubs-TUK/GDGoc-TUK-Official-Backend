@@ -47,7 +47,7 @@ jobs:
           script: |
             cd ~/GDGoc-TUK-Official-Backend/
 
-            git pull
+            sudo git pull
             
             echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
             
