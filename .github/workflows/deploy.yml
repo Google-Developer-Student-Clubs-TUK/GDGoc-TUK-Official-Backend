@@ -36,7 +36,9 @@ jobs:
           path: ./official/build/jib-cache
           key: ${{ runner.os }}-jib-${{ github.job }}-${{ hashFiles('**/build.gradle') }}
           restore-keys: ${{ runner.os }}-jib-${{ github.job }}
-      
+
+      - name: Build and push image with Jib
+        run: ./gradlew jib
 
       - name: SSH into Oracle VM and deploy
         uses: appleboy/ssh-action@master
