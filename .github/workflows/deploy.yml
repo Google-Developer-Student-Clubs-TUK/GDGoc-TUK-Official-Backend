@@ -51,10 +51,10 @@ jobs:
             
             echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
             
-            docker compose -f docker-compose.prod.yml down || true
+            sudo docker compose -f docker-compose.prod.yml down || true
             
-            docker compose -f docker-compose.prod.yml pull
+            sudo docker compose -f docker-compose.prod.yml pull
             
-            docker compose -f docker-compose.prod.yml up -d
+            sudo docker compose -f docker-compose.prod.yml up -d
             
             sudo docker image prune -f
