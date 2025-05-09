@@ -76,6 +76,9 @@ jib {
 		}
 	}
 	container {
+		environment = [
+				'SPRING_PROFILES_ACTIVE': 'prod'
+		]
 		jvmFlags = ['-Duser.timezone=Asia/Seoul']
 		ports = ['8080']
 		creationTime = 'USE_CURRENT_TIMESTAMP'
