@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  backend:
+    image: haechansomg/gdgoctuk-backend
+    depends_on:
+      - redis
+    container_name: backend
+    ports:
+      - "8080:8080"
+    networks:
+      gdgoc-tuk:
+    restart: always
+    tty: true
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      gdgoc-tuk:
+    restart: always
+    tty: true
+
+networks:
+  gdgoc-tuk:
+

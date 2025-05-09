@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.4.1'
 	id 'io.spring.dependency-management' version '1.1.7'
+	id 'com.google.cloud.tools.jib' version '3.4.0'
 }
 
 group = 'gdgoc.tuk'
@@ -60,6 +61,25 @@ dependencies {
 
 	// Data Faker
 	implementation 'net.datafaker:datafaker:2.4.3'
+}
+
+jib {
+	from {
+		image = 'eclipse-temurin:17-jdk-alpine'
+	}
+	to {
+		image = 'gdgoctuk/gdgoctuk-backend'
+		tags = ['latest']
+		auth {
+			username = project.findProperty('DOCKER_HUB_USERNAME')
+			password = project.findProperty('DOCKER_HUB_PASSWORD')
+		}
+	}
+	container {
+		jvmFlags = ['-Duser.timezone=Asia/Seoul']
+		ports = ['8080']
+		creationTime = 'USE_CURRENT_TIMESTAMP'
+	}
 }
 
 tasks.named('test') {

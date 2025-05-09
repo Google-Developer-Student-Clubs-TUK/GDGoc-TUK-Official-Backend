@@ -45,8 +45,10 @@ out/
 ### YML ###
 application-dev.yml
 application-local.yml
+application-prod.yml
 
 ### PRODUCTION SECRET ###
+gradle.properties
 
 ### GOOGLE OAUTH2 CLIENT CREDENTIAL ###
 credential.json
