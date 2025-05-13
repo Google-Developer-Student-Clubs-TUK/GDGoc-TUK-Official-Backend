@@ -3,7 +3,6 @@ package gdgoc.tuk.official.email.service;
 import gdgoc.tuk.official.email.dto.EmailVerificationRequest;
 import gdgoc.tuk.official.email.exception.NotVerifiedEmailException;
 import gdgoc.tuk.official.email.repository.VerificationCodeRedisRepository;
-import gdgoc.tuk.official.email.repository.VerificationCodeRedisRepositoryImpl;
 import gdgoc.tuk.official.email.template.VerificationCodeMailTemplate;
 import gdgoc.tuk.official.email.template.WelcomMailTemplate;
 import gdgoc.tuk.official.global.ErrorCode;
@@ -21,12 +20,9 @@ public class EmailService {
     private final EmailSender emailSender;
     private final VerificationCodeRedisRepository redisRepository;
 
-    @Value("${google.gmail.code-timeout}")
-    private Integer codeTimeout;
-
     public void sendVerificationMail(final String receiverEmail) {
         final String code = VerificationCodeGenerator.generate();
-        redisRepository.saveVerificationCode(receiverEmail, code, codeTimeout);
+        redisRepository.saveVerificationCode(receiverEmail, code, 30);
         final String mailBody = VerificationCodeMailTemplate.code(code);
         emailSender.send(receiverEmail, VerificationCodeMailTemplate.TITLE, mailBody);
     }

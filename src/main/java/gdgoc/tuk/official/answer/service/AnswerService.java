@@ -14,12 +14,12 @@ import gdgoc.tuk.official.google.service.SpreadSheetsService;
 import gdgoc.tuk.official.recruitment.domain.Recruitment;
 import gdgoc.tuk.official.recruitment.service.RecruitmentTimeService;
 
-import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -36,11 +36,12 @@ public class AnswerService {
     @Transactional
     public void apply(final AnswerListRequest request) {
         checkDuplicatedAnswer(request);
-        Recruitment recruitment = recruitmentTimeService.getOnGoingRecruitment(
-            LocalDateTime.now());
+        Recruitment recruitment = recruitmentTimeService.getOnGoingRecruitment(LocalDateTime.now());
         final List<Object> spreadSheetContent = extractAnswersForSpreadSheets(request);
-        spreadSheetsService.write(recruitment.getSpreadSheetsId(), List.of(spreadSheetContent),
-            recruitment.getGeneration());
+        spreadSheetsService.write(
+                recruitment.getSpreadSheetsId(),
+                List.of(spreadSheetContent),
+                recruitment.getGeneration());
         Applicant applicant =
                 applicantService.saveApplicant(
                         request.memberProfile(), recruitment.getGeneration());
@@ -57,7 +58,8 @@ public class AnswerService {
     }
 
     private void checkDuplicatedAnswer(final AnswerListRequest request) {
-        boolean alreadyApplied = applicantValidator.isAlreadyApplied(request.memberProfile().email());
+        boolean alreadyApplied =
+                applicantValidator.isAlreadyApplied(request.memberProfile().email());
         if (alreadyApplied) {
             throw new DuplicatedAnswerException(ErrorCode.DUPLICATED_ANSWER);
         }

@@ -15,15 +15,14 @@ import gdgoc.tuk.official.email.service.EmailService;
 import gdgoc.tuk.official.generationmember.service.GenerationMemberService;
 import gdgoc.tuk.official.global.ErrorCode;
 
-import java.io.IOException;
-import java.util.List;
-import javax.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -52,15 +51,14 @@ public class ApplicantService {
     public ApplicantPageResponse findAllApplicants(final Pageable pageable) {
         Page<Applicant> applicantPage =
                 applicantRepository.findByApplicationStatus(ApplicationStatus.PENDING, pageable);
-        List<ApplicantInfo> applicantResponse = applicantMapper.toApplicantResponse(
-            applicantPage.getContent());
+        List<ApplicantInfo> applicantResponse =
+                applicantMapper.toApplicantResponse(applicantPage.getContent());
         return new ApplicantPageResponse(
                 applicantPage.getTotalPages(), applicantPage.getNumber(), applicantResponse);
     }
 
     @Transactional
-    public void approve(final Long applicantId, final ApplicantRoleRequest request)
-            throws MessagingException, IOException {
+    public void approve(final Long applicantId, final ApplicantRoleRequest request) {
         Applicant applicant = getApplicantById(applicantId);
         Accounts accounts = accountRegisterService.createOrFindAccount(applicant, request.role());
         generationMemberService.createGenerationMember(applicant, accounts);

@@ -1,8 +1,6 @@
 package gdgoc.tuk.official.email.repository;
 
-import java.time.Duration;
 import java.util.Optional;
-
 
 public interface VerificationCodeRedisRepository {
 

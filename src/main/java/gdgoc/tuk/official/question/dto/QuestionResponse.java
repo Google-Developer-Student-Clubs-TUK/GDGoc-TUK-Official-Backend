@@ -1,8 +1,10 @@
 package gdgoc.tuk.official.question.dto;
 
 import gdgoc.tuk.official.question.domain.QuestionType;
-import java.util.List;
+
 import lombok.Builder;
+
+import java.util.List;
 
 @Builder
 public record QuestionResponse(

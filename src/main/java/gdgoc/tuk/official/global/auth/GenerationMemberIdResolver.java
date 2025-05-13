@@ -1,7 +1,9 @@
 package gdgoc.tuk.official.global.auth;
 
 import gdgoc.tuk.official.global.security.GdgMember;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -17,19 +19,18 @@ public class GenerationMemberIdResolver implements HandlerMethodArgumentResolver
     @Override
     public boolean supportsParameter(final MethodParameter parameter) {
         return parameter.hasParameterAnnotation(GenerationMemberId.class)
-            && parameter.getParameterType().equals(Long.class);
+                && parameter.getParameterType().equals(Long.class);
     }
 
     @Override
     public Object resolveArgument(
-        final MethodParameter parameter,
-        final ModelAndViewContainer mavContainer,
-        final NativeWebRequest webRequest,
-        final WebDataBinderFactory binderFactory)
-        throws Exception {
+            final MethodParameter parameter,
+            final ModelAndViewContainer mavContainer,
+            final NativeWebRequest webRequest,
+            final WebDataBinderFactory binderFactory)
+            throws Exception {
         final GdgMember principal =
-            (GdgMember)
-                SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return Long.valueOf(principal.getGenerationMember().getId());
+                (GdgMember) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return principal.getGenerationMember().getId();
     }
 }

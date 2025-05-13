@@ -7,7 +7,6 @@ import com.google.api.services.sheets.v4.model.ValueRange;
 
 import gdgoc.tuk.official.answer.repository.SpreadSheetsPrimaryKeyRepository;
 
-import gdgoc.tuk.official.recruitment.domain.Recruitment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,7 +21,8 @@ import java.util.concurrent.locks.ReentrantLock;
 @RequiredArgsConstructor
 public class SpreadSheetsService {
 
-    private static final String POSITION = "시트1!%s:%s";
+    // TODO : POSITION 이 Initializer와 분산돼 있음
+    private static final String POSITION = "Sheet1!%s:%s";
     private final Sheets sheetsClient;
     private final ReentrantLock reentrantLock = new ReentrantLock();
     private final SpreadSheetsPrimaryKeyRepository spreadSheetsPrimaryKeyRepository;
@@ -32,9 +32,9 @@ public class SpreadSheetsService {
         UpdateValuesResponse result = null;
         try {
             result = updateSheets(spreadsheetId, values, generation);
-            log.info("%d cells updated.", result.getUpdatedCells());
+            log.info("{} cells updated.", result.getUpdatedCells());
         } catch (GoogleJsonResponseException e) {
-            log.error("update error %s", e.getMessage());
+            log.error("update error {}", e.getMessage());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

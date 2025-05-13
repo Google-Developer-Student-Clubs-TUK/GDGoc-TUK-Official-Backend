@@ -27,7 +27,7 @@ public class QuestionOrders extends BaseTimeEntity {
         this.orders = orders;
     }
 
-    public void changeOrder(final Integer order){
+    public void changeOrder(final Integer order) {
         this.orders = order;
     }
 }

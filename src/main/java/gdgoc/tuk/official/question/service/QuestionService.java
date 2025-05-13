@@ -6,8 +6,8 @@ import gdgoc.tuk.official.question.domain.SubQuestion;
 import gdgoc.tuk.official.question.dto.ModifiedQuestion;
 import gdgoc.tuk.official.question.dto.NewQuestion;
 import gdgoc.tuk.official.question.dto.QuestionDeleteRequest;
-import gdgoc.tuk.official.question.dto.QuestionPageResponse;
 import gdgoc.tuk.official.question.dto.QuestionOrderResponse;
+import gdgoc.tuk.official.question.dto.QuestionPageResponse;
 import gdgoc.tuk.official.question.dto.QuestionResponse;
 import gdgoc.tuk.official.question.dto.QuestionUpdateRequest;
 import gdgoc.tuk.official.question.dto.UpdatedQuestionOrder;
@@ -17,8 +17,8 @@ import gdgoc.tuk.official.question.repository.QuestionRepository;
 import gdgoc.tuk.official.question.service.mapper.QuestionMapper;
 import gdgoc.tuk.official.questionorder.domain.QuestionOrders;
 import gdgoc.tuk.official.questionorder.repository.QuestionOrderRepository;
-
 import gdgoc.tuk.official.recruitment.service.RecruitmentTimeService;
+
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -47,7 +47,7 @@ public class QuestionService {
         final List<QuestionOrderResponse> questionOrderResponses =
                 questionMapper.toQuestionOrderResponseList(questionOrders);
         int lastPage = findLastPage(questionsSortedByOrder);
-        return new QuestionPageResponse(questionsSortedByOrder, questionOrderResponses,lastPage);
+        return new QuestionPageResponse(questionsSortedByOrder, questionOrderResponses, lastPage);
     }
 
     private int findLastPage(final List<QuestionResponse> questionsSortedByOrder) {
@@ -73,8 +73,7 @@ public class QuestionService {
 
     private void modifyQuestion(final QuestionUpdateRequest request) {
         if (request.modifiedQuestions().isEmpty()) return;
-        final Map<Long, ModifiedQuestion> modifiedQuestionMap =
-                getModifiedQuestionMap(request);
+        final Map<Long, ModifiedQuestion> modifiedQuestionMap = getModifiedQuestionMap(request);
         final List<Question> questions = findAllQuestionsByIds(request.modifiedQuestions());
         questions.forEach(
                 q -> {
@@ -134,7 +133,7 @@ public class QuestionService {
     }
 
     @Transactional
-    public void deleteSubQuestion(final Long questionId,final Long subQuestionId) {
+    public void deleteSubQuestion(final Long questionId, final Long subQuestionId) {
         final Question question = getQuestionFetchSubQuestions(questionId);
         if (question.isNotDeletable()) {
             throw new DeleteNotAllowedException(ErrorCode.DELETE_NOT_ALLOWED);
@@ -162,8 +161,8 @@ public class QuestionService {
 
     public Question getQuestionFetchSubQuestions(final Long questionId) {
         return questionRepository
-            .findByIdFetchSubQuestions(questionId)
-            .orElseThrow(() -> new QuestionNotFoundException(ErrorCode.QUESTION_NOT_FOUND));
+                .findByIdFetchSubQuestions(questionId)
+                .orElseThrow(() -> new QuestionNotFoundException(ErrorCode.QUESTION_NOT_FOUND));
     }
 
     public List<Question> findAllQuestions() {

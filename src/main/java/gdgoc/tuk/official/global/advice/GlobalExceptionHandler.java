@@ -5,15 +5,14 @@ import gdgoc.tuk.official.global.exception.AuthorityException;
 import gdgoc.tuk.official.global.exception.DuplicationException;
 import gdgoc.tuk.official.global.exception.GoogleSpreadSheetsException;
 import gdgoc.tuk.official.global.exception.ResourceNotFoundException;
-
 import gdgoc.tuk.official.global.exception.ValidationException;
 import gdgoc.tuk.official.global.response.ErrorResponse;
+
 import io.swagger.v3.oas.annotations.Hidden;
 
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;

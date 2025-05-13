@@ -1,21 +1,27 @@
 package gdgoc.tuk.official.generationmember.repository;
 
 import static gdgoc.tuk.official.generationmember.domain.QGenerationMember.*;
-import static java.util.Objects.*;
+
 import static org.springframework.util.StringUtils.*;
+
+import static java.util.Objects.*;
 
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+
 import gdgoc.tuk.official.generationmember.domain.EnrollmentStatus;
 import gdgoc.tuk.official.generationmember.domain.Field;
 import gdgoc.tuk.official.generationmember.domain.GenerationMember;
 import gdgoc.tuk.official.generationmember.dto.MemberSearchCond;
+
 import jakarta.persistence.EntityManager;
-import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public class GenerationMemberRepositorySearchImpl implements GenerationMemberRepositorySearch {
@@ -27,26 +33,32 @@ public class GenerationMemberRepositorySearchImpl implements GenerationMemberRep
     }
 
     @Override
-    public Page<GenerationMember> findByCondition(final MemberSearchCond memberSearchCond,
-        final Pageable pageable) {
-        List<GenerationMember> result = queryFactory.select(generationMember)
-            .from(generationMember)
-            .leftJoin(generationMember.accounts)
-            .where(fieldEq(memberSearchCond.field()), enrollmentEq(memberSearchCond.enrollmentStatus()),
-                nameEq(memberSearchCond.name()), generationEq(memberSearchCond.generation()))
-            .offset(pageable.getOffset())
-            .limit(pageable.getPageSize())
-            .fetch();
-        Long total = queryFactory.select(generationMember.count())
-            .from(generationMember)
-            .where(
-                fieldEq(memberSearchCond.field()),
-                enrollmentEq(memberSearchCond.enrollmentStatus()),
-                nameEq(memberSearchCond.name()),
-                generationEq(memberSearchCond.generation())
-            )
-            .fetchOne();
-        return new PageImpl(result,pageable,total);
+    public Page<GenerationMember> findByCondition(
+            final MemberSearchCond memberSearchCond, final Pageable pageable) {
+        List<GenerationMember> result =
+                queryFactory
+                        .select(generationMember)
+                        .from(generationMember)
+                        .leftJoin(generationMember.accounts)
+                        .where(
+                                fieldEq(memberSearchCond.field()),
+                                enrollmentEq(memberSearchCond.enrollmentStatus()),
+                                nameEq(memberSearchCond.name()),
+                                generationEq(memberSearchCond.generation()))
+                        .offset(pageable.getOffset())
+                        .limit(pageable.getPageSize())
+                        .fetch();
+        Long total =
+                queryFactory
+                        .select(generationMember.count())
+                        .from(generationMember)
+                        .where(
+                                fieldEq(memberSearchCond.field()),
+                                enrollmentEq(memberSearchCond.enrollmentStatus()),
+                                nameEq(memberSearchCond.name()),
+                                generationEq(memberSearchCond.generation()))
+                        .fetchOne();
+        return new PageImpl(result, pageable, total);
     }
 
     private Predicate generationEq(final String generation) {
@@ -58,8 +70,9 @@ public class GenerationMemberRepositorySearchImpl implements GenerationMemberRep
     }
 
     private Predicate enrollmentEq(final EnrollmentStatus enrollmentStatus) {
-        return nonNull(enrollmentStatus) ?
-            generationMember.enrollmentStatus.eq(enrollmentStatus) : null;
+        return nonNull(enrollmentStatus)
+                ? generationMember.enrollmentStatus.eq(enrollmentStatus)
+                : null;
     }
 
     private Predicate fieldEq(final Field field) {

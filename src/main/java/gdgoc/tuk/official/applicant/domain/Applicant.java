@@ -5,8 +5,8 @@ import gdgoc.tuk.official.generationmember.domain.EnrollmentStatus;
 import gdgoc.tuk.official.generationmember.domain.Field;
 import gdgoc.tuk.official.generationmember.domain.Gender;
 import gdgoc.tuk.official.generationmember.domain.UniversityYear;
-
 import gdgoc.tuk.official.global.BaseTimeEntity;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -30,14 +30,19 @@ public class Applicant extends BaseTimeEntity {
 
     private String name;
     private String studentNumber;
+
     @Enumerated(EnumType.STRING)
     private EnrollmentStatus enrollmentStatus;
+
     @Enumerated(EnumType.STRING)
     private UniversityYear universityYear;
+
     @Enumerated(EnumType.STRING)
     private Field field;
+
     @Enumerated(EnumType.STRING)
     private Gender gender;
+
     private String email;
     private String major;
     private String generation;
@@ -56,7 +61,8 @@ public class Applicant extends BaseTimeEntity {
             final Gender gender,
             final String email,
             final String major,
-            String generation, Role role) {
+            String generation,
+            Role role) {
         this.name = name;
         this.studentNumber = studentNumber;
         this.enrollmentStatus = enrollmentStatus;

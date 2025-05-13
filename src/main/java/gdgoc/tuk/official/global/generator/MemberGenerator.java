@@ -1,6 +1,7 @@
 package gdgoc.tuk.official.global.generator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import gdgoc.tuk.official.account.domain.Accounts;
 import gdgoc.tuk.official.account.domain.Role;
 import gdgoc.tuk.official.account.repository.AccountRepository;
@@ -14,9 +15,12 @@ import gdgoc.tuk.official.generationmember.domain.Gender;
 import gdgoc.tuk.official.generationmember.domain.GenerationMember;
 import gdgoc.tuk.official.generationmember.domain.UniversityYear;
 import gdgoc.tuk.official.generationmember.repository.GenerationMemberRepository;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
 import net.datafaker.Faker;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -57,24 +61,26 @@ public class MemberGenerator implements CommandLineRunner {
 
         for (int i = 0; i < 10; i++) {
             Faker faker = new Faker();
-            Applicant save = applicantRepository.save(
-                new Applicant(
-                    faker.name().lastName(),
-                    faker.expression("#{numerify '20########'}"),
-                    EnrollmentStatus.values()[i % 2],
-                    UniversityYear.values()[i % 4],
-                    Field.values()[i % 3],
-                    Gender.values()[i % 2],
-                    faker.name().lastName() + "tukorea.ac.kr",
-                    majors[i % 4],
-                    "2025",
-                    Role.values()[i % 3]));
+            Applicant save =
+                    applicantRepository.save(
+                            new Applicant(
+                                    faker.name().lastName(),
+                                    faker.expression("#{numerify '20########'}"),
+                                    EnrollmentStatus.values()[i % 2],
+                                    UniversityYear.values()[i % 4],
+                                    Field.values()[i % 3],
+                                    Gender.values()[i % 2],
+                                    faker.name().lastName() + "tukorea.ac.kr",
+                                    majors[i % 4],
+                                    "2025",
+                                    Role.values()[i % 3]));
             String s = objectMapper.writeValueAsString(new ApplicantAnswer());
             answerRepository.save(new Answer(s, save));
         }
     }
+
     @Getter
-    public static class ApplicantAnswer{
+    public static class ApplicantAnswer {
         String 이름;
         String 학과;
         String 지원동기;

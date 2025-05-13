@@ -5,7 +5,7 @@ public class WelcomMailTemplate {
     public static final String TITLE = "GDGoC TUK %s기 지원 결과 안내";
 
     private static final String CONTENT =
-        """
+            """
         <div class="container">
         <h2 class="header">🎉 GDGoC TUK %s기 합격을 축하합니다! 🎉</h2>
         <p class="message">

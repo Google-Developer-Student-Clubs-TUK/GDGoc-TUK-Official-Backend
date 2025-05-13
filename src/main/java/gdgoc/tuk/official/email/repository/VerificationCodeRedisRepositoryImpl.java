@@ -1,10 +1,12 @@
 package gdgoc.tuk.official.email.repository;
 
-import java.time.Duration;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
+
+import java.time.Duration;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor

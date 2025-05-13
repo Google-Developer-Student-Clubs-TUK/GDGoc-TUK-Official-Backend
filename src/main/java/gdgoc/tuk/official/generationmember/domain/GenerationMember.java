@@ -30,26 +30,35 @@ public class GenerationMember extends BaseTimeEntity {
 
     private String name;
     private String studentNumber;
+
     @Enumerated(EnumType.STRING)
     private EnrollmentStatus enrollmentStatus;
+
     @Enumerated(EnumType.STRING)
     private UniversityYear universityYear;
+
     @Enumerated(EnumType.STRING)
     private Field field;
+
     @Enumerated(EnumType.STRING)
     private Gender gender;
+
     private String major;
     private String generation;
     private Role role;
 
     @Builder
     public GenerationMember(
-            Accounts accounts, String name, String studentNumber,
+            Accounts accounts,
+            String name,
+            String studentNumber,
             final Field field,
             final Gender gender,
             final EnrollmentStatus enrollmentStatus,
-            final UniversityYear universityYear, String major,
-            final String generation, Role role) {
+            final UniversityYear universityYear,
+            String major,
+            final String generation,
+            Role role) {
         this.accounts = accounts;
         this.name = name;
         this.studentNumber = studentNumber;

@@ -27,17 +27,16 @@ public class GenerationMemberController {
 
     @GetMapping("/introduction/{generation}")
     @PreAuthorize("permitAll()")
-    @Operation(summary = "기수별 회원 소개용 조회", description = "기수 조회 API에서 응답한 최근 기수를 경로변수로 "
-        + "주시면됩니다.")
-    public MemberIntroductionListResponse findMembersWithGeneration(@PathVariable String generation) {
+    @Operation(summary = "기수별 회원 소개용 조회", description = "기수 조회 API에서 응답한 최근 기수를 경로변수로 " + "주시면됩니다.")
+    public MemberIntroductionListResponse findMembersWithGeneration(
+            @PathVariable String generation) {
         return generationMemberService.findGenerationMemberByGeneration(generation);
     }
 
     @GetMapping("/management")
     @Operation(summary = "회원 관리용 조회", description = "리더의 회원관리용 조회 API입니다.")
-    public MemberManagementPageResponse searchMembers(MemberSearchCond memberSearchCond,
-        Pageable pageable) {
-        return generationMemberService.searchMembers(memberSearchCond,pageable);
+    public MemberManagementPageResponse searchMembers(
+            MemberSearchCond memberSearchCond, Pageable pageable) {
+        return generationMemberService.searchMembers(memberSearchCond, pageable);
     }
-
 }

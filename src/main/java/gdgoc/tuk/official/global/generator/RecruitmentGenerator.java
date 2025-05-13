@@ -3,11 +3,12 @@ package gdgoc.tuk.official.global.generator;
 import gdgoc.tuk.official.recruitment.domain.Recruitment;
 import gdgoc.tuk.official.recruitment.repository.RecruitmentRepository;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor

@@ -12,18 +12,19 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
-@Profile("prod")
+@Profile("local")
 @Slf4j
-public class GmailSender implements EmailSender {
+@RequiredArgsConstructor
+public class LocalMailSender implements EmailSender {
 
     private final JavaMailSender javaMailSender;
 
-    public void send(String to, String subject, String content) {
+    @Override
+    public void send(final String to, final String subject, final String content) {
         MimeMessage message = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
-            helper.setFrom("GDGoCTUK운영진"); // service name
+            helper.setFrom("GDGoCTUK"); // service name
             helper.setTo(to); // customer email
             helper.setSubject(subject); // email title
             helper.setText(content, true); // content, html: true

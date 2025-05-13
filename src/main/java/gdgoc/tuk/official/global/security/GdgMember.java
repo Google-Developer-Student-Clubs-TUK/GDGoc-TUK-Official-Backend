@@ -1,9 +1,10 @@
 package gdgoc.tuk.official.global.security;
 
 import gdgoc.tuk.official.account.domain.Accounts;
-
 import gdgoc.tuk.official.generationmember.domain.GenerationMember;
+
 import lombok.Getter;
+
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 

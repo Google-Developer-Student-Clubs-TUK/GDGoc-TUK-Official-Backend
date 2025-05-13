@@ -6,6 +6,8 @@ import gdgoc.tuk.official.email.service.EmailService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-
-import javax.mail.MessagingException;
 
 @RequiredArgsConstructor
 @RestController
@@ -29,8 +29,7 @@ public class EmailController {
     @PostMapping
     @PreAuthorize("permitAll()")
     @Operation(summary = "인증코드 전송", description = "인증 코드를 전송합니다.")
-    public void sendVerificationCode(@RequestBody EmailSendingRequest request)
-            throws MessagingException, IOException {
+    public void sendVerificationCode(@RequestBody EmailSendingRequest request) {
         emailService.sendVerificationMail(request.email());
     }
 

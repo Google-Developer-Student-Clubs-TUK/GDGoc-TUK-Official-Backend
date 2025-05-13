@@ -2,7 +2,6 @@ package gdgoc.tuk.official.applicant.service.mapper;
 
 import gdgoc.tuk.official.answer.dto.MemberProfile;
 import gdgoc.tuk.official.applicant.domain.Applicant;
-import gdgoc.tuk.official.applicant.dto.ApplicantPageResponse;
 import gdgoc.tuk.official.applicant.dto.ApplicantPageResponse.ApplicantInfo;
 
 import org.springframework.stereotype.Component;

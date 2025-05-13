@@ -7,6 +7,5 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface GenerationMemberRepositorySearch {
-    Page<GenerationMember> findByCondition(MemberSearchCond condition,
-        Pageable pageable);
+    Page<GenerationMember> findByCondition(MemberSearchCond condition, Pageable pageable);
 }

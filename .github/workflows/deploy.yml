@@ -24,7 +24,7 @@ jobs:
 
       - name: Copy Google credential.json
         run: |
-          echo "${{ secrets.GOOGLE_CREDENTIAL_JSON }}"| base64 -d > src/main/resources/credential.json
+          echo "${{ secrets.GOOGLE_CREDENTIAL_JSON }}"| base64 -d > src/main/resources/gdgoc-tuk-official-459705-d42de1a05b2c.json
 
       - name: Copy gradle.properties
         run: |

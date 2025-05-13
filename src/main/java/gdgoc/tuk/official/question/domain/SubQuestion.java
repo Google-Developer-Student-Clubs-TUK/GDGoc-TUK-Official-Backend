@@ -1,6 +1,7 @@
 package gdgoc.tuk.official.question.domain;
 
 import gdgoc.tuk.official.global.BaseTimeEntity;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;

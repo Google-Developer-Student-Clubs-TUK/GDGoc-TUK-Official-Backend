@@ -1,8 +1,8 @@
 package gdgoc.tuk.official.global.security;
 
 import gdgoc.tuk.official.account.domain.Accounts;
-import gdgoc.tuk.official.account.repository.AccountRepository;
 import gdgoc.tuk.official.account.exception.AccountNotFoundException;
+import gdgoc.tuk.official.account.repository.AccountRepository;
 import gdgoc.tuk.official.generationmember.domain.GenerationMember;
 import gdgoc.tuk.official.generationmember.exception.GenerationMemberNotFoundException;
 import gdgoc.tuk.official.generationmember.repository.GenerationMemberRepository;
@@ -29,9 +29,13 @@ public class GdgMemberService implements UserDetailsService {
                         .findByEmail(username)
                         .orElseThrow(
                                 () -> new AccountNotFoundException(ErrorCode.ACCOUNT_NOT_FOUND));
-        GenerationMember generationMember = generationMemberRepository.findTopByAccountsOrderByCreatedAt(
-                accounts)
-            .orElseThrow(() -> new GenerationMemberNotFoundException(ErrorCode.QUESTION_NOT_FOUND));
-        return new GdgMember(accounts,generationMember);
+        GenerationMember generationMember =
+                generationMemberRepository
+                        .findTopByAccountsOrderByCreatedAt(accounts)
+                        .orElseThrow(
+                                () ->
+                                        new GenerationMemberNotFoundException(
+                                                ErrorCode.QUESTION_NOT_FOUND));
+        return new GdgMember(accounts, generationMember);
     }
 }

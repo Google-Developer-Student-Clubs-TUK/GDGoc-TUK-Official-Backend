@@ -8,12 +8,12 @@ import gdgoc.tuk.official.recruitment.domain.Recruitment;
 import gdgoc.tuk.official.recruitment.dto.GenerationResponse;
 import gdgoc.tuk.official.recruitment.dto.RecruitmentOpenRequest;
 import gdgoc.tuk.official.recruitment.dto.RecruitmentStatusResponse;
-import gdgoc.tuk.official.recruitment.exception.GenerationDuplicationException;
 import gdgoc.tuk.official.recruitment.exception.RecruitmentDuplicationException;
 import gdgoc.tuk.official.recruitment.repository.RecruitmentRepository;
 
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +23,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class RecruitmentService {
 
     private final RecruitmentRepository recruitmentRepository;
@@ -35,19 +36,22 @@ public class RecruitmentService {
         checkOnGoingRecruitment();
         spreadSheetsPrimaryKeyRepository.saveNewGeneration(request.generation());
         final String spreadSheetsId =
-                spreadSheetsInitializer.init(request.generation(), spreadSheetsQuestionService.getSpreadSheetQuestions());
+                spreadSheetsInitializer.init(
+                        request.generation(),
+                        spreadSheetsQuestionService.getSpreadSheetQuestions());
+        log.info("openRecruitment sheets id : {}",spreadSheetsId);
         final Recruitment recruitment =
                 new Recruitment(
                         request.generation(), spreadSheetsId, request.openAt(), request.closeAt());
         recruitmentRepository.save(recruitment);
     }
 
-    public RecruitmentStatusResponse getRecruitmentStatus(){
+    public RecruitmentStatusResponse getRecruitmentStatus() {
         LocalDateTime now = LocalDateTime.now();
-        return recruitmentRepository.findByBetweenOpenAtAndCloseAt(
-                now)
-            .map(r -> new RecruitmentStatusResponse(true))
-            .orElseGet(() -> new RecruitmentStatusResponse(false));
+        return recruitmentRepository
+                .findByBetweenOpenAtAndCloseAt(now)
+                .map(r -> new RecruitmentStatusResponse(true))
+                .orElseGet(() -> new RecruitmentStatusResponse(false));
     }
 
     private void checkOnGoingRecruitment() {

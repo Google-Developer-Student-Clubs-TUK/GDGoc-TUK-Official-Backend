@@ -7,7 +7,9 @@ import gdgoc.tuk.official.recruitment.service.RecruitmentService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
 import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,8 +28,8 @@ public class RecruitmentController {
     private final RecruitmentService recruitmentService;
 
     @PostMapping
-//    @PreAuthorize("hasRole('LEADER')")
-    @Operation(summary = "모집 시작",description = "리더 전용 API로 모집을 시작하는 API입니다.")
+    //    @PreAuthorize("hasRole('LEADER')")
+    @Operation(summary = "모집 시작", description = "리더 전용 API로 모집을 시작하는 API입니다.")
     public void openRecruitment(@Valid @RequestBody final RecruitmentOpenRequest request) {
         recruitmentService.openRecruitment(request);
     }

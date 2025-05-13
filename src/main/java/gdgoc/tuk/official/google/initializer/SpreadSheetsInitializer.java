@@ -2,6 +2,8 @@ package gdgoc.tuk.official.google.initializer;
 
 import com.google.api.client.googleapis.json.GoogleJsonError;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
+import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.model.Permission;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.BasicFilter;
 import com.google.api.services.sheets.v4.model.BatchUpdateSpreadsheetRequest;
@@ -23,6 +25,7 @@ import gdgoc.tuk.official.google.service.SpreadSheetsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -36,9 +39,12 @@ public class SpreadSheetsInitializer {
 
     private static final String SPREAD_SHEET_TITLE = "GDGOC-TUK %s년도 지원자 응답";
     private static final int INITIAL_SHEET_ID = 0;
-    private static final String POSITION = "시트1!1:1";
+    private static final String POSITION = "Sheet1!1:1";
+    @Value("${google.leader-gmail}")
+    private String LEADER_GMAIL;
     private final Sheets sheetsClient;
     private final SpreadSheetsService spreadSheetsService;
+    private final Drive driveClient;
 
     private Border getBorder() {
         return new Border()
@@ -95,6 +101,12 @@ public class SpreadSheetsInitializer {
         final Spreadsheet result;
         try {
             result = sheetsClient.spreadsheets().create(spreadsheet).execute();
+            Permission permission = new Permission();
+            permission.setType("user").setRole("writer").setEmailAddress(LEADER_GMAIL);
+            driveClient.permissions().create(result.getSpreadsheetId(),permission).setFields("id").execute();
+            permission.setType("user").setRole("reader").setEmailAddress(LEADER_GMAIL);
+            driveClient.permissions().create(result.getSpreadsheetId(),permission).setFields("id").execute();
+            log.info("createSpreadSheets:{}",result);
         } catch (IOException e) {
             log.error(e.getLocalizedMessage());
             throw new SheetsCreationException(ErrorCode.SHEETS_CREATION_FAILED);

@@ -1,9 +1,9 @@
 package gdgoc.tuk.official.question.domain;
 
 import gdgoc.tuk.official.global.BaseTimeEntity;
-
 import gdgoc.tuk.official.global.ErrorCode;
 import gdgoc.tuk.official.question.exception.QuestionNotFoundException;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -34,7 +34,7 @@ public class Question extends BaseTimeEntity {
             mappedBy = "question",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
-    private List<SubQuestion> subQuestions = new ArrayList<>();
+    private final List<SubQuestion> subQuestions = new ArrayList<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,6 +44,7 @@ public class Question extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private QuestionType questionType;
+
     private int page;
     private boolean isRequired;
     private boolean isDeletable;
@@ -51,7 +52,8 @@ public class Question extends BaseTimeEntity {
     @Builder
     public Question(
             final String content,
-            final QuestionType questionType, int page,
+            final QuestionType questionType,
+            int page,
             final boolean isRequired,
             boolean isDeletable) {
         this.content = content;
@@ -67,7 +69,8 @@ public class Question extends BaseTimeEntity {
             final QuestionType questionType,
             final boolean isRequired,
             boolean isDeletable,
-            List<SubQuestion> subQuestionList, int page) {
+            List<SubQuestion> subQuestionList,
+            int page) {
         this.content = content;
         this.questionType = questionType;
         this.isRequired = isRequired;

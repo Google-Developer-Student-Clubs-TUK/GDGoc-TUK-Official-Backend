@@ -35,7 +35,7 @@ public class QuestionController {
     }
 
     @PostMapping
-//    @PreAuthorize("hasRole('LEADER')")
+    //    @PreAuthorize("hasRole('LEADER')")
     @Operation(
             summary = "질문 등록/수정/순서변경",
             description =
@@ -51,7 +51,7 @@ public class QuestionController {
     }
 
     @DeleteMapping("/parent/{questionId}")
-//    @PreAuthorize("hasRole('LEADER')")
+    //    @PreAuthorize("hasRole('LEADER')")
     @Operation(summary = "부모 질문 삭제", description = "부모 질문(Question) 식별자를 이용해 질문을 삭제합니다.")
     public void deleteQuestion(
             @PathVariable final Long questionId, @RequestBody QuestionDeleteRequest request) {
@@ -60,8 +60,8 @@ public class QuestionController {
 
     @DeleteMapping("/parent/{questionId}/child/{subQuestionId}")
     @Operation(summary = "자식 질문 삭제", description = "자식 질문(SubQuestion) 식별자를 이용해 질문을 삭제합니다.")
-    public void deleteSubQuestion(@PathVariable final Long questionId,
-        @PathVariable final Long subQuestionId) {
-        questionService.deleteSubQuestion(questionId,subQuestionId);
+    public void deleteSubQuestion(
+            @PathVariable final Long questionId, @PathVariable final Long subQuestionId) {
+        questionService.deleteSubQuestion(questionId, subQuestionId);
     }
 }

@@ -7,14 +7,13 @@ import gdgoc.tuk.official.generationmember.domain.Gender;
 import gdgoc.tuk.official.generationmember.domain.UniversityYear;
 
 public record MemberManagementResponse(
-    String name,
-    Field field,
-    String studentNumber,
-    String major,
-    String email,
-    Gender gender,
-    UniversityYear universityYear,
-    String generation,
-    Role role,
-    EnrollmentStatus enrollmentStatus
-) {}
+        String name,
+        Field field,
+        String studentNumber,
+        String major,
+        String email,
+        Gender gender,
+        UniversityYear universityYear,
+        String generation,
+        Role role,
+        EnrollmentStatus enrollmentStatus) {}

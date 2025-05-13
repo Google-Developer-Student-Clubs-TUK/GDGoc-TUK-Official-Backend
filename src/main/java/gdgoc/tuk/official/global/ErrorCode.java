@@ -21,7 +21,7 @@ public enum ErrorCode {
     GENERATION_DUPLICATED(HttpStatus.BAD_REQUEST, "200", "이미 존재하는 기수입니다."),
     RECRUITMENT_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "201", "이미 모집중인 모집이 있습니다."),
     ON_GOING_RECRUITMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "202", "모집 중인 공고가 없습니다."),
-    INVALID_GENERATION(HttpStatus.BAD_REQUEST,"203","모집 기수는 올해 혹은 내년으로 설정 가능합니다."),
+    INVALID_GENERATION(HttpStatus.BAD_REQUEST, "203", "모집 기수는 올해 혹은 내년으로 설정 가능합니다."),
 
     /** Google Spread Sheets Error Code 300 ~ 399 */
     SHEETS_CREATION_FAILED(HttpStatus.BAD_GATEWAY, "300", "구글 스프레드시트 생성에 실패했습니다. 잠시 후 다시 시도해주세요."),
@@ -45,7 +45,7 @@ public enum ErrorCode {
 
     /** Answer Error Code 800 ~ 899 */
     DUPLICATED_ANSWER(HttpStatus.BAD_REQUEST, "800", "중복된 지원서입니다."),
-    ANSWER_NOT_FOUND(HttpStatus.NOT_FOUND,"801","지원자의 응답을 찾을 수 없습니다.");
+    ANSWER_NOT_FOUND(HttpStatus.NOT_FOUND, "801", "지원자의 응답을 찾을 수 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

@@ -51,5 +51,6 @@ application-prod.yml
 gradle.properties
 
 ### GOOGLE OAUTH2 CLIENT CREDENTIAL ###
+gdgoc-tuk-official-459705-d42de1a05b2c.json
 credential.json
 tokens/**

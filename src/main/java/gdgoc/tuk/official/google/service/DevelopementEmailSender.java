@@ -13,9 +13,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-@Profile("prod")
+@Profile("dev")
 @Slf4j
-public class GmailSender implements EmailSender {
+public class DevelopementEmailSender implements EmailSender {
 
     private final JavaMailSender javaMailSender;
 
@@ -23,10 +23,10 @@ public class GmailSender implements EmailSender {
         MimeMessage message = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
-            helper.setFrom("GDGoCTUK운영진"); // service name
-            helper.setTo(to); // customer email
-            helper.setSubject(subject); // email title
-            helper.setText(content, true); // content, html: true
+            helper.setFrom("GDGoCTUK운영진");
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(content, true);
             javaMailSender.send(message);
         } catch (MessagingException e) {
             e.printStackTrace(); // 에러 출력

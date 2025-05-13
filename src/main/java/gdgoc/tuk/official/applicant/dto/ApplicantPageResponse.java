@@ -9,8 +9,8 @@ import lombok.Builder;
 
 import java.util.List;
 
-public record ApplicantPageResponse(int totalPage, int currentPage,
-                                    List<ApplicantInfo> applicants) {
+public record ApplicantPageResponse(
+        int totalPage, int currentPage, List<ApplicantInfo> applicants) {
     @Builder
     public record ApplicantInfo(
             Long applicantId,

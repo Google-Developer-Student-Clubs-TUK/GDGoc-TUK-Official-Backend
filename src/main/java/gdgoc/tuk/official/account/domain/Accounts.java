@@ -1,6 +1,7 @@
 package gdgoc.tuk.official.account.domain;
 
 import gdgoc.tuk.official.global.BaseTimeEntity;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -35,7 +36,7 @@ public class Accounts extends BaseTimeEntity {
         this.role = role;
     }
 
-    public void changeRole(final Role newRole){
+    public void changeRole(final Role newRole) {
         this.role = newRole;
     }
 }

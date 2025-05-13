@@ -19,11 +19,11 @@ public class RecruitmentTimeService {
 
     public Recruitment getOnGoingRecruitment(final LocalDateTime now) {
         return recruitmentRepository
-            .findByBetweenOpenAtAndCloseAt(now)
-            .orElseThrow(
-                () ->
-                    new RecruitmentNotExistException(
-                        ErrorCode.ON_GOING_RECRUITMENT_NOT_FOUND));
+                .findByBetweenOpenAtAndCloseAt(now)
+                .orElseThrow(
+                        () ->
+                                new RecruitmentNotExistException(
+                                        ErrorCode.ON_GOING_RECRUITMENT_NOT_FOUND));
     }
 
     public void checkQuestionModifiable(final LocalDateTime now) {
