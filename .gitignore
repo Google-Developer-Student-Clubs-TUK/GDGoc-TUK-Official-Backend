@@ -54,3 +54,7 @@ gradle.properties
 gdgoc-tuk-official-459705-d42de1a05b2c.json
 credential.json
 tokens/**
+
+### JIB Cache ###
+!build/jib-cache/
+!build/jib-cache/**
