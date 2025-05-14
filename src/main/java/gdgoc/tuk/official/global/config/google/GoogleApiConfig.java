@@ -14,6 +14,7 @@ import com.google.api.services.sheets.v4.SheetsScopes;
 import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.ServiceAccountCredentials;
 
+import java.io.InputStream;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -37,8 +38,9 @@ public class GoogleApiConfig {
     @Bean
     public Sheets sheets() throws GeneralSecurityException, IOException {
         final NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-        return new Sheets.Builder(httpTransport, JSON_FACTORY, new HttpCredentialsAdapter(ServiceAccountCredentials.fromStream(
-            new FileInputStream("src/main/resources/" + credentialsPath))
+        InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream(credentialsPath);
+        return new Sheets.Builder(httpTransport, JSON_FACTORY,
+            new HttpCredentialsAdapter(ServiceAccountCredentials.fromStream(resourceAsStream)
             .createScoped(SheetsScopes.SPREADSHEETS)))
                 .setApplicationName(applicationName)
                 .build();
@@ -47,9 +49,9 @@ public class GoogleApiConfig {
     @Bean
     public Drive drive() throws GeneralSecurityException, IOException {
         final NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+        InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream(credentialsPath);
         return new Drive.Builder(httpTransport, JSON_FACTORY,
-            new HttpCredentialsAdapter(ServiceAccountCredentials.fromStream(
-                new FileInputStream("src/main/resources/" + credentialsPath))
+            new HttpCredentialsAdapter(ServiceAccountCredentials.fromStream(resourceAsStream)
                 .createScoped(List.of(DRIVE,DRIVE_FILE))))
             .setApplicationName(applicationName)
             .build();
