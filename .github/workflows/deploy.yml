@@ -22,9 +22,16 @@ jobs:
       - name: Copy application-prod.yml
         run: echo "${{ secrets.APPLICATION_PROPERTIES }}" > src/main/resources/application-prod.yml
 
-      - name: Copy Google credential.json
-        run: |
-          echo "${{ secrets.GOOGLE_CREDENTIAL_JSON }}"| base64 -d > src/main/resources/credential.json
+#      - name: Copy Google credential.json
+#        run: |
+#          echo "${{ secrets.GOOGLE_CREDENTIAL_JSON }}"| base64 --decode > src/main/resources/credential.json
+      - name: create-json
+        id: create-json
+        uses: jsdaniell/create-json@v1.2.2
+        with:
+          name: "credential.json"
+          json: ${{ secrets.GOOGLE_CREDENTIAL_JSON }}
+          dir: 'src/main/resources/'
 
       - name: Copy gradle.properties
         run: |
