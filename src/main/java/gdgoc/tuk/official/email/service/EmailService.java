@@ -10,7 +10,6 @@ import gdgoc.tuk.official.google.service.EmailSender;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,7 +26,7 @@ public class EmailService {
         emailSender.send(receiverEmail, VerificationCodeMailTemplate.TITLE, mailBody);
     }
 
-    public void sendWelcomMail(final String receiverEmail, final String generation) {
+    public void sendWelcomeMail(final String receiverEmail, final String generation) {
         final String mailBody = WelcomMailTemplate.body(generation);
         final String title = WelcomMailTemplate.title(generation);
         emailSender.send(receiverEmail, title, mailBody);

@@ -63,7 +63,7 @@ public class ApplicantService {
         Accounts accounts = accountRegisterService.createOrFindAccount(applicant, request.role());
         generationMemberService.createGenerationMember(applicant, accounts);
         applicant.approve();
-        emailService.sendWelcomMail(accounts.getEmail(), applicant.getGeneration());
+        emailService.sendWelcomeMail(accounts.getEmail(), applicant.getGeneration());
     }
 
     @Transactional
