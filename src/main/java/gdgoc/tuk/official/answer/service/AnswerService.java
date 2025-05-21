@@ -12,7 +12,7 @@ import gdgoc.tuk.official.applicant.service.ApplicantValidator;
 import gdgoc.tuk.official.global.ErrorCode;
 import gdgoc.tuk.official.google.service.SpreadSheetsService;
 import gdgoc.tuk.official.recruitment.domain.Recruitment;
-import gdgoc.tuk.official.recruitment.service.RecruitmentTimeService;
+import gdgoc.tuk.official.recruitment.service.RecruitmentService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,12 +31,12 @@ public class AnswerService {
     private final ApplicantService applicantService;
     private final ApplicantValidator applicantValidator;
     private final AnswerRepository answerRepository;
-    private final RecruitmentTimeService recruitmentTimeService;
+    private final RecruitmentService recruitmentService;
 
     @Transactional
     public void apply(final AnswerListRequest request) {
-        checkDuplicatedAnswer(request);
-        Recruitment recruitment = recruitmentTimeService.getOnGoingRecruitment(LocalDateTime.now());
+        validateDuplicatedAnswer(request);
+        Recruitment recruitment = recruitmentService.getOnGoingRecruitment(LocalDateTime.now());
         final List<Object> spreadSheetContent = extractAnswersForSpreadSheets(request);
         spreadSheetsService.write(
                 recruitment.getSpreadSheetsId(),
@@ -57,7 +57,7 @@ public class AnswerService {
         return new AnswerResponse(answer.getQuestionAndAnswer());
     }
 
-    private void checkDuplicatedAnswer(final AnswerListRequest request) {
+    private void validateDuplicatedAnswer(final AnswerListRequest request) {
         boolean alreadyApplied =
                 applicantValidator.isAlreadyApplied(request.memberProfile().email());
         if (alreadyApplied) {

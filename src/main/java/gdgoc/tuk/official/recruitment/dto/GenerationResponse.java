@@ -1,5 +1,5 @@
 package gdgoc.tuk.official.recruitment.dto;
 
-import java.util.List;
+import java.util.Set;
 
-public record GenerationResponse(List<String> generations) {}
+public record GenerationResponse(Set<String> generations) {}

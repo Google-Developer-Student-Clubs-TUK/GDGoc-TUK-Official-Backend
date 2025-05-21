@@ -22,10 +22,12 @@ import lombok.RequiredArgsConstructor;
 import net.datafaker.Faker;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Profile("!test")
 public class MemberGenerator implements CommandLineRunner {
 
     private final AccountRepository accountRepository;

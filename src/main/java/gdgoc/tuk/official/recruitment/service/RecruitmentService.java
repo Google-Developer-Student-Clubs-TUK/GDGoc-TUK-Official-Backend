@@ -9,8 +9,11 @@ import gdgoc.tuk.official.recruitment.dto.GenerationResponse;
 import gdgoc.tuk.official.recruitment.dto.RecruitmentOpenRequest;
 import gdgoc.tuk.official.recruitment.dto.RecruitmentStatusResponse;
 import gdgoc.tuk.official.recruitment.exception.RecruitmentDuplicationException;
+import gdgoc.tuk.official.recruitment.exception.RecruitmentNotExistException;
 import gdgoc.tuk.official.recruitment.repository.RecruitmentRepository;
 
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +36,7 @@ public class RecruitmentService {
 
     @Transactional
     public void openRecruitment(final RecruitmentOpenRequest request) {
-        checkOnGoingRecruitment();
+        validateNoOngoingRecruitment();
         spreadSheetsPrimaryKeyRepository.saveNewGeneration(request.generation());
         final String spreadSheetsId =
                 spreadSheetsInitializer.init(
@@ -54,7 +57,16 @@ public class RecruitmentService {
                 .orElseGet(() -> new RecruitmentStatusResponse(false));
     }
 
-    private void checkOnGoingRecruitment() {
+    public Recruitment getOnGoingRecruitment(final LocalDateTime now) {
+        return recruitmentRepository
+            .findByBetweenOpenAtAndCloseAt(now)
+            .orElseThrow(
+                () ->
+                    new RecruitmentNotExistException(
+                        ErrorCode.ON_GOING_RECRUITMENT_NOT_FOUND));
+    }
+
+    private void validateNoOngoingRecruitment() {
         LocalDateTime currentTime = LocalDateTime.now();
         if (recruitmentRepository.existsByCloseAtIsAfter(currentTime)) {
             throw new RecruitmentDuplicationException(ErrorCode.RECRUITMENT_ALREADY_EXIST);
@@ -62,10 +74,10 @@ public class RecruitmentService {
     }
 
     public GenerationResponse getGenerations() {
-        List<String> generations =
+        Set<String> generations =
                 recruitmentRepository.findGenerationByLocalTime(LocalDateTime.now()).stream()
                         .map(Recruitment::getGeneration)
-                        .toList();
+                        .collect(Collectors.toSet());
         return new GenerationResponse(generations);
     }
 }

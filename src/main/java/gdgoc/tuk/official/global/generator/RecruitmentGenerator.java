@@ -6,12 +6,14 @@ import gdgoc.tuk.official.recruitment.repository.RecruitmentRepository;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
 @RequiredArgsConstructor
+@Profile("!test")
 public class RecruitmentGenerator implements CommandLineRunner {
 
     private final RecruitmentRepository recruitmentRepository;

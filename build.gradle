@@ -65,6 +65,9 @@ dependencies {
 
 	// Data Faker
 	implementation 'net.datafaker:datafaker:2.4.3'
+
+	// h2
+	runtimeOnly 'com.h2database:h2'
 }
 
 jib {

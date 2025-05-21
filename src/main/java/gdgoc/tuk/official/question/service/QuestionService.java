@@ -17,7 +17,7 @@ import gdgoc.tuk.official.question.repository.QuestionRepository;
 import gdgoc.tuk.official.question.service.mapper.QuestionMapper;
 import gdgoc.tuk.official.questionorder.domain.QuestionOrders;
 import gdgoc.tuk.official.questionorder.repository.QuestionOrderRepository;
-import gdgoc.tuk.official.recruitment.service.RecruitmentTimeService;
+import gdgoc.tuk.official.recruitment.service.RecruitmentValidator;
 
 import lombok.RequiredArgsConstructor;
 
@@ -37,7 +37,7 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
     private final QuestionMapper questionMapper;
     private final QuestionOrderRepository questionOrderRepository;
-    private final RecruitmentTimeService recruitmentTimeService;
+    private final RecruitmentValidator recruitmentValidator;
 
     public QuestionPageResponse findAllQuestionsAndSubQuestionsWithOrder() {
         List<Question> questions = questionRepository.findAllFetchSubQuestion();
@@ -58,7 +58,7 @@ public class QuestionService {
 
     @Transactional
     public void saveAndModifyQuestions(final QuestionUpdateRequest request) {
-        recruitmentTimeService.checkQuestionModifiable(LocalDateTime.now());
+        recruitmentValidator.validateQuestionModifiable(LocalDateTime.now());
         Map<Long, Integer> newOrderMap = saveQuestions(request);
         modifyQuestion(request);
         if (!newOrderMap.isEmpty()) {

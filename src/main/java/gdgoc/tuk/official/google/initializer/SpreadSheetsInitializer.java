@@ -1,7 +1,5 @@
 package gdgoc.tuk.official.google.initializer;
 
-import com.google.api.client.googleapis.json.GoogleJsonError;
-import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.Permission;
 import com.google.api.services.sheets.v4.Sheets;
@@ -15,8 +13,6 @@ import com.google.api.services.sheets.v4.model.SetBasicFilterRequest;
 import com.google.api.services.sheets.v4.model.Spreadsheet;
 import com.google.api.services.sheets.v4.model.SpreadsheetProperties;
 import com.google.api.services.sheets.v4.model.UpdateBordersRequest;
-import com.google.api.services.sheets.v4.model.UpdateValuesResponse;
-import com.google.api.services.sheets.v4.model.ValueRange;
 
 import gdgoc.tuk.official.global.ErrorCode;
 import gdgoc.tuk.official.google.exception.SheetsCreationException;
@@ -39,12 +35,11 @@ public class SpreadSheetsInitializer {
 
     private static final String SPREAD_SHEET_TITLE = "GDGOC-TUK %s년도 지원자 응답";
     private static final int INITIAL_SHEET_ID = 0;
-    private static final String POSITION = "Sheet1!1:1";
     @Value("${google.leader-gmail}")
-    private String LEADER_GMAIL;
+    private static String LEADER_GMAIL;
     private final Sheets sheetsClient;
-    private final SpreadSheetsService spreadSheetsService;
     private final Drive driveClient;
+    private final SpreadSheetsService spreadSheetsService;
 
     private Border getBorder() {
         return new Border()
@@ -130,29 +125,5 @@ public class SpreadSheetsInitializer {
         } catch (IOException e) {
             log.error("Bottom Border Creation Error : {}", e.getLocalizedMessage());
         }
-    }
-
-    private UpdateValuesResponse setUpQuestions(String spreadsheetId, List<List<Object>> values) {
-        UpdateValuesResponse result = null;
-        try {
-            // Updates the values in the specified range.
-            ValueRange body = new ValueRange().setValues(values).setMajorDimension("ROWS");
-            result =
-                    sheetsClient
-                            .spreadsheets()
-                            .values()
-                            .update(spreadsheetId, POSITION, body)
-                            .setValueInputOption("USER_ENTERED")
-                            .execute();
-            log.info("%d cells updated.", result.getUpdatedCells());
-        } catch (GoogleJsonResponseException e) {
-            GoogleJsonError error = e.getDetails();
-            if (error.getCode() == 404) {
-                log.error("Spreadsheet not found with questionId '%s'.\n", spreadsheetId);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return result;
     }
 }

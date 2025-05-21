@@ -2,7 +2,6 @@ package gdgoc.tuk.official.global.config.google;
 
 import static com.google.api.services.sheets.v4.SheetsScopes.DRIVE;
 import static com.google.api.services.sheets.v4.SheetsScopes.DRIVE_FILE;
-import static com.google.api.services.sheets.v4.SheetsScopes.all;
 
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
@@ -14,17 +13,18 @@ import com.google.api.services.sheets.v4.SheetsScopes;
 import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.ServiceAccountCredentials;
 
-import java.io.InputStream;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.GeneralSecurityException;
+import java.util.List;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
+@Profile("!test")
 public class GoogleApiConfig {
 
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();

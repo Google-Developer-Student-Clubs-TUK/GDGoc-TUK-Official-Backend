@@ -21,7 +21,6 @@ import java.util.concurrent.locks.ReentrantLock;
 @RequiredArgsConstructor
 public class SpreadSheetsService {
 
-    // TODO : POSITION 이 Initializer와 분산돼 있음
     private static final String POSITION = "Sheet1!%s:%s";
     private final Sheets sheetsClient;
     private final ReentrantLock reentrantLock = new ReentrantLock();
