@@ -39,7 +39,7 @@ public class AnswerService {
         Recruitment recruitment = recruitmentService.getOnGoingRecruitment(LocalDateTime.now());
         final List<Object> spreadSheetContent = extractAnswersForSpreadSheets(request);
         spreadSheetsService.write(
-                recruitment.getSpreadSheetsId(),
+                recruitment.getSpreadSheetId(),
                 List.of(spreadSheetContent),
                 recruitment.getGeneration());
         Applicant applicant =

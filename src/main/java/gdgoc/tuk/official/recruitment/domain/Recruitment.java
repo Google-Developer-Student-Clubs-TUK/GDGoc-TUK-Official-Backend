@@ -24,25 +24,27 @@ public class Recruitment {
     private Long id;
 
     private String generation;
-    private String spreadSheetsId;
+    private String spreadSheetId;
+    private String spreadSheetUrl;
     private LocalDateTime openAt;
     private LocalDateTime closeAt;
 
     public Recruitment(
             final String generation,
-            final String spreadSheetsId,
+            final String spreadSheetId, String spreadSheetUrl,
             final LocalDateTime openAt,
             final LocalDateTime closeAt) {
+        this.spreadSheetUrl = spreadSheetUrl;
         validateGeneration(generation);
         this.generation = generation;
-        this.spreadSheetsId = spreadSheetsId;
+        this.spreadSheetId = spreadSheetId;
         this.openAt = openAt;
         this.closeAt = closeAt;
     }
 
     public Recruitment(final String generation) {
         this.generation = generation;
-        this.spreadSheetsId = "spreadSheetsId";
+        this.spreadSheetId = "spreadSheetId";
         this.openAt = LocalDateTime.now().minusDays(5);
         this.closeAt = LocalDateTime.now().minusDays(5);
     }

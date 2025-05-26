@@ -18,6 +18,9 @@ import gdgoc.tuk.official.global.ErrorCode;
 import gdgoc.tuk.official.google.exception.SheetsCreationException;
 import gdgoc.tuk.official.google.service.SpreadSheetsService;
 
+import gdgoc.tuk.official.recruitment.domain.Recruitment;
+import gdgoc.tuk.official.recruitment.dto.SpreadSheetInformation;
+import gdgoc.tuk.official.recruitment.repository.RecruitmentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,10 +39,12 @@ public class SpreadSheetsInitializer {
     private static final String SPREAD_SHEET_TITLE = "GDGOC-TUK %s년도 지원자 응답";
     private static final int INITIAL_SHEET_ID = 0;
     @Value("${google.leader-gmail}")
-    private static String LEADER_GMAIL;
+    private String LEADER_GMAIL;
     private final Sheets sheetsClient;
     private final Drive driveClient;
     private final SpreadSheetsService spreadSheetsService;
+    private final RecruitmentRepository recruitmentRepository;
+
 
     private Border getBorder() {
         return new Border()
@@ -78,7 +83,7 @@ public class SpreadSheetsInitializer {
         }
     }
 
-    public String init(final String generation, final List<List<Object>> questions) {
+    public SpreadSheetInformation init(final String generation, final List<List<Object>> questions) {
         final Spreadsheet spreadsheet =
                 new Spreadsheet()
                         .setProperties(
@@ -89,7 +94,7 @@ public class SpreadSheetsInitializer {
         spreadSheetsService.write(spreadsheetId, questions, generation);
         setHeaderBottomBorder(spreadsheetId);
         setHeaderRow(spreadsheetId);
-        return spreadsheetId;
+        return new SpreadSheetInformation(spreadsheetId,result.getSpreadsheetUrl());
     }
 
     private Spreadsheet createSpreadSheets(final Spreadsheet spreadsheet) {
@@ -99,8 +104,7 @@ public class SpreadSheetsInitializer {
             Permission permission = new Permission();
             permission.setType("user").setRole("writer").setEmailAddress(LEADER_GMAIL);
             driveClient.permissions().create(result.getSpreadsheetId(),permission).setFields("id").execute();
-            permission.setType("user").setRole("reader").setEmailAddress(LEADER_GMAIL);
-            driveClient.permissions().create(result.getSpreadsheetId(),permission).setFields("id").execute();
+
             log.info("createSpreadSheets:{}",result);
         } catch (IOException e) {
             log.error(e.getLocalizedMessage());

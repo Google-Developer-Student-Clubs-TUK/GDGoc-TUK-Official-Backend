@@ -8,6 +8,7 @@ import gdgoc.tuk.official.recruitment.domain.Recruitment;
 import gdgoc.tuk.official.recruitment.dto.GenerationResponse;
 import gdgoc.tuk.official.recruitment.dto.RecruitmentOpenRequest;
 import gdgoc.tuk.official.recruitment.dto.RecruitmentStatusResponse;
+import gdgoc.tuk.official.recruitment.dto.SpreadSheetInformation;
 import gdgoc.tuk.official.recruitment.exception.RecruitmentDuplicationException;
 import gdgoc.tuk.official.recruitment.exception.RecruitmentNotExistException;
 import gdgoc.tuk.official.recruitment.repository.RecruitmentRepository;
@@ -38,14 +39,18 @@ public class RecruitmentService {
     public void openRecruitment(final RecruitmentOpenRequest request) {
         validateNoOngoingRecruitment();
         spreadSheetsPrimaryKeyRepository.saveNewGeneration(request.generation());
-        final String spreadSheetsId =
+        final SpreadSheetInformation spreadSheetInformation =
                 spreadSheetsInitializer.init(
                         request.generation(),
                         spreadSheetsQuestionService.getSpreadSheetQuestions());
-        log.info("openRecruitment sheets id : {}",spreadSheetsId);
+        log.info("openRecruitment sheets id : {}", spreadSheetInformation.spreadSheetId());
         final Recruitment recruitment =
                 new Recruitment(
-                        request.generation(), spreadSheetsId, request.openAt(), request.closeAt());
+                        request.generation(),
+                        spreadSheetInformation.spreadSheetId(),
+                        spreadSheetInformation.spreadSheetUrl(),
+                        request.openAt(),
+                        request.closeAt());
         recruitmentRepository.save(recruitment);
     }
 
@@ -59,11 +64,11 @@ public class RecruitmentService {
 
     public Recruitment getOnGoingRecruitment(final LocalDateTime now) {
         return recruitmentRepository
-            .findByBetweenOpenAtAndCloseAt(now)
-            .orElseThrow(
-                () ->
-                    new RecruitmentNotExistException(
-                        ErrorCode.ON_GOING_RECRUITMENT_NOT_FOUND));
+                .findByBetweenOpenAtAndCloseAt(now)
+                .orElseThrow(
+                        () ->
+                                new RecruitmentNotExistException(
+                                        ErrorCode.ON_GOING_RECRUITMENT_NOT_FOUND));
     }
 
     private void validateNoOngoingRecruitment() {

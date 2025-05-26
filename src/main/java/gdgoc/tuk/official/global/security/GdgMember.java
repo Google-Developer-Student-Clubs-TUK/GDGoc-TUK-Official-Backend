@@ -12,6 +12,10 @@ import org.springframework.security.core.userdetails.User;
 public class GdgMember extends User {
     private final GenerationMember generationMember;
 
+    public String getRole(){
+        return generationMember.getRole().name();
+    }
+
     public GdgMember(final Accounts accounts, final GenerationMember generationMember) {
         super(
                 accounts.getEmail(),

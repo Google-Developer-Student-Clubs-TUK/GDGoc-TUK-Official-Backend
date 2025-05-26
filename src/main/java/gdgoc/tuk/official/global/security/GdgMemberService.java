@@ -10,6 +10,7 @@ import gdgoc.tuk.official.global.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,25 +18,24 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class GdgMemberService implements UserDetailsService {
     private final AccountRepository accountRepository;
     private final GenerationMemberRepository generationMemberRepository;
 
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-        // TODO: 필터에서 예외 잡아라
         final Accounts accounts =
                 accountRepository
                         .findByEmail(username)
-                        .orElseThrow(
-                                () -> new AccountNotFoundException(ErrorCode.ACCOUNT_NOT_FOUND));
+                        .orElseThrow(() -> new UsernameNotFoundException("계정을 찾을 수 없습니다."));
         GenerationMember generationMember =
                 generationMemberRepository
                         .findTopByAccountsOrderByCreatedAt(accounts)
                         .orElseThrow(
                                 () ->
                                         new GenerationMemberNotFoundException(
-                                                ErrorCode.QUESTION_NOT_FOUND));
+                                                ErrorCode.GENERATION_MEMBER_NOT_FOUND));
         return new GdgMember(accounts, generationMember);
     }
 }

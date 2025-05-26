@@ -29,6 +29,7 @@ public enum ErrorCode {
     /** Accounts Error Code 400 ~ 499 */
     ACCOUNT_NOT_FOUND(HttpStatus.NOT_FOUND, "400", "계정을 찾을 수 없습니다."),
     DUPLICATED_ACCOUNT(HttpStatus.BAD_REQUEST, "401", "중복된 계정 가입입니다."),
+    PASSWORD_NOT_MATCH(HttpStatus.BAD_REQUEST,"402","비밀번호가 다릅니다"),
 
     /** Applicant Error Code 500 ~ 599 */
     NOT_ACCEPTED_APPLICANT(HttpStatus.BAD_REQUEST, "500", "합격 대상자가 아닙니다."),

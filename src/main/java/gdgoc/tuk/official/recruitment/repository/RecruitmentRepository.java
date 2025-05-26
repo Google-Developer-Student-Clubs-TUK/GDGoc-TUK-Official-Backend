@@ -13,8 +13,6 @@ import java.util.Optional;
 @Repository
 public interface RecruitmentRepository extends JpaRepository<Recruitment, Long> {
 
-    boolean existsByGeneration(String generation);
-
     boolean existsByCloseAtIsAfter(LocalDateTime now);
 
     @Query("select r from Recruitment r where :now BETWEEN r.openAt and r.closeAt")

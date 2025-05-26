@@ -45,6 +45,7 @@ public class GenerationMember extends BaseTimeEntity {
 
     private String major;
     private String generation;
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @Builder
