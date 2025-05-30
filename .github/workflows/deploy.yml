@@ -13,6 +13,9 @@ jobs:
       - name: Load code from GitHub repository
         uses: actions/checkout@v4
 
+      - name: Check jib-cache folder existence
+        run: ls -la official/build/jib-cache || echo "jib-cache 폴더 없음"
+
       - name: Install JDK 17
         uses: actions/setup-java@v4
         with:
@@ -22,9 +25,6 @@ jobs:
       - name: Copy application-prod.yml
         run: echo "${{ secrets.APPLICATION_PROPERTIES }}" > src/main/resources/application-prod.yml
 
-#      - name: Copy Google credential.json
-#        run: |
-#          echo "${{ secrets.GOOGLE_CREDENTIAL_JSON }}"| base64 --decode > src/main/resources/credential.json
       - name: create-json
         id: create-json
         uses: jsdaniell/create-json@v1.2.2
