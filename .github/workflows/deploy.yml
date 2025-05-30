@@ -14,7 +14,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Check jib-cache folder existence
-        run: ls -la official/build/jib-cache || echo "jib-cache 폴더 없음"
+        run: ls
 
       - name: Install JDK 17
         uses: actions/setup-java@v4
