@@ -1,6 +1,7 @@
 package gdgoc.tuk.official.recruitment.controller;
 
 import gdgoc.tuk.official.recruitment.dto.GenerationResponse;
+import gdgoc.tuk.official.recruitment.dto.OpenRecruitmentResponse;
 import gdgoc.tuk.official.recruitment.dto.RecruitmentOpenRequest;
 import gdgoc.tuk.official.recruitment.dto.RecruitmentStatusResponse;
 import gdgoc.tuk.official.recruitment.service.RecruitmentService;
@@ -30,8 +31,8 @@ public class RecruitmentController {
     @PostMapping
     //    @PreAuthorize("hasRole('LEADER')")
     @Operation(summary = "모집 시작", description = "리더 전용 API로 모집을 시작하는 API입니다.")
-    public void openRecruitment(@Valid @RequestBody final RecruitmentOpenRequest request) {
-        recruitmentService.openRecruitment(request);
+    public OpenRecruitmentResponse openRecruitment(@Valid @RequestBody final RecruitmentOpenRequest request) {
+        return recruitmentService.openRecruitment(request);
     }
 
     @GetMapping("/generations")

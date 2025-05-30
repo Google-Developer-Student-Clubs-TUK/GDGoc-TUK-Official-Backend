@@ -6,6 +6,7 @@ import gdgoc.tuk.official.google.initializer.SpreadSheetsInitializer;
 import gdgoc.tuk.official.google.service.SpreadSheetsQuestionService;
 import gdgoc.tuk.official.recruitment.domain.Recruitment;
 import gdgoc.tuk.official.recruitment.dto.GenerationResponse;
+import gdgoc.tuk.official.recruitment.dto.OpenRecruitmentResponse;
 import gdgoc.tuk.official.recruitment.dto.RecruitmentOpenRequest;
 import gdgoc.tuk.official.recruitment.dto.RecruitmentStatusResponse;
 import gdgoc.tuk.official.recruitment.dto.SpreadSheetInformation;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.apache.bcel.classfile.Module.Open;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +38,7 @@ public class RecruitmentService {
     private final SpreadSheetsQuestionService spreadSheetsQuestionService;
 
     @Transactional
-    public void openRecruitment(final RecruitmentOpenRequest request) {
+    public OpenRecruitmentResponse openRecruitment(final RecruitmentOpenRequest request) {
         validateNoOngoingRecruitment();
         spreadSheetsPrimaryKeyRepository.saveNewGeneration(request.generation());
         final SpreadSheetInformation spreadSheetInformation =
@@ -52,6 +54,9 @@ public class RecruitmentService {
                         request.openAt(),
                         request.closeAt());
         recruitmentRepository.save(recruitment);
+        return new OpenRecruitmentResponse(spreadSheetInformation.spreadSheetUrl(),
+            spreadSheetInformation.spreadSheetId()
+            ,request.generation());
     }
 
     public RecruitmentStatusResponse getRecruitmentStatus() {
