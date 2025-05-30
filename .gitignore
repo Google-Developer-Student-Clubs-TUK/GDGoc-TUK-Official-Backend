@@ -1,6 +1,5 @@
 HELP.md
 .gradle
-build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
@@ -56,5 +55,6 @@ credential.json
 tokens/**
 
 ### JIB Cache ###
+build/*
 !build/jib-cache/
 !build/jib-cache/**

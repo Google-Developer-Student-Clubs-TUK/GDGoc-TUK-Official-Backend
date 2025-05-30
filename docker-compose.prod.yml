@@ -11,7 +11,7 @@ services:
     restart: always
     tty: true
     environment:
-      SPRING_PROFILES_ACTIVE: prod
+      SPRING_PROFILES_ACTIVE: production
 
   redis:
     image: redis:latest
