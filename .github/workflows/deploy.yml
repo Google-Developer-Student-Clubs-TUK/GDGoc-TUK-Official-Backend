@@ -13,9 +13,6 @@ jobs:
       - name: Load code from GitHub repository
         uses: actions/checkout@v4
 
-      - name: Check jib-cache folder existence
-        run: ls
-
       - name: Install JDK 17
         uses: actions/setup-java@v4
         with:
@@ -40,7 +37,7 @@ jobs:
       - name: Cache Jib layers
         uses: actions/cache@v3
         with:
-          path: ./official/build/jib-cache
+          path: ./build/jib-cache
           key: ${{ runner.os }}-jib-${{ github.job }}-${{ hashFiles('**/build.gradle') }}
           restore-keys: ${{ runner.os }}-jib-${{ github.job }}
 
