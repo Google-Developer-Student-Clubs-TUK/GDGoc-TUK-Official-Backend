@@ -45,7 +45,7 @@ class QuestionServiceTest {
     void setUpQuestion(){
         LocalDateTime now = LocalDateTime.now();
         String generation = String.valueOf(now.getYear());
-        recruitmentRepository.save(new Recruitment(generation,"id",now,now.plusDays(4)));
+        recruitmentRepository.save(new Recruitment(generation,"url","id",now,now.plusDays(4)));
 
         Question question1 = new Question("질문1", QuestionType.SHORT_TEXT, 0, true, true);
         Question question2 = new Question("질문2", QuestionType.SHORT_TEXT, 0, true, true);

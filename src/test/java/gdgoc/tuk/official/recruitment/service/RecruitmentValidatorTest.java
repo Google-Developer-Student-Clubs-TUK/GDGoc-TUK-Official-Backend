@@ -33,7 +33,7 @@ class RecruitmentValidatorTest {
     void throwIfModifyQuestionsDuringRecruiting() {
         // given
         LocalDateTime now = LocalDateTime.now();
-        Recruitment closedRecruitment = new Recruitment("2025", "fakeId", now, now.plusDays(5L));
+        Recruitment closedRecruitment = new Recruitment("2025","url" ,"fakeId", now, now.plusDays(5L));
         recruitmentRepository.save(closedRecruitment);
         // when & then
         assertThatThrownBy(() -> recruitmentValidator.validateQuestionModifiable(now))
@@ -45,7 +45,7 @@ class RecruitmentValidatorTest {
     void doesNotThrowIfModificationAllowed() {
         // given
         LocalDateTime now = LocalDateTime.now();
-        Recruitment closedRecruitment = new Recruitment("2025", "fakeId", now.minusDays(5L), now.minusDays(1L));
+        Recruitment closedRecruitment = new Recruitment("2025","url", "fakeId", now.minusDays(5L), now.minusDays(1L));
         recruitmentRepository.save(closedRecruitment);
         // when & then
         assertThatCode(() -> recruitmentValidator.validateQuestionModifiable(now)).doesNotThrowAnyException();

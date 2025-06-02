@@ -1,6 +1,7 @@
 package gdgoc.tuk.official.global.security;
 
 import gdgoc.tuk.official.account.domain.Accounts;
+import gdgoc.tuk.official.account.domain.Role;
 import gdgoc.tuk.official.account.exception.AccountNotFoundException;
 import gdgoc.tuk.official.account.repository.AccountRepository;
 import gdgoc.tuk.official.generationmember.domain.GenerationMember;

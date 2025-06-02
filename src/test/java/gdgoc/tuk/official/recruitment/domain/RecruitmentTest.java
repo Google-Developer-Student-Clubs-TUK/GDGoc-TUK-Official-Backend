@@ -20,7 +20,7 @@ class RecruitmentTest {
         LocalDateTime openAt = LocalDateTime.now();
         LocalDateTime closeAt = openAt.plusDays(10);
         // when & then
-        Assertions.assertThatCode(()->new Recruitment(currentYear,spreadSheetsId,openAt,closeAt)).doesNotThrowAnyException();
+        Assertions.assertThatCode(()->new Recruitment(currentYear,"url",spreadSheetsId,openAt,closeAt)).doesNotThrowAnyException();
     }
 
     @Test
@@ -32,7 +32,7 @@ class RecruitmentTest {
         LocalDateTime openAt = LocalDateTime.now();
         LocalDateTime closeAt = openAt.plusDays(10);
         // when & then
-        Assertions.assertThatCode(()->new Recruitment(currentYear,spreadSheetsId,openAt,closeAt)).doesNotThrowAnyException();
+        Assertions.assertThatCode(()->new Recruitment(currentYear,"url",spreadSheetsId,openAt,closeAt)).doesNotThrowAnyException();
     }
 
     @Test
@@ -44,7 +44,7 @@ class RecruitmentTest {
         LocalDateTime openAt = LocalDateTime.now();
         LocalDateTime closeAt = openAt.plusDays(10);
         // when & then
-        Assertions.assertThatCode(()->new Recruitment(currentYear,spreadSheetsId,openAt,closeAt)).isInstanceOf(
+        Assertions.assertThatCode(()->new Recruitment(currentYear,"url",spreadSheetsId,openAt,closeAt)).isInstanceOf(
             InvalidGenerationException.class);
     }
 
@@ -57,7 +57,7 @@ class RecruitmentTest {
         LocalDateTime openAt = LocalDateTime.now();
         LocalDateTime closeAt = openAt.plusDays(10);
         // when & then
-        Assertions.assertThatCode(()->new Recruitment(currentYear,spreadSheetsId,openAt,closeAt)).isInstanceOf(
+        Assertions.assertThatCode(()->new Recruitment(currentYear,"url",spreadSheetsId,openAt,closeAt)).isInstanceOf(
             InvalidGenerationException.class);
     }
 }

@@ -23,6 +23,7 @@ import net.datafaker.Faker;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -35,6 +36,7 @@ public class MemberGenerator implements CommandLineRunner {
     private final ApplicantRepository applicantRepository;
     private final AnswerRepository answerRepository;
     private final ObjectMapper objectMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(final String... args) throws Exception {
@@ -79,6 +81,24 @@ public class MemberGenerator implements CommandLineRunner {
             String s = objectMapper.writeValueAsString(new ApplicantAnswer());
             answerRepository.save(new Answer(s, save));
         }
+        generateLeaderAccount();
+    }
+
+    private void generateLeaderAccount() {
+        Accounts save = accountRepository.save(new Accounts("gdgoctuk@gmail.com", passwordEncoder.encode("gdgoc0205"),
+            Role.ROLE_LEADER));
+        generationMemberRepository.save(
+            new GenerationMember(
+                save,
+                "GDGoC TUK Leader",
+                "0000000000",
+                null,
+                null,
+                null,
+                null,
+                null,
+                "0000",
+                save.getRole()));
     }
 
     @Getter

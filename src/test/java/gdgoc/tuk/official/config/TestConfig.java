@@ -24,8 +24,8 @@ public class TestConfig {
         return Mockito.mock(Drive.class);
     }
 
-    @Bean
-    public EmailSender emailSender(){
-        return new TestEmailSender();
-    }
+//    @Bean
+//    public EmailSender emailSender(){
+//        return new TestEmailSender();
+//    }
 }

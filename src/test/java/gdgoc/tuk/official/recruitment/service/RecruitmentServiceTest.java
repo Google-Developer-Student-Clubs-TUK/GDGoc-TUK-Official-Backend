@@ -145,7 +145,7 @@ class RecruitmentServiceTest {
     void throwIfOnGoingRecruitmentNotExist() {
         // given
         LocalDateTime now = LocalDateTime.now();
-        Recruitment closedRecruitment = new Recruitment("2025", "fakeId", now.minusDays(10L), now.minusDays(5L));
+        Recruitment closedRecruitment = new Recruitment("2025","url", "fakeId", now.minusDays(10L), now.minusDays(5L));
         recruitmentRepository.save(closedRecruitment);
         // when & then
         assertThatThrownBy(() -> recruitmentService.getOnGoingRecruitment(now))
@@ -158,7 +158,7 @@ class RecruitmentServiceTest {
         // given
         String generation = "2025";
         LocalDateTime now = LocalDateTime.now();
-        Recruitment onGoingRecruitment = new Recruitment(generation, "fakeId", now, now.plusDays(5L));
+        Recruitment onGoingRecruitment = new Recruitment(generation,"url", "fakeId", now, now.plusDays(5L));
         recruitmentRepository.save(onGoingRecruitment);
         // when
         Recruitment savedOnGoingRecruitment = recruitmentService.getOnGoingRecruitment(now());
