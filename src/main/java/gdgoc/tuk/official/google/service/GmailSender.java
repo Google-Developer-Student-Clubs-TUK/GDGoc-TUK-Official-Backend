@@ -22,6 +22,7 @@ public class GmailSender implements EmailSender {
     private final JavaMailSender javaMailSender;
 
     @Async
+    @Override
     public void send(String to, String subject, String content) {
         MimeMessage message = javaMailSender.createMimeMessage();
         try {
