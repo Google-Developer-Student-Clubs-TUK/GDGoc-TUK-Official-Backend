@@ -1,29 +1,37 @@
 import http from "k6/http";
-import { sleep } from "k6";
+import { check, sleep } from "k6";
 
 export const options = {
   scenarios: {
-    periodic_burst: {
-      executor: "ramping-arrival-rate",
-      startRate: 1,
-      timeUnit: "1s",
-      preAllocatedVUs: 50,
-      stages: [
-        { target: 2, duration: "60s" }, // warmup low RPS
-        { target: 0, duration: "65s" }, // idle → 스레드 제거
-        { target: 5, duration: "60s" }, // 재생성 (2nd wave)
-        { target: 0, duration: "65s" }, // 또 idle
-        { target: 5, duration: "60s" }, // 3rd wave
-        { target: 0, duration: "65s" },
-        { target: 5, duration: "60s" },
-        { target: 0, duration: "65s" },
-      ],
+    batch1: {
+      executor: "per-vu-iterations",
+      vus: 20,
+      iterations: 1,
+      startTime: "0s",
+      exec: "sendEmail",
+    },
+    batch2: {
+      executor: "per-vu-iterations",
+      vus: 20,
+      iterations: 1,
+      startTime: "5s",
+      exec: "sendEmail",
+    },
+    batch3: {
+      executor: "per-vu-iterations",
+      vus: 20,
+      iterations: 1,
+      startTime: "10s",
+      exec: "sendEmail",
     },
   },
 };
 
-export default function () {
-  const payload = JSON.stringify({ email: "haechansong8@gmail.com" });
+export function sendEmail() {
+  const url = "https://gdgoctuk.com/api/emails"; // 실제 API 주소
+  const payload = JSON.stringify({
+    email: "haechansong8@gmail.com",
+  });
 
   const params = {
     headers: {
@@ -31,5 +39,8 @@ export default function () {
     },
   };
 
-  http.post("https://gdgoctuk.com/api/emails", payload, params);
+  const res = http.post(url, payload, params);
+  check(res, {
+    "status is 200": (r) => r.status === 200,
+  });
 }

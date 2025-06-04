@@ -32,9 +32,9 @@ public class GmailSender implements EmailSender {
             helper.setText(content, true);
             javaMailSender.send(message);
         } catch (MessagingException e) {
-            log.error("MessagingException : {}", e);
+            log.error("MessagingException : {}", e.getLocalizedMessage());
         } catch (RuntimeException e) {
-            log.error("Runtime Exception : {}", e);
+            log.error("Runtime Exception : {}", e.getLocalizedMessage());
         }
 //        try {
 //            log.debug("[MOCK EMAIL START] to={}", to);
