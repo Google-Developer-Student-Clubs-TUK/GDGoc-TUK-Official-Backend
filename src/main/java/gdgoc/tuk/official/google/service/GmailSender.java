@@ -1,6 +1,7 @@
 package gdgoc.tuk.official.google.service;
 
 
+import io.github.bucket4j.Bucket;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +20,16 @@ import org.springframework.stereotype.Service;
 public class GmailSender implements EmailSender {
 
     private final JavaMailSender javaMailSender;
+    private final Bucket bucket;
 
     @Async
     @Override
     public void send(String to, String subject, String content) {
+        try{
+            bucket.asBlocking().consume(1);
+        }catch (InterruptedException e){
+            log.info("InterruptedException : {}",e.getLocalizedMessage());
+        }
         MimeMessage message = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");

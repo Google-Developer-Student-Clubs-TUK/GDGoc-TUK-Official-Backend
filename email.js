@@ -5,21 +5,21 @@ export const options = {
   scenarios: {
     batch1: {
       executor: "per-vu-iterations",
-      vus: 20,
+      vus: 10,
       iterations: 1,
       startTime: "0s",
       exec: "sendEmail",
     },
     batch2: {
       executor: "per-vu-iterations",
-      vus: 20,
+      vus: 10,
       iterations: 1,
       startTime: "5s",
       exec: "sendEmail",
     },
     batch3: {
       executor: "per-vu-iterations",
-      vus: 20,
+      vus: 10,
       iterations: 1,
       startTime: "10s",
       exec: "sendEmail",
@@ -30,7 +30,7 @@ export const options = {
 export function sendEmail() {
   const url = "https://gdgoctuk.com/api/emails"; // 실제 API 주소
   const payload = JSON.stringify({
-    email: "haechansong8@gmail.com",
+    email: "bukak2@tukorea.ac.kr",
   });
 
   const params = {
