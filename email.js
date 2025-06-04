@@ -5,21 +5,21 @@ export const options = {
   scenarios: {
     batch1: {
       executor: "per-vu-iterations",
-      vus: 10,
+      vus: 20,
       iterations: 1,
       startTime: "0s",
       exec: "sendEmail",
     },
     batch2: {
       executor: "per-vu-iterations",
-      vus: 10,
+      vus: 20,
       iterations: 1,
       startTime: "5s",
       exec: "sendEmail",
     },
     batch3: {
       executor: "per-vu-iterations",
-      vus: 10,
+      vus: 20,
       iterations: 1,
       startTime: "10s",
       exec: "sendEmail",
