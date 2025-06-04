@@ -23,16 +23,25 @@ public class LocalMailSender implements EmailSender {
     @Override
     @Async
     public void send(final String to, final String subject, final String content) {
-        MimeMessage message = javaMailSender.createMimeMessage();
+//        MimeMessage message = javaMailSender.createMimeMessage();
+//        try {
+//            MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
+//            helper.setFrom("GDGoCTUK"); // service name
+//            helper.setTo(to); // customer email
+//            helper.setSubject(subject); // email title
+//            helper.setText(content, true); // content, html: true
+//            javaMailSender.send(message);
+//        } catch (MessagingException e) {
+//            e.printStackTrace(); // 에러 출력
+//        }
         try {
-            MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
-            helper.setFrom("GDGoCTUK"); // service name
-            helper.setTo(to); // customer email
-            helper.setSubject(subject); // email title
-            helper.setText(content, true); // content, html: true
-            javaMailSender.send(message);
-        } catch (MessagingException e) {
-            e.printStackTrace(); // 에러 출력
+            log.debug("[MOCK EMAIL START] to={}", to);
+            Thread.sleep(3300);
+            log.info("thread name : {}",Thread.currentThread().getName());
+            log.debug("[MOCK EMAIL DONE] to={}", to);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            log.error("Mock email sending interrupted", e);
         }
     }
 }
