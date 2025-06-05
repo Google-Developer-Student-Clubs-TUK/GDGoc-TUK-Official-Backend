@@ -22,7 +22,7 @@ public class GmailSender implements EmailSender {
     private final JavaMailSender javaMailSender;
     private final Bucket bucket;
 
-//    @Async
+    @Async
     @Override
     public void send(String to, String subject, String content) {
 //        try{
