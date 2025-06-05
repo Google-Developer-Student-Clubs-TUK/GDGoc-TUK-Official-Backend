@@ -37,7 +37,13 @@ jobs:
       - name: Cache Jib layers
         uses: actions/cache@v3
         with:
-          path: ./build/jib-cache
+          path: |
+            ./build/jib-cache
+            ./build/jib-image.digest
+            ./build/jib-image.id
+            ./build/jib-image.json
+            ~/.gradle/caches
+            ~/.gradle/wrapper
           key: ${{ runner.os }}-jib-${{ github.job }}-${{ hashFiles('**/build.gradle') }}
           restore-keys: ${{ runner.os }}-jib-${{ github.job }}
 
