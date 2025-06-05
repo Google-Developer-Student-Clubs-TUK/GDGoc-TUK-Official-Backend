@@ -34,14 +34,14 @@ jobs:
         run: |
           echo "${{ secrets.GRADLE_PROPERTIES }}" > gradle.properties
 
-      - name: Cache Gradle caches
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ github.job}}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: ${{ runner.os }}-gradle-${{ github.job }}
+#      - name: Cache Gradle caches
+#        uses: actions/cache@v3
+#        with:
+#          path: |
+#            ~/.gradle/caches
+#            ~/.gradle/wrapper
+#          key: ${{ runner.os }}-gradle-${{ github.job}}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+#          restore-keys: ${{ runner.os }}-gradle-${{ github.job }}
 
       - name: Cache Jib layers
         uses: actions/cache@v3
