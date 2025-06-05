@@ -56,8 +56,3 @@ tokens/**
 
 ### JIB Cache ###
 build/*
-!build/jib-cache/
-!build/jib-cache/**
-!build/jib-image.digest
-!build/jib-image.id
-!build/jib-image.json
