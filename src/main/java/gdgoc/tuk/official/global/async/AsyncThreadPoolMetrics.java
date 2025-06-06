@@ -29,6 +29,8 @@ public class AsyncThreadPoolMetrics {
             .description("Active async threads")
             .register(registry);
 
+//        Gauge.builder("async.executor.live.thread",tp,ThreadPoolExecutor::get)
+
         Gauge.builder("async.executor.queue.size", tp, e -> e.getQueue().size())
             .description("Async executor queue size")
             .register(registry);
