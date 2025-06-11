@@ -1,11 +1,14 @@
 package gdgoc.tuk.official.google.service;
 
 
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
@@ -21,11 +24,18 @@ public class DevelopementEmailSender implements EmailSender {
 
     @Async
     public void send(String to, String subject, String content) {
+        MimeMessage message = javaMailSender.createMimeMessage();
         try {
-            Thread.sleep(350);
-            log.info("Test");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
+            helper.setFrom("GDGoCTUK");
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(content, true);
+            javaMailSender.send(message);
+        } catch (MessagingException e) {
+            log.error("MessagingException : {}", e.getLocalizedMessage());
+        } catch (RuntimeException e) {
+            log.error("Runtime Exception : {}", e.getLocalizedMessage());
         }
     }
 }
