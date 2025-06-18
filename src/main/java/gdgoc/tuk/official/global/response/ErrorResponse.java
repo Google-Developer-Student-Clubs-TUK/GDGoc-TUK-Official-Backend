@@ -16,11 +16,4 @@ public record ErrorResponse(
                 errorCode.getMsg());
     }
 
-    public ErrorResponse(final ErrorCode errorCode, final String detailMsg) {
-        this(
-                errorCode.getHttpStatus().value(),
-                errorCode.getHttpStatus().getReasonPhrase(),
-                errorCode.getCode(),
-                detailMsg);
-    }
 }
