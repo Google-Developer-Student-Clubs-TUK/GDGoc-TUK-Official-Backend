@@ -26,12 +26,12 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
             HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws IOException {
         GdgMember member = (GdgMember) authentication.getPrincipal();
-        LoginSuccessResponse loginResponse = new LoginSuccessResponse(member.getRole());
+        LoginSuccessResponse loginResponse = new LoginSuccessResponse(member.getRole(),member.getUsername());
 
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType("application/json;charset=UTF-8");
         objectMapper.writeValue(response.getWriter(), loginResponse);
     }
 
-    private record LoginSuccessResponse(String role) {}
+    private record LoginSuccessResponse(String role, String name) {}
 }
