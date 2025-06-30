@@ -42,10 +42,17 @@ public class RecruitmentController {
         return recruitmentService.getGenerations();
     }
 
-    @GetMapping("/status")
+    @GetMapping("/current/status")
     @PreAuthorize("permitAll()")
     @Operation(summary = "모집 시작 여부", description = "현재 날짜를 기준으로 모집이 진행 중인지 아닌지를 반환합니다.")
-    public RecruitmentStatusResponse getRecruitmentStatus() {
-        return recruitmentService.getRecruitmentStatus();
+    public RecruitmentStatusResponse getCurrentRecruitmentStatus() {
+        return recruitmentService.getCurrentRecruitmentStatus();
+    }
+
+    @GetMapping("/future/status")
+    @PreAuthorize("permitAll()")
+    @Operation(summary = "모집 시작 여부", description = "현재 날짜를 기준으로 모집이 진행 중인지 아닌지를 반환합니다.")
+    public RecruitmentStatusResponse getFutureRecruitmentStatus() {
+        return recruitmentService.getFutureRecruitmentStatus();
     }
 }

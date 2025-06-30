@@ -19,12 +19,10 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.apache.bcel.classfile.Module.Open;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -59,12 +57,20 @@ public class RecruitmentService {
             ,request.generation());
     }
 
-    public RecruitmentStatusResponse getRecruitmentStatus() {
+    public RecruitmentStatusResponse getCurrentRecruitmentStatus() {
         LocalDateTime now = LocalDateTime.now();
         return recruitmentRepository
                 .findByBetweenOpenAtAndCloseAt(now)
                 .map(r -> new RecruitmentStatusResponse(true))
                 .orElseGet(() -> new RecruitmentStatusResponse(false));
+    }
+
+    public RecruitmentStatusResponse getFutureRecruitmentStatus() {
+        LocalDateTime now = LocalDateTime.now();
+        return recruitmentRepository
+            .findByOpenAtAfterOrderByOpenAtAsc(now)
+            .map(r -> new RecruitmentStatusResponse(true))
+            .orElseGet(() -> new RecruitmentStatusResponse(false));
     }
 
     public Recruitment getOnGoingRecruitment(final LocalDateTime now) {

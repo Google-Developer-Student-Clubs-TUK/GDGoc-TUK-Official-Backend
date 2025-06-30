@@ -3,7 +3,6 @@ package gdgoc.tuk.official.recruitment.service;
 import static java.time.LocalDateTime.now;
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
 import gdgoc.tuk.official.answer.repository.SpreadSheetsPrimaryKeyRepository;
 import gdgoc.tuk.official.config.TestConfig;
@@ -75,7 +74,7 @@ class RecruitmentServiceTest {
         // when
         recruitmentService.openRecruitment(secondRequest);
         // then
-        boolean isOpen = recruitmentService.getRecruitmentStatus().isOpen();
+        boolean isOpen = recruitmentService.getCurrentRecruitmentStatus().isOpen();
         assertThat(isOpen).isTrue();
     }
 
@@ -84,7 +83,7 @@ class RecruitmentServiceTest {
     void getFalseRecruitmentStatus() {
         // given
         // when
-        boolean isOpen = recruitmentService.getRecruitmentStatus().isOpen();
+        boolean isOpen = recruitmentService.getCurrentRecruitmentStatus().isOpen();
         // then
         assertThat(isOpen).isFalse();
     }
@@ -99,7 +98,7 @@ class RecruitmentServiceTest {
         );
         recruitmentService.openRecruitment(firstRequest);
         // when
-        boolean isOpen = recruitmentService.getRecruitmentStatus().isOpen();
+        boolean isOpen = recruitmentService.getCurrentRecruitmentStatus().isOpen();
         // then
         assertThat(isOpen).isTrue();
     }
