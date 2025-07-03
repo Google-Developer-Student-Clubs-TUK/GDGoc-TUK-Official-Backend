@@ -20,16 +20,10 @@ import org.springframework.stereotype.Service;
 public class GmailSender implements EmailSender {
 
     private final JavaMailSender javaMailSender;
-    private final Bucket bucket;
 
     @Async
     @Override
     public void send(String to, String subject, String content) {
-//        try{
-//            bucket.asBlocking().consume(1);
-//        }catch (InterruptedException e){
-//            log.info("InterruptedException : {}",e.getLocalizedMessage());
-//        }
         MimeMessage message = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
@@ -43,13 +37,5 @@ public class GmailSender implements EmailSender {
         } catch (RuntimeException e) {
             log.error("Runtime Exception : {}", e.getLocalizedMessage());
         }
-//        try {
-//            log.debug("[MOCK EMAIL START] to={}", to);
-//            Thread.sleep(3300);
-//            log.debug("[MOCK EMAIL DONE] to={}", to);
-//        } catch (InterruptedException e) {
-//            Thread.currentThread().interrupt();
-//            log.error("Mock email sending interrupted", e);
-//        }
     }
 }
