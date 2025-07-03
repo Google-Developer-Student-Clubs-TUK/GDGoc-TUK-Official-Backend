@@ -1,7 +1,6 @@
 package gdgoc.tuk.official.google.service;
 
 
-import io.github.bucket4j.Bucket;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
