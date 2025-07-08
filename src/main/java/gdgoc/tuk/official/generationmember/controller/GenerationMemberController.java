@@ -1,10 +1,15 @@
 package gdgoc.tuk.official.generationmember.controller;
 
+import gdgoc.tuk.official.generationmember.domain.GenerationMember;
+import gdgoc.tuk.official.generationmember.dto.LoginCheckResponse;
 import gdgoc.tuk.official.generationmember.dto.MemberIntroductionListResponse;
 import gdgoc.tuk.official.generationmember.dto.MemberManagementPageResponse;
 import gdgoc.tuk.official.generationmember.dto.MemberSearchCond;
 import gdgoc.tuk.official.generationmember.service.GenerationMemberService;
 
+import gdgoc.tuk.official.global.auth.GenerationMemberId;
+import gdgoc.tuk.official.global.auth.GenerationMemberPrincipal;
+import gdgoc.tuk.official.global.security.GdgMember;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -38,5 +43,11 @@ public class GenerationMemberController {
     public MemberManagementPageResponse searchMembers(
             MemberSearchCond memberSearchCond, Pageable pageable) {
         return generationMemberService.searchMembers(memberSearchCond, pageable);
+    }
+
+    @GetMapping
+    @Operation(summary = "회원 로그인 확인", description = "로그인 된 회원인 지를 판별한 후 권한을 응답합니다.")
+    public LoginCheckResponse loginCheck(@GenerationMemberPrincipal GenerationMember generationMember) {
+        return new LoginCheckResponse(generationMember.getRole().getContent());
     }
 }
