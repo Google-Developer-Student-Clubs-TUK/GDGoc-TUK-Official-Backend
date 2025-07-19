@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/generation-members")
 @Tag(name = "기수 별 회원 API")
+@Slf4j
 public class GenerationMemberController {
 
     private final GenerationMemberService generationMemberService;
@@ -48,6 +50,8 @@ public class GenerationMemberController {
     @GetMapping
     @Operation(summary = "회원 로그인 확인", description = "로그인 된 회원인 지를 판별한 후 권한을 응답합니다.")
     public LoginCheckResponse loginCheck(@GenerationMemberPrincipal GenerationMember generationMember) {
+        log.info("Generation Member : {}", generationMember);
+        
         return new LoginCheckResponse(generationMember.getRole().getContent());
     }
 }
