@@ -20,7 +20,7 @@ public class GenerationMemberPrincipalResolver implements HandlerMethodArgumentR
 
     @Override
     public boolean supportsParameter(final MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(GenerationMemberId.class)
+        return parameter.hasParameterAnnotation(GenerationMemberPrincipal.class)
                 && parameter.getParameterType().equals(Long.class);
     }
 
