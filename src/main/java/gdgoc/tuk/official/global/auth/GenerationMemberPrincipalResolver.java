@@ -1,5 +1,6 @@
 package gdgoc.tuk.official.global.auth;
 
+import gdgoc.tuk.official.generationmember.domain.GenerationMember;
 import gdgoc.tuk.official.global.security.GdgMember;
 
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class GenerationMemberPrincipalResolver implements HandlerMethodArgumentR
     @Override
     public boolean supportsParameter(final MethodParameter parameter) {
         return parameter.hasParameterAnnotation(GenerationMemberPrincipal.class)
-                && parameter.getParameterType().equals(Long.class);
+                && parameter.getParameterType().equals(GenerationMember.class);
     }
 
     @Override
