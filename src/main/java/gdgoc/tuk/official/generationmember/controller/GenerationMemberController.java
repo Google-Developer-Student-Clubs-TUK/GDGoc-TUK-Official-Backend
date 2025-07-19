@@ -51,7 +51,7 @@ public class GenerationMemberController {
     @Operation(summary = "회원 로그인 확인", description = "로그인 된 회원인 지를 판별한 후 권한을 응답합니다.")
     public LoginCheckResponse loginCheck(@GenerationMemberPrincipal GenerationMember generationMember) {
         log.info("Generation Member : {}", generationMember);
-        
+
         return new LoginCheckResponse(generationMember.getRole().getContent());
     }
 }
