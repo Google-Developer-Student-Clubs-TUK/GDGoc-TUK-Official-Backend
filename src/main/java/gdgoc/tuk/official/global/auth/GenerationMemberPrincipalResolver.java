@@ -4,6 +4,7 @@ import gdgoc.tuk.official.global.security.GdgMember;
 
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class GenerationMemberPrincipalResolver implements HandlerMethodArgumentResolver {
 
     @Override
@@ -31,6 +33,8 @@ public class GenerationMemberPrincipalResolver implements HandlerMethodArgumentR
             throws Exception {
         final GdgMember principal =
                 (GdgMember) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        log.info("============Principal = {} {} {}",principal,principal.getGenerationMember(),
+            principal.getGenerationMember().getRole());
         return principal.getGenerationMember();
     }
 }
