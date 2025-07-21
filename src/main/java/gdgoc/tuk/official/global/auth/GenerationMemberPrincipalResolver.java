@@ -32,11 +32,8 @@ public class GenerationMemberPrincipalResolver implements HandlerMethodArgumentR
             final NativeWebRequest webRequest,
             final WebDataBinderFactory binderFactory)
             throws Exception {
-        log.info("Principal {}", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         final GdgMember principal =
                 (GdgMember) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        log.info("============Principal = {} {} {}",principal,principal.getGenerationMember(),
-            principal.getGenerationMember().getRole());
         return principal.getGenerationMember();
     }
 }
